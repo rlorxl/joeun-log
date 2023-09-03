@@ -1,7 +1,6 @@
 import Test from '/public/posts/test.mdx';
 import fs from 'fs';
 import { Metadata } from 'next';
-import Head from 'next/head';
 import path from 'path';
 const yamlFront = require('yaml-front-matter'); // import는 오류. require는 오류 x
 
@@ -17,28 +16,17 @@ const getPostData = async () => {
   // });
 };
 
-// export const getMetadata = async () => {
-//   const res = await getPostData();
+export const generateMetadata = async (): Promise<Metadata> => {
+  const res = await getPostData();
 
-//   return {
-//     title: res.title,
-//     description: res.description,
-//   };
-// };
+  return {
+    title: res.title,
+    description: res.description,
+  };
+};
 
 const Home = async () => {
-  const post = await getPostData();
-
-  return (
-    <>
-      <Head>
-        <title>{post.title}</title>
-        <meta name="description" content={post.description} />
-      </Head>
-      {/* {post.contents} */}
-      <Test />
-    </>
-  );
+  return <Test />;
 };
 
 export default Home;
