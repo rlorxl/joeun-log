@@ -24,7 +24,6 @@ const getPostData = async () => {
 
 // export const generateMetadata = async (): Promise<Metadata> => {
 //   const res = await getPostData();
-
 //   return {
 //     title: res.title,
 //     description: res.description,

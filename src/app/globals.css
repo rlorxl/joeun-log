@@ -58,13 +58,23 @@
   a {
     @apply no-underline;
   }
+}
 
+@layer utilities {
   .flex-center {
-    @apply flex justify-center items-center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .flex-between {
-    @apply flex justify-between items-center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .blog-width {
+    width: 650px;
   }
 }
 
