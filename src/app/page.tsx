@@ -1,95 +1,77 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+import Me from '../../public/me.mdx';
+// import fs from 'fs';
+import { Metadata } from 'next';
+import path from 'path';
+import { useState } from 'react';
+const yamlFront = require('yaml-front-matter'); // import는 오류. require는 오류 x
+import { Icon } from '@iconify/react';
 
-export default function Home() {
+const getPostData = async () => {
+  const filePath = path.join(process.cwd(), '/public/posts', 'test.mdx'); // 상대경로로 하면 왜 오류?
+  // const fileContent = fs.readFileSync(filePath);
+  // console.log(yamlFront.loadFront(fileContent)); 이 함수내부에서만 가능하고 반환할 때는 toString()을 해줘야 한다.
+  // return yamlFront.loadFront(fileContent.toString());
+  // JSON.parse(fileContent) -> x
+
+  // fs.readFile(filePath, 'utf8', contents => {
+  //   console.log(yamlFront.loadFront(contents));
+  // });
+};
+
+// export const generateMetadata = async (): Promise<Metadata> => {
+//   const res = await getPostData();
+
+//   return {
+//     title: res.title,
+//     description: res.description,
+//   };
+// };
+
+type TContents = {
+  name: string;
+  content: JSX.Element | string;
+};
+
+let contents: TContents[] = [
+  { name: 'blog', content: '' },
+  { name: 'me', content: <Me /> },
+  { name: 'contact', content: 'imjoeun08@naver.com' },
+];
+
+const Home = () => {
+  const [currentTab, setCurrentTab] = useState<string>('blog');
+
+  const changeTab = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLButtonElement;
+    const name = target.textContent;
+    if (typeof name !== 'string') return;
+    setCurrentTab(name);
+  };
+
+  const mainContent = contents.map(
+    ({ name, content }) => name === currentTab && <div key={name}>{content}</div>,
+  );
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <div className="w-full bg-white flex-col flex-center">
+      <div className="text-2xl w-full mt-10 flex-center space-x-8 mb-16">
+        <button type="button" onClick={changeTab}>
+          me
+        </button>
+        <button type="button" onClick={changeTab}>
+          contact
+        </button>
       </div>
+      <div className="text-center">{mainContent}</div>
+      {currentTab !== 'blog' && (
+        <button type="button" className="mt-14 flex-center" onClick={() => setCurrentTab('blog')}>
+          <Icon icon="pajamas:go-back" className="mr-2" />
+          뒤로
+        </button>
+      )}
+    </div>
+  );
+};
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+export default Home;
