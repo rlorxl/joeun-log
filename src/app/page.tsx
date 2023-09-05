@@ -6,6 +6,9 @@ import path from 'path';
 import { useState } from 'react';
 const yamlFront = require('yaml-front-matter'); // import는 오류. require는 오류 x
 import { Icon } from '@iconify/react';
+import RecentPosts from '@/components/main/recent-posts';
+import Image from 'next/image';
+import BlogLogo from '../../public/mainlogo.svg';
 
 const getPostData = async () => {
   const filePath = path.join(process.cwd(), '/public/posts', 'test.mdx'); // 상대경로로 하면 왜 오류?
@@ -34,7 +37,7 @@ type TContents = {
 };
 
 let contents: TContents[] = [
-  { name: 'blog', content: '' },
+  { name: 'blog', content: <RecentPosts /> },
   { name: 'me', content: <Me /> },
   { name: 'contact', content: 'imjoeun08@naver.com' },
 ];
@@ -54,23 +57,27 @@ const Home = () => {
   );
 
   return (
-    <div className="w-full bg-white flex-col flex-center">
-      <div className="text-2xl w-full mt-10 flex-center space-x-8 mb-16">
-        <button type="button" onClick={changeTab}>
-          me
-        </button>
-        <button type="button" onClick={changeTab}>
-          contact
-        </button>
+    <>
+      <Image src={BlogLogo} alt="logo" />
+      <div className="w-full bg-white flex-col flex-center">
+        <div className="text-2xl w-full mt-10 flex-center space-x-8 mb-16">
+          <button type="button" onClick={changeTab}>
+            me
+          </button>
+          <button type="button" onClick={changeTab}>
+            contact
+          </button>
+        </div>
+        <div className="text-center">{mainContent}</div>
+        {currentTab !== 'blog' && (
+          <button type="button" className="mt-14 flex-center" onClick={() => setCurrentTab('blog')}>
+            <Icon icon="pajamas:go-back" className="mr-2" />
+            뒤로
+          </button>
+        )}
       </div>
-      <div className="text-center">{mainContent}</div>
-      {currentTab !== 'blog' && (
-        <button type="button" className="mt-14 flex-center" onClick={() => setCurrentTab('blog')}>
-          <Icon icon="pajamas:go-back" className="mr-2" />
-          뒤로
-        </button>
-      )}
-    </div>
+      <footer className="text-sm text-second-color fixed bottom-10">© rlorxl 2023</footer>
+    </>
   );
 };
 
