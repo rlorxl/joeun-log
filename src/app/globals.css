@@ -58,6 +58,10 @@
   a {
     @apply no-underline;
   }
+
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {
