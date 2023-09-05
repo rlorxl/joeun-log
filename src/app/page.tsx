@@ -1,4 +1,5 @@
 import Test from '/public/posts/test.mdx';
+import Main from '../pages/main';
 import fs from 'fs';
 import { Metadata } from 'next';
 import path from 'path';
@@ -16,17 +17,17 @@ const getPostData = async () => {
   // });
 };
 
-export const generateMetadata = async (): Promise<Metadata> => {
-  const res = await getPostData();
+// export const generateMetadata = async (): Promise<Metadata> => {
+//   const res = await getPostData();
 
-  return {
-    title: res.title,
-    description: res.description,
-  };
-};
+//   return {
+//     title: res.title,
+//     description: res.description,
+//   };
+// };
 
 const Home = async () => {
-  return <Test />;
+  return <Main />;
 };
 
 export default Home;
