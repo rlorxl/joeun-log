@@ -2,9 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '../../../public/logo.svg';
-import Door from '../../../public/icon/door.svg';
-import Search from '../../../public/icon/search.svg';
-import Sun from '../../../public/icon/sun.svg';
+import * as Icon from '../../../public/icon/index';
 
 type TBlogNav = {
   name: string;
@@ -35,13 +33,13 @@ const BlogLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
         <div className="space-y-10 flex-col flex">
           <button type="button">
-            <Image src={Search} alt="검색" />
+            <Image src={Icon.Search} alt="검색" />
           </button>
           <button type="button">
-            <Image src={Sun} alt="다크모드" />
+            <Image src={Icon.Sun} alt="다크모드" />
           </button>
           <Link href="/">
-            <Image src={Door} alt="메인으로 이동" />
+            <Image src={Icon.Door} alt="메인으로 이동" />
           </Link>
           <div className="mt-8 text-sm text-second-color">©rlorxl 2023</div>
         </div>

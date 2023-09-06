@@ -1,9 +1,9 @@
 import React from 'react';
 import fs from 'fs';
 import path from 'path';
-import ArrowRight from '../../../public/icon/arrow-right.svg';
-import Image from 'next/image';
-import Link from 'next/link';
+import { TPosts } from '@/types/post';
+import { sortingData } from '../../utils/data-sorting';
+import Post from '@/components/blog/post';
 const yamlFront = require('yaml-front-matter');
 
 const getAllPosts = () => {
@@ -29,43 +29,13 @@ const getAllPosts = () => {
   }
 };
 
-type TPost = {
-  title: string;
-  category: string;
-  date: string;
-  tags: string;
-  __content: string;
-};
-
 const BlogPage = async () => {
   const allPosts = await getAllPosts();
-  console.log(allPosts);
-
-  const toUrl = (post: TPost) => `/${post.category}/${post.date.replaceAll('-', '/')}/post`;
 
   return (
     <div className="ml-52 blog-width space-y-5">
-      {allPosts.map((post: TPost) => (
-        <div
-          key={post.title}
-          className="border-b last:border-b-0 pb-5 border-b-second-color space-y-4">
-          <h2 className="text-2xl font-semibold hover:underline">
-            <Link href={'#'}>{post.title}</Link>
-          </h2>
-          <p className="hover:underline">
-            <Link href={'#'}>{post.__content}</Link>
-          </p>
-          <div>
-            <span className="mr-2">{post.date}</span>
-            {post.tags.split(',').map(tag => (
-              <span className="mr-2">{tag}</span>
-            ))}
-          </div>
-          <Link href={toUrl(post)} className="text-sm w-fit flex justify-start items-center">
-            <span className="mr-1">더보기</span>
-            <Image src={ArrowRight} alt="더보기" />
-          </Link>
-        </div>
+      {sortingData(allPosts).map((post: TPosts) => (
+        <Post key={post.title} post={post} />
       ))}
     </div>
   );

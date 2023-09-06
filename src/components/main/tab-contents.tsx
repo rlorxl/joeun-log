@@ -1,18 +1,12 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RecentPosts from './recent-posts';
 import Me from '../../../public/me.mdx';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { MdxContext } from '@/context/mdx';
-
-type TPosts = {
-  title: string;
-  category: string;
-  date: string;
-  tags: string;
-  description: string;
-  __content: string;
-};
+import { useSetRecoilState } from 'recoil';
+import { postsState } from '@/recoil/posts';
+import { TPosts } from '@/types/post';
+import { sortingData } from '../../utils/data-sorting';
 
 type TContents = {
   name: string;
@@ -27,6 +21,7 @@ let contents: TContents[] = [
 
 const TabContents = ({ data }: { data: TPosts[] }) => {
   const [currentTab, setCurrentTab] = useState<string>('blog');
+  const setPosts = useSetRecoilState(postsState);
 
   const changeTab = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
@@ -39,9 +34,11 @@ const TabContents = ({ data }: { data: TPosts[] }) => {
     ({ name, content }) => name === currentTab && <div key={name}>{content}</div>,
   );
 
-  const { setList } = useContext(MdxContext);
   useEffect(() => {
-    if (data) setList(data);
+    if (data.length > 0) {
+      const recents = sortingData(data);
+      setPosts(recents);
+    }
   }, [data]);
 
   return (
