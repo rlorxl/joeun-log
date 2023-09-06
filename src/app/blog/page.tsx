@@ -4,6 +4,8 @@ import path from 'path';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
 import Image from 'next/image';
 import Link from 'next/link';
+import { TPosts } from '@/types/post';
+import { toUrl } from '../../utils/url';
 const yamlFront = require('yaml-front-matter');
 
 const getAllPosts = () => {
@@ -29,23 +31,12 @@ const getAllPosts = () => {
   }
 };
 
-type TPost = {
-  title: string;
-  category: string;
-  date: string;
-  tags: string;
-  __content: string;
-};
-
 const BlogPage = async () => {
   const allPosts = await getAllPosts();
-  // console.log(allPosts);
-
-  const toUrl = (post: TPost) => `/${post.category}/${post.date.replaceAll('-', '/')}/post`;
 
   return (
     <div className="ml-52 blog-width space-y-5">
-      {allPosts.map((post: TPost) => (
+      {allPosts.map((post: TPosts) => (
         <div
           key={post.title}
           className="border-b last:border-b-0 pb-5 border-b-second-color space-y-4">

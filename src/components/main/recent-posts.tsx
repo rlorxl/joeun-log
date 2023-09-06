@@ -1,43 +1,21 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import Image from 'next/image';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
-import { TPosts } from '@/types/post';
+import { toUrl } from '../../utils/url';
 
 const RecentPosts = () => {
-  const [recentPost, setRecentPost] = useState<TPosts[] | []>([]);
   const posts = useRecoilValue(postsState);
-
-  const sortingData = (data: TPosts[]) => {
-    const translate_1 = data.map(item => ({ ...item, date: item.date.split('-') }));
-    const translate_2 = translate_1.map(item => ({
-      ...item,
-      date: item.date.map(num => (Number(num) < 10 ? '0' + num : num)).join(''),
-    }));
-    const sortedData = translate_2.sort((a, b) => Number(b.date) - Number(a.date));
-    const resultData = sortedData.map(data => ({
-      ...data,
-      date: data.date.slice(0, 4) + '.' + data.date.slice(4, 6) + '.' + data.date.slice(6, 8),
-    }));
-    setRecentPost(resultData);
-  };
-
-  useEffect(() => {
-    sortingData(posts);
-  }, [posts]);
-
-  const toUrl = (post: TPosts) => `/${post.category}/${post.date.replaceAll('-', '/')}/post`;
 
   return (
     <div className="flex justify-between items-start">
       <h2 className="mr-10 text-2xl font-bold">최근 글</h2>
       <div className="shrink-0">
         <ul className="space-y-2">
-          {recentPost.length > 0 &&
-            recentPost.map(post => (
+          {posts.length > 0 &&
+            posts.map(post => (
               <li key={post.title} className="flex-between">
                 <Link href={toUrl(post)} className="mr-12 text-lg hover:underline">
                   {post.title}

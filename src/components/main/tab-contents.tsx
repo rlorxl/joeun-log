@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import { TPosts } from '@/types/post';
+import { sortingData } from '../../utils/data-sorting';
 
 type TContents = {
   name: string;
@@ -34,7 +35,10 @@ const TabContents = ({ data }: { data: TPosts[] }) => {
   );
 
   useEffect(() => {
-    if (data.length > 0) setPosts(data);
+    if (data.length > 0) {
+      const recents = sortingData(data);
+      setPosts(recents);
+    }
   }, [data]);
 
   return (
