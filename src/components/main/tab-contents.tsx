@@ -1,9 +1,10 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RecentPosts from './recent-posts';
 import Me from '../../../public/me.mdx';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { MdxContext } from '@/context/mdx';
+import { useSetRecoilState } from 'recoil';
+import { postsState } from '@/recoil/posts';
 
 type TPosts = {
   title: string;
@@ -27,6 +28,7 @@ let contents: TContents[] = [
 
 const TabContents = ({ data }: { data: TPosts[] }) => {
   const [currentTab, setCurrentTab] = useState<string>('blog');
+  const setPosts = useSetRecoilState(postsState);
 
   const changeTab = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
@@ -39,9 +41,8 @@ const TabContents = ({ data }: { data: TPosts[] }) => {
     ({ name, content }) => name === currentTab && <div key={name}>{content}</div>,
   );
 
-  const { setList } = useContext(MdxContext);
   useEffect(() => {
-    if (data) setList(data);
+    if (data.length > 0) setPosts(data);
   }, [data]);
 
   return (
@@ -55,6 +56,11 @@ const TabContents = ({ data }: { data: TPosts[] }) => {
         </button>
       </div>
       <div className="text-center">{mainContent}</div>
+      {/* <div className="text-center">
+        {currentTab === 'blog' && <RecentPosts data={data} />}
+        {currentTab === 'me' && <Me />}
+        {currentTab === 'contact' && 'imjoeun08@naver.com'}
+      </div> */}
       {currentTab !== 'blog' && (
         <button type="button" className="mt-14 flex-center" onClick={() => setCurrentTab('blog')}>
           <Icon icon="pajamas:go-back" className="mr-2" />

@@ -5,6 +5,8 @@ const yamlFront = require('yaml-front-matter'); // import는 오류. require는 
 import Image from 'next/image';
 import BlogLogo from '../../public/mainlogo.svg';
 import TabContents from '@/components/main/tab-contents';
+import { MdxProvider } from '@/context/mdx';
+import { RecoilRoot } from 'recoil';
 
 // const getPostData = async () => {
 //   const filePath = path.join(process.cwd(), 'public/posts/daily', 'daily.mdx'); // 상대경로로 하면 왜 오류?
