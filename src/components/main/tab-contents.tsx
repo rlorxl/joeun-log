@@ -5,15 +5,7 @@ import Me from '../../../public/me.mdx';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
-
-type TPosts = {
-  title: string;
-  category: string;
-  date: string;
-  tags: string;
-  description: string;
-  __content: string;
-};
+import { TPosts } from '@/types/post';
 
 type TContents = {
   name: string;

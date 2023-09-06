@@ -5,15 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import Image from 'next/image';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
-
-type TPosts = {
-  title: string;
-  category: string;
-  date: string;
-  tags: string;
-  description: string;
-  __content: string;
-};
+import { TPosts } from '@/types/post';
 
 const RecentPosts = () => {
   const [recentPost, setRecentPost] = useState<TPosts[] | []>([]);

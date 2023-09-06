@@ -39,7 +39,7 @@ type TPost = {
 
 const BlogPage = async () => {
   const allPosts = await getAllPosts();
-  console.log(allPosts);
+  // console.log(allPosts);
 
   const toUrl = (post: TPost) => `/${post.category}/${post.date.replaceAll('-', '/')}/post`;
 

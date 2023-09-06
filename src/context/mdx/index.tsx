@@ -1,13 +1,5 @@
+import { TPosts } from '@/types/post';
 import { createContext, useState } from 'react';
-
-type TPosts = {
-  title: string;
-  category: string;
-  date: string;
-  tags: string;
-  description: string;
-  __content: string;
-};
 
 const MdxContext = createContext({
   posts: [
