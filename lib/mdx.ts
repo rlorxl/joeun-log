@@ -1,16 +1,28 @@
-// import fs from 'fs';
-// import path from 'path';
-// import compile from '@next/mdx';
+// import server-only
 
-// const rootDirectory = path.join(process.cwd(), 'app', 'posts');
+import fs from 'fs';
+import path from 'path';
+const yamlFront = require('yaml-front-matter');
 
-// export const getPostBySlug = async (slug: any) => {
-//   const realSlug = slug.replace(/\.mdx$/, '');
-//   const filePath = path.join(rootDirectory, `${realSlug}.mdx`);
-//   const fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
+export const getAllPosts = () => {
+  try {
+    const rootDirectory = fs.readdirSync('public/posts');
+    const posts = rootDirectory.map(folder => fs.readdirSync(`public/posts/${folder}`)).flat();
 
-//   const { frontmatter, content } = await compile({
-//     source: fileContent,
-//     options: { parseFrontmatter: true },
-//   });
-// };
+    let files: any = [];
+    rootDirectory.forEach(dir => {
+      posts.forEach(post => {
+        const filePath = path.join(process.cwd(), `public/posts/${dir}`, post);
+        try {
+          const fileContent = fs.readFileSync(filePath);
+          files = [...files, yamlFront.loadFront(fileContent)];
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    });
+    return files;
+  } catch (err) {
+    console.log(err);
+  }
+};
