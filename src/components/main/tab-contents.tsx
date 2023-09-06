@@ -52,11 +52,6 @@ const TabContents = ({ data }: { data: TPosts[] }) => {
         </button>
       </div>
       <div className="text-center">{mainContent}</div>
-      {/* <div className="text-center">
-        {currentTab === 'blog' && <RecentPosts data={data} />}
-        {currentTab === 'me' && <Me />}
-        {currentTab === 'contact' && 'imjoeun08@naver.com'}
-      </div> */}
       {currentTab !== 'blog' && (
         <button type="button" className="mt-14 flex-center" onClick={() => setCurrentTab('blog')}>
           <Icon icon="pajamas:go-back" className="mr-2" />
