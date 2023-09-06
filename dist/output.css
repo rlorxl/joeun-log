@@ -622,6 +622,11 @@ a {
   width: 100%;
 }
 
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -672,6 +677,12 @@ a {
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 
+.space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
 .border-b {
   border-bottom-width: 1px;
 }
@@ -689,6 +700,11 @@ a {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#FFD43C\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 212 60 / var(--tw-bg-opacity));
 }
 
 .py-20 {

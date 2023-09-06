@@ -38,7 +38,8 @@ type TPost = {
 };
 
 const BlogPage = async () => {
-  const allPosts = getAllPosts();
+  const allPosts = await getAllPosts();
+  console.log(allPosts);
 
   const toUrl = (post: TPost) => `/${post.category}/${post.date.replaceAll('-', '/')}/post`;
 
@@ -55,12 +56,12 @@ const BlogPage = async () => {
             <Link href={'#'}>{post.__content}</Link>
           </p>
           <div>
+            <span className="mr-2">{post.date}</span>
             {post.tags.split(',').map(tag => (
               <span className="mr-2">{tag}</span>
             ))}
-            {post.date}
           </div>
-          <Link href={toUrl(post)} className="text-sm flex justify-start items-center">
+          <Link href={toUrl(post)} className="text-sm w-fit flex justify-start items-center">
             <span className="mr-1">더보기</span>
             <Image src={ArrowRight} alt="더보기" />
           </Link>

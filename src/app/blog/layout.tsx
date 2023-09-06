@@ -20,9 +20,7 @@ const navLinkto: TBlogNav[] = [
 const BlogLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex justify-between items-start py-20 h-screen">
-      <nav
-        className="flex-col flex justify-between items-start w-[120px] h-full"
-        suppressHydrationWarning>
+      <nav className="flex-col flex justify-between items-start w-[120px] h-full">
         <div>
           <Link href="/blog">
             <Image src={Logo} alt="logo" width={40} />
