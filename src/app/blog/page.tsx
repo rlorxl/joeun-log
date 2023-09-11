@@ -1,15 +1,9 @@
 import React from 'react';
 import fs from 'fs';
 import path from 'path';
-import { TPosts } from '@/types/post';
 import { sortingData } from '../../utils/data-sorting';
-import Post from '@/components/blog/post';
 import { bundleMDX } from 'mdx-bundler';
-import { getMDXComponent } from 'mdx-bundler/client';
-import Link from 'next/link';
-import Image from 'next/image';
-import ArrowRight from '../../../public/icon/arrow-right.svg';
-const yamlFront = require('yaml-front-matter');
+import BlogPosts from './posts';
 
 const getAllPosts = async () => {
   const rootDirectory = fs.readdirSync('public/posts');
@@ -54,9 +48,14 @@ const getAllPosts = async () => {
 
 const BlogPage = async () => {
   const allPosts = await getAllPosts();
-  const sortingPost = sortingData(allPosts);
+  const passingData = allPosts.map(({ code, frontmatter }) => ({ code, frontmatter }));
+  const sortingPost = sortingData(passingData);
 
-  return <div className="ml-52 blog-width space-y-5">{/* BlogPost */}</div>;
+  return (
+    <div className="ml-52 blog-width space-y-5">
+      <BlogPosts posts={sortingPost} />
+    </div>
+  );
 };
 
 export default BlogPage;
