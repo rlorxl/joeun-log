@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { bundleMDX } from 'mdx-bundler';
 
-const getFiles = async (dir: string, posts: string[]) => {
+export const getFiles = async (dir: string, posts: string[]) => {
   let files: { [key: string]: any }[] = [];
 
   for (const post of posts) {

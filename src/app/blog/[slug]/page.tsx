@@ -1,37 +1,34 @@
 import fs from 'fs';
-import path from 'path';
-import { bundleMDX } from 'mdx-bundler';
-import CategoryPosts from './posts';
-import { sortingData } from '@/utils/data-sorting';
+import { getFiles } from '@/utils/get-posts';
+import Posts from '@/components/blog/posts';
 
 const getCategoryPosts = async (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
-  const posts = fs.readdirSync(rootDirectory);
+  const years = fs.readdirSync(rootDirectory); // ['2023','2024']
 
-  let files: { [key: string]: any }[] = [];
+  let mdxSources: { [key: string]: any }[] = [];
 
-  for (const post of posts) {
-    const filePath = path.join(process.cwd(), rootDirectory, post);
-    if (!filePath) continue;
-    try {
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const mdxSource = await bundleMDX({ source: fileContent });
-      files.push(mdxSource);
-    } catch (err) {
-      console.log(err);
+  for (const year of years) {
+    const dirpath = `${rootDirectory}/${year}`;
+    const months = fs.readdirSync(dirpath);
+
+    for (const month of months) {
+      const dirpath_2 = `${dirpath}/${month}`;
+      const files = fs.readdirSync(dirpath_2);
+      const mdxs = await getFiles(dirpath_2, files);
+      mdxSources = [...mdxSources, ...mdxs];
     }
   }
-  return files;
+  return mdxSources;
 };
 
 const CategoryPage = async ({ params }: { params: { slug: string } }) => {
   const categoryPosts = await getCategoryPosts(params.slug);
   const passingData = categoryPosts.map(({ code, frontmatter }) => ({ code, frontmatter }));
-  const sortingPost = sortingData(passingData);
 
   return (
     <div className="ml-52 blog-width space-y-5">
-      <CategoryPosts posts={sortingPost} />
+      <Posts posts={passingData} />
     </div>
   );
 };

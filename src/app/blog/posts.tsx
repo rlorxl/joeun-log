@@ -1,5 +1,5 @@
 'use client';
 
-import BlogPosts from '@/components/blog/blog-posts';
+import Posts from '@/components/blog/posts';
 
-export default BlogPosts;
+export default Posts;

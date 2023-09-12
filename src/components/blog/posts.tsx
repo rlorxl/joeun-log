@@ -1,11 +1,12 @@
-import { useRef } from 'react';
+'use client';
+import React, { useRef } from 'react';
 import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
-import { sortingData } from '@/utils/data-sorting';
-import Image from 'next/image';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
+import Image from 'next/image';
+import { sortingData } from '@/utils/data-sorting';
 
-const CategoryPosts = ({
+const Posts = ({
   posts,
 }: {
   posts: { code: string; frontmatter: { [key: string]: string } }[];
@@ -69,4 +70,4 @@ const CategoryPosts = ({
   );
 };
 
-export default CategoryPosts;
+export default Posts;
