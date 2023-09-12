@@ -19,7 +19,11 @@ let contents: TContents[] = [
   { name: 'contact', content: 'imjoeun08@naver.com' },
 ];
 
-const TabContents = ({ data }: { data: TPosts[] }) => {
+const TabContents = ({
+  data,
+}: {
+  data: { code: string; frontmatter: { [key: string]: string } }[];
+}) => {
   const [currentTab, setCurrentTab] = useState<string>('blog');
   const setPosts = useSetRecoilState(postsState);
 

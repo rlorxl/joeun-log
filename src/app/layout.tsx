@@ -6,7 +6,7 @@ import RecoilRootWrapper from '../../lib/recoil-wrapper';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'rlorxlblog',
+  title: 'rlorxl',
   description: 'welcome to rlorxl blog',
 };
 
