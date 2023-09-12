@@ -3,8 +3,13 @@ import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
 import Image from 'next/image';
+import { sortingData } from '@/utils/data-sorting';
 
-const BlogPosts = ({ posts }: { posts: { [key: string]: any }[] }) => {
+const BlogPosts = ({
+  posts,
+}: {
+  posts: { code: string; frontmatter: { [key: string]: string } }[];
+}) => {
   const firstSentence = useRef<string>('');
 
   const renderFirstP = (props: any) => {
@@ -24,7 +29,7 @@ const BlogPosts = ({ posts }: { posts: { [key: string]: any }[] }) => {
 
   return (
     <>
-      {posts.map(({ code, frontmatter }) => {
+      {sortingData(posts).map(({ code, frontmatter }) => {
         const Component = getMDXComponent(code);
         return (
           <div
