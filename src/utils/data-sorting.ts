@@ -14,12 +14,14 @@ import { TPosts } from '@/types/post';
 //   return resultData;
 // };
 
-export const sortingData = (data: { [key: string]: any }[]) => {
+export const sortingData = (data: { code: string; frontmatter: { [key: string]: string } }[]) => {
+  if (data.length === 1) return data;
+
   const matters = data.map(item => item.frontmatter);
 
   const withIndex = matters.map((matter, idx) => {
     const dates = matter.published.split('-');
-    const newDate = dates.map((num: number) => (Number(num) < 10 ? '0' + num : num)).join('');
+    const newDate = dates.map((num: string) => (Number(num) < 10 ? '0' + num : num)).join('');
     return { index: idx, date: newDate };
   });
 
@@ -27,7 +29,7 @@ export const sortingData = (data: { [key: string]: any }[]) => {
 
   const indexes = sortingDate.map(item => item.index);
 
-  const sortedData: { [key: string]: any }[] = [];
+  const sortedData: { code: string; frontmatter: { [key: string]: string } }[] = [];
 
   indexes.forEach((index, i) => {
     sortedData[i] = data[index];

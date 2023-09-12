@@ -15,12 +15,12 @@ const RecentPosts = () => {
       <div className="shrink-0">
         <ul className="space-y-2">
           {posts.length > 0 &&
-            posts.map(post => (
-              <li key={post.title} className="flex-between">
-                <Link href={toUrl(post)} className="mr-12 text-lg hover:underline">
-                  {post.title}
+            posts.slice(0, 4).map(({ frontmatter }) => (
+              <li key={frontmatter.title} className="flex-between">
+                <Link href={'#'} className="mr-12 text-lg hover:underline">
+                  {frontmatter.title}
                 </Link>
-                <p className="text-sm">{post.date}</p>
+                <p className="text-sm">{frontmatter.published}</p>
               </li>
             ))}
         </ul>

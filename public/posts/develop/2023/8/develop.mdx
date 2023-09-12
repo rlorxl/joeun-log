@@ -19,3 +19,17 @@ Presigned URL은 미리 서명된 권한으로 잠시 접근가능하게 해주�
    나는 Next js와 프리즈마 orm을 사용중이기 때문에 프리즈마 블로그에서 찾은 ‘Next js + prisma + typescript 이미지 업로드’부분을 참고했다! 여기서 나온 방식은 Presigned-POST방식이다.
 
 Presigned POST방식은 Presigned URL하고는 약간 다른데 POST메서드만 사용할 수 있어서 업로드만 가능하다는 점이 다르다. 구현과정에서 우여곡절이 많았지만 업로드 성공한 코드를 올려본다.
+
+```js
+for (const post of posts) {
+  const filePath = path.join(process.cwd(), rootDirectory, post);
+  if (!filePath) continue;
+  try {
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const mdxSource = await bundleMDX({ source: fileContent });
+    files.push(mdxSource);
+  } catch (err) {
+    // console.log(err);
+  }
+}
+```

@@ -1,28 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-const yamlFront = require('yaml-front-matter');
 import { bundleMDX } from 'mdx-bundler';
 import CategoryPosts from './posts';
-import { getMDXComponent } from 'mdx-bundler/client';
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote } from 'next-mdx-remote';
+import { sortingData } from '@/utils/data-sorting';
 
 const getCategoryPosts = async (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
   const posts = fs.readdirSync(rootDirectory);
 
   let files: { [key: string]: any }[] = [];
-  // posts.forEach(async post => {
-  //   const filePath = path.join(process.cwd(), rootDirectory, post);
-  //   if (!filePath) return;
-  //   try {
-  //     const fileContent = fs.readFileSync(filePath, 'utf8');
-  //     const mdxSource = await serialize(fileContent, { parseFrontmatter: true });
-  //     files = [...files, mdxSource];
-  //   } catch (err) {
-  //     // console.log(err);
-  //   }
-  // });
+
   for (const post of posts) {
     const filePath = path.join(process.cwd(), rootDirectory, post);
     if (!filePath) continue;
@@ -31,7 +18,7 @@ const getCategoryPosts = async (categoryId: string) => {
       const mdxSource = await bundleMDX({ source: fileContent });
       files.push(mdxSource);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   }
   return files;
@@ -39,15 +26,12 @@ const getCategoryPosts = async (categoryId: string) => {
 
 const CategoryPage = async ({ params }: { params: { slug: string } }) => {
   const categoryPosts = await getCategoryPosts(params.slug);
-
-  const codes = categoryPosts.map(post => post.code);
-  const frontmatters = categoryPosts.map(post => post.frontmatter);
+  const passingData = categoryPosts.map(({ code, frontmatter }) => ({ code, frontmatter }));
+  const sortingPost = sortingData(passingData);
 
   return (
     <div className="ml-52 blog-width space-y-5">
-      <CategoryPosts codes={codes} frontmatters={frontmatters} />
-      {/* {categoryPosts &&
-        sortingData(categoryPosts).map((post: TPosts) => <Post key={post.title} post={post} />)} */}
+      <CategoryPosts posts={sortingPost} />
     </div>
   );
 };

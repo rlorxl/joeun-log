@@ -41,6 +41,7 @@ const BlogPosts = ({ posts }: { posts: { [key: string]: any }[] }) => {
                 ol: () => null,
                 li: () => null,
                 img: () => null,
+                pre: () => null,
                 p: renderFirstP,
               }}
             />
