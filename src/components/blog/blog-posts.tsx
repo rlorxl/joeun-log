@@ -10,16 +10,16 @@ const BlogPosts = ({
 }: {
   posts: { code: string; frontmatter: { [key: string]: string } }[];
 }) => {
-  const firstSentence = useRef<string>('');
+  const firstSentenceArr = useRef<string[]>(Array(posts.length).fill(''));
 
-  const renderFirstP = (props: any) => {
+  const renderFirstSentence = (props: any, idx: number) => {
     const text = props.children;
 
-    if (!firstSentence.current) {
-      firstSentence.current = text;
+    if (firstSentenceArr.current[idx] === '') {
+      firstSentenceArr.current[idx] = text;
       return (
-        <Link href={'#'} className="hover:underline">
-          {firstSentence.current}
+        <Link href={'#'} className="hover:underline hover:text-second-color">
+          {text}
         </Link>
       );
     }
@@ -29,7 +29,7 @@ const BlogPosts = ({
 
   return (
     <>
-      {sortingData(posts).map(({ code, frontmatter }) => {
+      {sortingData(posts).map(({ code, frontmatter }, idx) => {
         const Component = getMDXComponent(code);
         return (
           <div
@@ -47,7 +47,7 @@ const BlogPosts = ({
                 li: () => null,
                 img: () => null,
                 pre: () => null,
-                p: renderFirstP,
+                p: props => renderFirstSentence(props, idx),
               }}
             />
             <div>
