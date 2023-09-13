@@ -76,6 +76,10 @@
   .blog-width {
     width: 650px;
   }
+
+  .post-width {
+    width: 800px;
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {

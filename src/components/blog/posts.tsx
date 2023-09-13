@@ -5,21 +5,19 @@ import Link from 'next/link';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
 import Image from 'next/image';
 import { sortingData } from '@/utils/data-sorting';
+import { TPost } from '@/types/post';
+import { toUrl } from '@/utils/url';
 
-const Posts = ({
-  posts,
-}: {
-  posts: { code: string; frontmatter: { [key: string]: string } }[];
-}) => {
+const Posts = ({ posts }: { posts: TPost[] }) => {
   const firstSentenceArr = useRef<string[]>(Array(posts.length).fill(''));
 
-  const renderFirstSentence = (props: any, idx: number) => {
+  const renderFirstSentence = (props: any, idx: number, frontmatter: { [key: string]: string }) => {
     const text = props.children;
 
     if (firstSentenceArr.current[idx] === '') {
       firstSentenceArr.current[idx] = text;
       return (
-        <Link href={'#'} className="hover:underline hover:text-second-color">
+        <Link href={toUrl(frontmatter)} className="hover:underline hover:text-second-color">
           {text}
         </Link>
       );
@@ -37,7 +35,7 @@ const Posts = ({
             key={frontmatter.title}
             className="border-b last:border-b-0 pb-5 border-b-second-color space-y-4">
             <h1 className="text-2xl font-semibold hover:underline mb-4">
-              <Link href={'#'}>{frontmatter.title}</Link>
+              <Link href={toUrl(frontmatter)}>{frontmatter.title}</Link>
             </h1>
             <Component
               components={{
@@ -48,7 +46,7 @@ const Posts = ({
                 li: () => null,
                 img: () => null,
                 pre: () => null,
-                p: props => renderFirstSentence(props, idx),
+                p: props => renderFirstSentence(props, idx, frontmatter),
               }}
             />
             <div>
@@ -59,7 +57,9 @@ const Posts = ({
                 </span>
               ))}
             </div>
-            <Link href="#" className="text-sm w-fit flex justify-start items-center">
+            <Link
+              href={toUrl(frontmatter)}
+              className="text-sm w-fit flex justify-start items-center">
               <span className="mr-1">더보기</span>
               <Image src={ArrowRight} alt="더보기" />
             </Link>

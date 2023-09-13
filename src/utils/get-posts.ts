@@ -1,6 +1,17 @@
+import 'server-only';
+
 import fs from 'fs';
 import path from 'path';
+import { cache } from 'react';
 import { bundleMDX } from 'mdx-bundler';
+
+export const revalidate = 3600;
+
+// export const preload = (id: string) => {
+//   // void evaluates the given expression and returns undefined
+//   // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
+//   void getPost(id);
+// };
 
 export const getFiles = async (dir: string, posts: string[]) => {
   let files: { [key: string]: any }[] = [];
@@ -17,6 +28,43 @@ export const getFiles = async (dir: string, posts: string[]) => {
   }
   return files;
 };
+
+export const getPost = cache(async (segments: string) => {
+  let paths = Array.from(segments);
+  let rootPath = '';
+  let filename = '';
+
+  // const test = decodeURI(
+  //   'http://localhost:3000/blog/develop/2023/8/%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EB%B9%84%EB%8F%99%EA%B8%B0%EB%A1%9C%EC%A7%81-%EC%B2%98%EB%A6%AC%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC',
+  // );
+
+  paths.forEach((path, i, paths) => {
+    if (i !== paths.length - 1) {
+      rootPath += `/${path}`;
+    } else {
+      const url = process.env.LOCAL_URL + '/' + path;
+      const decodedUri = decodeURI(url);
+      const arr = decodedUri.split('/');
+      filename = arr[arr.length - 1].replaceAll('-', ' ');
+    }
+  });
+
+  const rootDirectory = `public/posts${rootPath}`; // public/posts/develop/2023/8
+
+  try {
+    const files = fs.readdirSync(rootDirectory); // [ 'develop.mdx', 'test.mdx' ]
+
+    const mdxs = await getFiles(rootDirectory, files);
+    // console.log(mdxs);
+    let mdx;
+    mdxs.forEach(source => {
+      if (source.frontmatter.title === filename) mdx = source;
+    });
+    return mdx;
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 export const getAllPosts = async () => {
   try {

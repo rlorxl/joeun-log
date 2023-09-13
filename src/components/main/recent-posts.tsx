@@ -17,7 +17,7 @@ const RecentPosts = () => {
           {posts.length > 0 &&
             posts.slice(0, 4).map(({ frontmatter }) => (
               <li key={frontmatter.title} className="flex-between">
-                <Link href={'#'} className="mr-12 text-lg hover:underline">
+                <Link href={toUrl(frontmatter)} className="mr-12 text-lg hover:underline">
                   {frontmatter.title}
                 </Link>
                 <p className="text-sm">{frontmatter.published}</p>
