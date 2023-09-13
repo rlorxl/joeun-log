@@ -6,3 +6,8 @@ export type TPosts = {
   description: string;
   __content: string;
 };
+
+export type TPost = {
+  code: string;
+  frontmatter: { [key: string]: any };
+};

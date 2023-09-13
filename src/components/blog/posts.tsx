@@ -5,12 +5,9 @@ import Link from 'next/link';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
 import Image from 'next/image';
 import { sortingData } from '@/utils/data-sorting';
+import { TPost } from '@/types/post';
 
-const Posts = ({
-  posts,
-}: {
-  posts: { code: string; frontmatter: { [key: string]: string } }[];
-}) => {
+const Posts = ({ posts }: { posts: TPost[] }) => {
   const firstSentenceArr = useRef<string[]>(Array(posts.length).fill(''));
 
   const renderFirstSentence = (props: any, idx: number) => {
