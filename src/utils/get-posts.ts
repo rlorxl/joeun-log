@@ -1,11 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import Image from 'next/image';
-import BlogLogo from '../../public/mainlogo.svg';
-import TabContents from '@/components/main/tab-contents';
 import { bundleMDX } from 'mdx-bundler';
 
-const getFiles = async (dir: string, posts: string[]) => {
+export const getFiles = async (dir: string, posts: string[]) => {
   let files: { [key: string]: any }[] = [];
 
   for (const post of posts) {
@@ -21,7 +18,7 @@ const getFiles = async (dir: string, posts: string[]) => {
   return files;
 };
 
-const getAllPosts = async () => {
+export const getAllPosts = async () => {
   try {
     let mdxSources: { [key: string]: any }[] = [];
 
@@ -48,18 +45,3 @@ const getAllPosts = async () => {
     console.log(err);
   }
 };
-
-const Home = async () => {
-  const allPosts = await getAllPosts();
-  const passingData = allPosts?.map(({ code, frontmatter }) => ({ code, frontmatter }));
-
-  return (
-    <>
-      <Image src={BlogLogo} alt="logo" />
-      {passingData && <TabContents data={passingData} />}
-      <footer className="text-sm text-second-color fixed bottom-10">© rlorxl 2023</footer>
-    </>
-  );
-};
-
-export default Home;

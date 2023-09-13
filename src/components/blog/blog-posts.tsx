@@ -3,18 +3,23 @@ import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
 import Image from 'next/image';
+import { sortingData } from '@/utils/data-sorting';
 
-const BlogPosts = ({ posts }: { posts: { [key: string]: any }[] }) => {
-  const firstSentence = useRef<string>('');
+const BlogPosts = ({
+  posts,
+}: {
+  posts: { code: string; frontmatter: { [key: string]: string } }[];
+}) => {
+  const firstSentenceArr = useRef<string[]>(Array(posts.length).fill(''));
 
-  const renderFirstP = (props: any) => {
+  const renderFirstSentence = (props: any, idx: number) => {
     const text = props.children;
 
-    if (!firstSentence.current) {
-      firstSentence.current = text;
+    if (firstSentenceArr.current[idx] === '') {
+      firstSentenceArr.current[idx] = text;
       return (
-        <Link href={'#'} className="hover:underline">
-          {firstSentence.current}
+        <Link href={'#'} className="hover:underline hover:text-second-color">
+          {text}
         </Link>
       );
     }
@@ -24,7 +29,7 @@ const BlogPosts = ({ posts }: { posts: { [key: string]: any }[] }) => {
 
   return (
     <>
-      {posts.map(({ code, frontmatter }) => {
+      {sortingData(posts).map(({ code, frontmatter }, idx) => {
         const Component = getMDXComponent(code);
         return (
           <div
@@ -42,7 +47,7 @@ const BlogPosts = ({ posts }: { posts: { [key: string]: any }[] }) => {
                 li: () => null,
                 img: () => null,
                 pre: () => null,
-                p: renderFirstP,
+                p: props => renderFirstSentence(props, idx),
               }}
             />
             <div>
