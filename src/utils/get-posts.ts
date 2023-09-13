@@ -18,6 +18,28 @@ export const getFiles = async (dir: string, posts: string[]) => {
   return files;
 };
 
+export const getPost = async (rootPath: string, filename: string) => {
+  // let paths = Array.from(segments);
+  // let rootPath = '';
+  // let filename = '';
+
+  // paths.forEach((path, i, paths) => {
+  //   if (i === paths.length - 1) filename = `${path}.mdx`;
+  //   else rootPath += `/${path}`;
+  // });
+
+  const rootDirectory = `public/posts${rootPath}`; // public/posts/develop/2023/8
+
+  try {
+    const files = fs.readdirSync(rootDirectory); // [ 'develop.mdx', 'test.mdx' ]
+    const post = files.filter(file => file === filename);
+    const mdxs = await getFiles(rootDirectory, post);
+    return mdxs;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getAllPosts = async () => {
   try {
     let mdxSources: { [key: string]: any }[] = [];

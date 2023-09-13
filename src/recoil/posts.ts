@@ -1,7 +1,14 @@
-import { TPosts } from '@/types/post';
+import { TPost } from '@/types/post';
 import { atom } from 'recoil';
 
-export const postsState = atom<{ code: string; frontmatter: { [key: string]: string } }[]>({
+const postsState = atom<TPost[]>({
   key: 'postsState',
   default: [],
 });
+
+const postState = atom<TPost[]>({
+  key: 'postState',
+  default: [],
+});
+
+export { postsState, postState };

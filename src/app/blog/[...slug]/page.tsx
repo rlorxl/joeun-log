@@ -1,10 +1,9 @@
 import React from 'react';
-import fs from 'fs';
-import { getFiles } from '@/utils/get-posts';
 import PostDetail from '@/components/blog/detail';
+import { getPost } from '@/utils/get-posts';
 
-const getPost = async (segments: string) => {
-  let paths = Array.from(segments);
+const DetailPage = async ({ params }: { params: { slug: string } }) => {
+  let paths = Array.from(params.slug);
   let rootPath = '';
   let filename = '';
 
@@ -13,24 +12,11 @@ const getPost = async (segments: string) => {
     else rootPath += `/${path}`;
   });
 
-  const rootDirectory = `public/posts${rootPath}`; // public/posts/develop/2023/8
-
-  try {
-    const files = fs.readdirSync(rootDirectory); // [ 'develop.mdx', 'test.mdx' ]
-    const post = files.filter(file => file === filename);
-    const mdxs = await getFiles(rootDirectory, post);
-    return mdxs;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const DetailPage = async ({ params }: { params: { slug: string } }) => {
-  const postDetails = await getPost(params.slug);
+  const postDetails = await getPost(rootPath, filename);
   const passingData = postDetails?.map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   return (
-    <div className="ml-48 post-width space-y-5">
+    <div className="ml-80 post-width space-y-5 overflow-y-scroll scrollbar-hide">
       {passingData && <PostDetail post={passingData} />}
     </div>
   );

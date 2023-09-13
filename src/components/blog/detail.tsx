@@ -1,8 +1,43 @@
+'use client';
 import { TPost } from '@/types/post';
 import { getMDXComponent } from 'mdx-bundler/client';
-import React from 'react';
+import React, { HTMLAttributes, useEffect } from 'react';
+import { Highlight, themes } from 'prism-react-renderer';
+import { useSetRecoilState } from 'recoil';
+import { postState } from '@/recoil/posts';
+
+const CustomCode = (props: any) => {
+  // console.log(props);
+
+  const code = props.children.props.children.trim();
+  const className = props.children.props.className || '';
+  const language = className.replace(/language-/, '');
+
+  return (
+    <Highlight theme={themes.palenight} code={code} language={language}>
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
+        <pre className="rounded-md p-4 text-sm mt-6 mb-6" style={style}>
+          {tokens.map((line, i) => (
+            <div key={i} {...getLineProps({ line })}>
+              {line.map((token, key) => (
+                <span key={key} {...getTokenProps({ token })} />
+              ))}
+            </div>
+          ))}
+        </pre>
+      )}
+    </Highlight>
+  );
+};
 
 const PostDetail = ({ post }: { post: TPost[] }) => {
+  const setPost = useSetRecoilState(postState);
+
+  useEffect(() => {
+    if (!post) return;
+    setPost(post);
+  }, [post]);
+
   return (
     <>
       {post.map(({ code, frontmatter }, idx) => {
@@ -30,10 +65,8 @@ const PostDetail = ({ post }: { post: TPost[] }) => {
                 br: props => <br className="mb-12" {...props} />,
                 ol: props => <ol className="list-decimal pl-5 mb-6 space-y-2" {...props} />,
                 ul: props => <ul className="list-disc pl-5 mb-6 space-y-2" {...props} />,
-                pre: props => (
-                  <pre className="bg-gray-800 rounded-lg mt-6 p-5 text-sm text-white" {...props} />
-                ),
                 code: props => <code className=" bg-[#E9EAEE] rounded-md p-1 text-sm" {...props} />,
+                pre: props => CustomCode(props),
               }}
             />
           </div>

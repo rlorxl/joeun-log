@@ -8,7 +8,7 @@ import BlogNavigation from '@/components/blog/navigation';
 const BlogLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex justify-between items-start py-20 h-screen">
-      <nav className="flex-col flex justify-between w-[120px] h-full">
+      <nav className="flex-col flex justify-between w-[120px] fixed h-4/5">
         <Link href="/blog" className="mb-8">
           <Image src={Logo} alt="logo" width={40} />
         </Link>
