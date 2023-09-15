@@ -6,7 +6,7 @@ import Image from 'next/image';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
 import { toUrl } from '../../utils/url';
 
-const popupAni = (i: number): string => {
+const slideUpAni = (i: number): string => {
   let classname = '';
   switch (i) {
     case 0:
@@ -36,9 +36,7 @@ const RecentPosts = () => {
           <div className="shrink-0">
             <ul className="space-y-2">
               {posts.slice(0, 4).map(({ frontmatter }, idx) => (
-                <li
-                  key={frontmatter.title}
-                  className={'flex-between' + (idx >= 0 ? popupAni(idx) : '')}>
+                <li key={frontmatter.title} className={'flex-between' + slideUpAni(idx)}>
                   <Link href={toUrl(frontmatter)} className="mr-12 text-lg hover:underline">
                     {frontmatter.title}
                   </Link>

@@ -5,7 +5,6 @@ import Me from '../../../public/me.mdx';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
-import { TPosts } from '@/types/post';
 import { sortingData } from '../../utils/data-sorting';
 
 type TContents = {
@@ -46,7 +45,7 @@ const TabContents = ({
   }, [data]);
 
   return (
-    <div className="w-full bg-white flex-col flex-center">
+    <div className="w-full flex-col flex-center">
       <div className="text-2xl w-full mt-10 flex-center space-x-8 mb-16">
         <button type="button" onClick={changeTab}>
           me

@@ -38,7 +38,9 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
     if (firstSentenceArr.current[idx] === '') {
       firstSentenceArr.current[idx] = text;
       return (
-        <Link href={toUrl(frontmatter)} className="hover:underline hover:text-second-color">
+        <Link
+          href={toUrl(frontmatter)}
+          className="hover:underline hover:text-second-color dark:text-darkmode-text-color">
           {text}
         </Link>
       );
@@ -69,11 +71,12 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
                 li: () => null,
                 img: () => null,
                 pre: () => null,
+                hr: () => null,
                 p: props => renderFirstSentence(props, idx, frontmatter),
               }}
             />
-            <div>
-              <span className="mr-2">{frontmatter.published}</span>
+            <div className="dark:text-darkmode-text-color">
+              <span className="mr-2 ">{frontmatter.published}</span>
               {frontmatter.keywords.split(',').map((tag: string, i: number) => (
                 <span key={tag + i} className="mr-2">
                   {tag}
@@ -82,7 +85,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             </div>
             <Link
               href={toUrl(frontmatter)}
-              className="text-sm w-fit flex justify-start items-center group">
+              className="text-sm w-fit flex justify-start items-center group dark:text-darkmode-text-color">
               <span className="mr-1">더보기</span>
               <div className="group-hover:animate-moveright">
                 <Image src={ArrowRight} alt="더보기" />
