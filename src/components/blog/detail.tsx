@@ -47,7 +47,7 @@ const PostDetail = ({ post }: { post: TPost[] }) => {
             <section className="mb-10">
               <p className="text-4xl font-bold mb-4">{frontmatter.title}</p>
               <div>
-                {frontmatter.tags.split(',').map((tag: string, i: number) => (
+                {frontmatter.keywords.split(',').map((tag: string, i: number) => (
                   <span key={tag + i} className="mr-2 font-semibold">
                     {tag}
                   </span>

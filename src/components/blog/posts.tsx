@@ -51,7 +51,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             />
             <div>
               <span className="mr-2">{frontmatter.published}</span>
-              {frontmatter.tags.split(',').map((tag: string, i: number) => (
+              {frontmatter.keywords?.split(',').map((tag: string, i: number) => (
                 <span key={tag + i} className="mr-2">
                   {tag}
                 </span>

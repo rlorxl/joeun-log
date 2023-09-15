@@ -34,15 +34,16 @@ export const getPost = cache(async (segments: string) => {
   let rootPath = '';
   let filename = '';
 
-  // const test = decodeURI(
-  //   'http://localhost:3000/blog/develop/2023/8/%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EB%B9%84%EB%8F%99%EA%B8%B0%EB%A1%9C%EC%A7%81-%EC%B2%98%EB%A6%AC%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC',
-  // );
-
   paths.forEach((path, i, paths) => {
     if (i !== paths.length - 1) {
       rootPath += `/${path}`;
     } else {
-      const url = process.env.LOCAL_URL + '/' + path;
+      /* 세그먼트에 한글이 있어서 인코딩된 문자로 반환되기 때문에 디코딩해서 한글로 변환해서 가져와야 한다. 디코딩할때는 전체 Url이 필요. 
+        decodeURI(
+          'http://localhost:3000/blog/develop/2023/8/%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EB%B9%84%EB%8F%99%EA%B8%B0%EB%A1%9C%EC%A7%81-%EC%B2%98%EB%A6%AC%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC',
+        );
+      */
+      const url = process.env.LOCAL_URL + '/' + path; // 로컬 환경변수
       const decodedUri = decodeURI(url);
       const arr = decodedUri.split('/');
       filename = arr[arr.length - 1].replaceAll('-', ' ');
