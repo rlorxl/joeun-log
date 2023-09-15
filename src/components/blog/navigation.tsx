@@ -20,6 +20,7 @@ const navLinkto: TBlogNav[] = [
 
 const BlogNavigation = () => {
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
+  const [isMainIconHover, setIsMainIconHover] = useState<boolean>(false);
   const path = usePathname(); // /blog/develop/2023/8/develop
   const currentPostSource = useRecoilValue(postState);
 
@@ -69,7 +70,6 @@ const BlogNavigation = () => {
           })}
         </div>
       )}
-
       <div className="space-y-10 flex-col flex">
         {!isDetailPage && (
           <button type="button">
@@ -77,11 +77,24 @@ const BlogNavigation = () => {
           </button>
         )}
         <button type="button">
-          <Image src={Icon.Sun} alt="다크모드" />
+          <Image src={Icon.Light} alt="다크모드" />
         </button>
         {!isDetailPage && (
-          <Link href="/">
-            <Image src={Icon.Door} alt="메인으로 이동" />
+          <Link
+            href="/"
+            className="h-11 w-7"
+            onMouseEnter={() => setIsMainIconHover(true)}
+            onMouseLeave={() => setIsMainIconHover(false)}>
+            <div className="h-[46px] w-[34px] relative flex justify-start items-start group">
+              <Image src={Icon.Door} alt="" className="w-full h-full absolute top-0 left-0" />
+              {isMainIconHover && (
+                <Image
+                  src={Icon.DoorLight}
+                  alt="메인으로 이동"
+                  className="w-full h-full absolute top-0 left-0 group-hover:animate-lighton"
+                />
+              )}
+            </div>
           </Link>
         )}
       </div>

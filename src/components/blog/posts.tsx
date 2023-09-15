@@ -8,6 +8,27 @@ import { sortingData } from '@/utils/data-sorting';
 import { TPost } from '@/types/post';
 import { toUrl } from '@/utils/url';
 
+const popupAni = (i: number): string => {
+  let classname = '';
+  switch (i) {
+    case 0:
+      classname = ' animate-show1';
+      break;
+    case 1:
+      classname = ' animate-show2';
+      break;
+    case 2:
+      classname = ' animate-show3';
+      break;
+    case 3:
+      classname = ' animate-show4';
+      break;
+    case 4:
+      classname = ' animate-show5';
+  }
+  return classname;
+};
+
 const Posts = ({ posts }: { posts: TPost[] }) => {
   const firstSentenceArr = useRef<string[]>(Array(posts.length).fill(''));
 
@@ -33,7 +54,9 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
         return (
           <div
             key={frontmatter.title}
-            className="border-b last:border-b-0 pb-5 border-b-second-color space-y-4">
+            className={
+              'border-b last:border-b-0 pb-5 border-b-second-color space-y-4' + popupAni(idx)
+            }>
             <h1 className="text-2xl font-semibold hover:underline mb-4">
               <Link href={toUrl(frontmatter)}>{frontmatter.title}</Link>
             </h1>
@@ -51,7 +74,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             />
             <div>
               <span className="mr-2">{frontmatter.published}</span>
-              {frontmatter.keywords?.split(',').map((tag: string, i: number) => (
+              {frontmatter.keywords.split(',').map((tag: string, i: number) => (
                 <span key={tag + i} className="mr-2">
                   {tag}
                 </span>
@@ -59,9 +82,11 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             </div>
             <Link
               href={toUrl(frontmatter)}
-              className="text-sm w-fit flex justify-start items-center">
+              className="text-sm w-fit flex justify-start items-center group">
               <span className="mr-1">더보기</span>
-              <Image src={ArrowRight} alt="더보기" />
+              <div className="group-hover:animate-moveright">
+                <Image src={ArrowRight} alt="더보기" />
+              </div>
             </Link>
           </div>
         );
