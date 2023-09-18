@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
@@ -8,7 +8,30 @@ import { sortingData } from '@/utils/data-sorting';
 import { TPost } from '@/types/post';
 import { toUrl } from '@/utils/url';
 
+const popupAni = (i: number): string => {
+  let classname = '';
+  switch (i) {
+    case 0:
+      classname = ' animate-show1';
+      break;
+    case 1:
+      classname = ' animate-show2';
+      break;
+    case 2:
+      classname = ' animate-show3';
+      break;
+    case 3:
+      classname = ' animate-show4';
+      break;
+    case 4:
+      classname = ' animate-show5';
+  }
+  return classname;
+};
+
 const Posts = ({ posts }: { posts: TPost[] }) => {
+  const [mounted, setMounted] = useState<boolean>(false);
+
   const firstSentenceArr = useRef<string[]>(Array(posts.length).fill(''));
 
   const renderFirstSentence = (props: any, idx: number, frontmatter: { [key: string]: string }) => {
@@ -17,7 +40,9 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
     if (firstSentenceArr.current[idx] === '') {
       firstSentenceArr.current[idx] = text;
       return (
-        <Link href={toUrl(frontmatter)} className="hover:underline hover:text-second-color">
+        <Link
+          href={toUrl(frontmatter)}
+          className="hover:underline hover:text-second-color dark:text-darkmode-text-color">
           {text}
         </Link>
       );
@@ -26,6 +51,12 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
     return null;
   };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <>
       {sortingData(posts).map(({ code, frontmatter }, idx) => {
@@ -33,7 +64,9 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
         return (
           <div
             key={frontmatter.title}
-            className="border-b last:border-b-0 pb-5 border-b-second-color space-y-4">
+            className={
+              'border-b last:border-b-0 pb-5 border-b-darkmode-text-color space-y-4' + popupAni(idx)
+            }>
             <h1 className="text-2xl font-semibold hover:underline mb-4">
               <Link href={toUrl(frontmatter)}>{frontmatter.title}</Link>
             </h1>
@@ -46,12 +79,13 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
                 li: () => null,
                 img: () => null,
                 pre: () => null,
+                hr: () => null,
                 p: props => renderFirstSentence(props, idx, frontmatter),
               }}
             />
-            <div>
-              <span className="mr-2">{frontmatter.published}</span>
-              {frontmatter.tags.split(',').map((tag: string, i: number) => (
+            <div className="dark:text-darkmode-text-color">
+              <span className="mr-2 ">{frontmatter.published}</span>
+              {frontmatter.keywords.split(',').map((tag: string, i: number) => (
                 <span key={tag + i} className="mr-2">
                   {tag}
                 </span>
@@ -59,9 +93,11 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             </div>
             <Link
               href={toUrl(frontmatter)}
-              className="text-sm w-fit flex justify-start items-center">
+              className="text-sm w-fit flex justify-start items-center group dark:text-darkmode-text-color">
               <span className="mr-1">더보기</span>
-              <Image src={ArrowRight} alt="더보기" />
+              <div className="group-hover:animate-moveright">
+                <Image src={ArrowRight} alt="더보기" />
+              </div>
             </Link>
           </div>
         );

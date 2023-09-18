@@ -5,7 +5,6 @@ import Me from '../../../public/me.mdx';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
-import { TPosts } from '@/types/post';
 import { sortingData } from '../../utils/data-sorting';
 
 type TContents = {
@@ -46,12 +45,18 @@ const TabContents = ({
   }, [data]);
 
   return (
-    <div className="w-full bg-white flex-col flex-center">
-      <div className="text-2xl w-full mt-10 flex-center space-x-8 mb-16">
-        <button type="button" onClick={changeTab}>
+    <div className="w-full flex-col flex-center">
+      <div className="text-2xl font-bold w-full my-10 flex-center space-x-8">
+        <button
+          type="button"
+          onClick={changeTab}
+          className="relative h-10 hover:before:absolute hover:before:bottom-0 hover:before:left-1/2 hover:before:-translate-x-1/2 s hover:before:w-1/2 hover:before:h-1 hover:before:bg-base-color hover:before:animate-drawline">
           me
         </button>
-        <button type="button" onClick={changeTab}>
+        <button
+          type="button"
+          onClick={changeTab}
+          className="relative h-10 hover:before:absolute hover:before:bottom-0 hover:before:left-1/2 hover:before:-translate-x-1/2 s hover:before:w-1/2 hover:before:h-1 hover:before:bg-base-color hover:before:animate-drawline">
           contact
         </button>
       </div>

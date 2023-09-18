@@ -2,7 +2,7 @@ export type TPosts = {
   title: string;
   category: string;
   published: string;
-  tags?: string;
+  keywords: string;
   description?: string;
 };
 
