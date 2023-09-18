@@ -21,6 +21,10 @@ module.exports = {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(5px)' },
         },
+        drawline: {
+          '0%': { width: '0%' },
+          '100%': { width: '50%' },
+        },
         lighton: {
           '0%': { opacity: '0%' },
           '100%': { opacity: '100%' },
@@ -41,6 +45,7 @@ module.exports = {
         show4: 'show 2s ease forwards',
         show5: 'show 2.5s ease forwards',
         moveright: 'moveright 0.5s forwards',
+        drawline: 'drawline 0.4s forwards',
         lighton: 'lighton 0.5s ease-in-out forwards',
         todarkmode: 'darkmode 0.7s ease-in-out forwards',
         tolightmode: 'lightmode 0.7s ease-in-out forwards',
