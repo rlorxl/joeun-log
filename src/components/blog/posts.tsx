@@ -65,7 +65,8 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
           <div
             key={frontmatter.title}
             className={
-              'border-b last:border-b-0 pb-5 border-b-darkmode-text-color space-y-4' + popupAni(idx)
+              'border-b last:border-b-0 pb-5 border-b-darkmode-text-color space-y-4 sm:px-8' +
+              popupAni(idx)
             }>
             <h1 className="text-2xl font-semibold hover:underline mb-4">
               <Link href={toUrl(frontmatter)}>{frontmatter.title}</Link>

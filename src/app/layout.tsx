@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body
         className={`${sofia.className} dark:text-white dark:bg-darkmode-base-color transition-all duration-75`}>
-        <main className="w-full min-h-screen flex-col flex-center">
+        <main className="w-full min-h-screen relative flex-col flex-center">
           <RecoilRootWrapper>
             <ThemeWrapper>{children}</ThemeWrapper>
           </RecoilRootWrapper>

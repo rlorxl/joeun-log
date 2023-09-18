@@ -9,9 +9,11 @@ const Home = async () => {
 
   return (
     <>
-      <Image src={BlogLogo} alt="logo" />
+      <Image src={BlogLogo} alt="logo" className="sm:w-14" />
       {passingData && <TabContents data={passingData} />}
-      <footer className="text-sm text-second-color fixed bottom-10">© rlorxl. 2023</footer>
+      <footer className="fixed bottom-0 bg-white w-full p-5 text-sm text-center text-second-color">
+        ©rlorxl. 2023
+      </footer>
     </>
   );
 };

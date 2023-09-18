@@ -10,8 +10,8 @@ import { useTheme } from 'next-themes';
 const BlogLayout = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useTheme();
   return (
-    <div className="flex justify-between items-start py-20 h-screen">
-      <nav className="flex-col flex justify-between w-[120px] fixed h-4/5">
+    <div className="relative py-20 h-screen sm:py-0 sm:w-full">
+      <nav className="flex-col flex justify-between w-[120px] fixed h-4/5 dark:bg-darkmode-base-color bg-white sm:w-full sm:p-8 sm:h-auto sm:z-10 sm:sticky sm:top-0">
         <Link href="/blog" className="mb-8">
           {theme === 'dark' ? (
             <Image src={LogoWhite} alt="logo" width={40} />
@@ -20,9 +20,11 @@ const BlogLayout = ({ children }: { children: React.ReactNode }) => {
           )}
         </Link>
         <BlogNavigation />
-        <div className="mt-8 text-sm text-second-color">©rlorxl 2023</div>
       </nav>
       {children}
+      <div className="text-sm text-second-color fixed bottom-20 sm:static sm:py-5 sm:text-center">
+        ©rlorxl. 2023
+      </div>
     </div>
   );
 };

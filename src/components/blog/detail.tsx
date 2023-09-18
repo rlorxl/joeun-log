@@ -16,7 +16,7 @@ const CustomCode = (props: any) => {
   return (
     <Highlight theme={themes.palenight} code={code} language={language}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre className="rounded-md p-4 text-sm mt-6 mb-6" style={style}>
+        <pre className="rounded-md p-4 text-sm mt-6 mb-6 overflow-x-scroll" style={style}>
           {tokens.map((line, i) => (
             <div key={i} {...getLineProps({ line })}>
               {line.map((token, key) => (
@@ -60,12 +60,29 @@ const PostDetail = ({ post }: { post: TPost[] }) => {
                 h1: props => <h1 className="text-3xl font-semibold mb-3" {...props} />,
                 h2: props => <h2 className="text-2xl font-semibold mb-3" {...props} />,
                 h3: props => <h3 className="text-xl font-semibold mb-3" {...props} />,
-                p: props => <p className="mb-2 leading-6" {...props} />,
+                p: props => (
+                  <p className="mb-2 leading-6 dark:text-darkmode-text-color" {...props} />
+                ),
                 hr: props => <hr className="border-2 mt-6 mb-6" {...props} />,
                 br: props => <br className="mb-12" {...props} />,
-                ol: props => <ol className="list-decimal pl-5 mb-6 space-y-2" {...props} />,
-                ul: props => <ul className="list-disc pl-5 mb-6 space-y-2" {...props} />,
-                code: props => <code className=" bg-[#E9EAEE] rounded-md p-1 text-sm" {...props} />,
+                ol: props => (
+                  <ol
+                    className="list-decimal pl-5 mb-6 space-y-2 dark:text-darkmode-text-color"
+                    {...props}
+                  />
+                ),
+                ul: props => (
+                  <ul
+                    className="list-disc pl-5 mb-6 space-y-2 dark:text-darkmode-text-color"
+                    {...props}
+                  />
+                ),
+                code: props => (
+                  <code
+                    className=" bg-[#E9EAEE] rounded-md p-1 text-sm dark:text-base-color"
+                    {...props}
+                  />
+                ),
                 pre: props => CustomCode(props),
               }}
             />

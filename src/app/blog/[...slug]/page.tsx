@@ -54,7 +54,7 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
   const passingData = Array(postDetails).map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   return (
-    <div className="ml-80 post-width space-y-5 overflow-y-scroll scrollbar-hide">
+    <div className="ml-80 post-width space-y-5 overflow-x-hidden overflow-y-scroll scrollbar-hide sm:w-full sm:ml-0 sm:p-8">
       {passingData && <PostDetail post={passingData} />}
     </div>
   );

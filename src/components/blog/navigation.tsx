@@ -57,7 +57,7 @@ const BlogNavigation = () => {
   return (
     <div className="flex flex-col justify-between h-4/5 font-semibold">
       {!isDetailPage && (
-        <ul className="space-y-8">
+        <ul className="space-y-8 sm:space-y-5">
           {navLinkto.map(({ name, link }) => (
             <li key={name} className="hover:text-second-color transition">
               <Link href={link}>{name}</Link>
@@ -89,7 +89,7 @@ const BlogNavigation = () => {
           })}
         </div>
       )}
-      <div className="space-y-10 flex-col flex">
+      <div className="space-y-10 flex-col flex sm:flex-row sm:justify-between sm:items-center sm:space-y-0 sm: sm:w-36 sm:absolute sm:top-0 sm:p-8 sm:right-0">
         {/* {!isDetailPage && (
           <button type="button">
             <Image src={Icon.Search} alt="검색" />

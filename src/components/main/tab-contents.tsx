@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import { sortingData } from '../../utils/data-sorting';
+import { toSmallDevice } from '@/utils/responsive-class';
 
 type TContents = {
   name: string;
@@ -46,7 +47,8 @@ const TabContents = ({
 
   return (
     <div className="w-full flex-col flex-center">
-      <div className="text-2xl font-bold w-full my-10 flex-center space-x-8">
+      <div
+        className={`text-2xl font-bold w-full my-10 flex-center space-x-8 sm:flex-col sm:space-x-0`}>
         <button
           type="button"
           onClick={changeTab}
@@ -60,13 +62,13 @@ const TabContents = ({
           contact
         </button>
       </div>
-      <div className="text-center">{mainContent}</div>
       {currentTab !== 'blog' && (
-        <button type="button" className="mt-14 flex-center" onClick={() => setCurrentTab('blog')}>
+        <button type="button" className="mb-10 flex-center" onClick={() => setCurrentTab('blog')}>
           <Icon icon="pajamas:go-back" className="mr-2" />
           뒤로
         </button>
       )}
+      <div className="text-center sm:px-8 sm:pb-20">{mainContent}</div>
     </div>
   );
 };
