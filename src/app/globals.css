@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Work+Sans:wght@400;700&display=swap');
 
 @layer base {
   * {
@@ -18,6 +19,11 @@
 
   a {
     @apply no-underline;
+  }
+
+  [data-theme='dark'] [data-hide-on-theme='dark'],
+  [data-theme='light'] [data-hide-on-theme='light'] {
+    display: none;
   }
 }
 

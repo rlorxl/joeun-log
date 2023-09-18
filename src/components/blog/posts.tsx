@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
 import ArrowRight from '../../../public/icon/arrow-right.svg';
@@ -30,6 +30,8 @@ const popupAni = (i: number): string => {
 };
 
 const Posts = ({ posts }: { posts: TPost[] }) => {
+  const [mounted, setMounted] = useState<boolean>(false);
+
   const firstSentenceArr = useRef<string[]>(Array(posts.length).fill(''));
 
   const renderFirstSentence = (props: any, idx: number, frontmatter: { [key: string]: string }) => {
@@ -49,6 +51,12 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
     return null;
   };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <>
       {sortingData(posts).map(({ code, frontmatter }, idx) => {
@@ -57,7 +65,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
           <div
             key={frontmatter.title}
             className={
-              'border-b last:border-b-0 pb-5 border-b-second-color space-y-4' + popupAni(idx)
+              'border-b last:border-b-0 pb-5 border-b-darkmode-text-color space-y-4' + popupAni(idx)
             }>
             <h1 className="text-2xl font-semibold hover:underline mb-4">
               <Link href={toUrl(frontmatter)}>{frontmatter.title}</Link>

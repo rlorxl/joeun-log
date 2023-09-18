@@ -27,7 +27,7 @@ const CategoryPage = async ({ params }: { params: { slug: string } }) => {
   const passingData = categoryPosts.map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   return (
-    <div className="ml-52 blog-width space-y-5">
+    <div className="ml-60 blog-width space-y-5">
       <Posts posts={passingData} />
     </div>
   );

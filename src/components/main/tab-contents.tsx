@@ -46,7 +46,7 @@ const TabContents = ({
 
   return (
     <div className="w-full flex-col flex-center">
-      <div className="text-2xl w-full mt-10 flex-center space-x-8 mb-16">
+      <div className="text-2xl font-bold w-full mt-10 flex-center space-x-8 mb-16">
         <button type="button" onClick={changeTab}>
           me
         </button>

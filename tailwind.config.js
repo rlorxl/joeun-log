@@ -60,5 +60,5 @@ module.exports = {
     //   );
     // }),
   ],
-  darkMode: 'class', // html요소의 class속성에서 모드 정보를 찾을 수 있음.
+  darkMode: ['class'], // html요소의 class속성에서 모드 정보를 찾을 수 있음.
 };
