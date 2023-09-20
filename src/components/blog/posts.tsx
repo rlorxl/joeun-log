@@ -55,6 +55,11 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
     setMounted(true);
   }, []);
 
+  // 렌더링될 때마다 ref값 초기화.
+  useEffect(() => {
+    firstSentenceArr.current = Array(posts.length).fill('');
+  });
+
   if (!mounted) return null;
 
   return (

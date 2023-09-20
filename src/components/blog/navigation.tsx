@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation';
 import { useRecoilValue } from 'recoil';
 import { postState } from '@/recoil/posts';
 import { getMDXComponent } from 'mdx-bundler/client';
-import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
+import setCookie from '@/utils/set-cookie';
 
 type TBlogNav = {
   name: string;
@@ -21,16 +21,7 @@ const navLinkto: TBlogNav[] = [
   { name: '그냥생각', link: '/blog/daily' },
 ];
 
-const setCookie = (value: string) => {
-  let exdate = new Date();
-  exdate.setDate(exdate.getDate() + 7);
-  let cookieValue = value;
-  document.cookie = `theme=${cookieValue};Path=/;`;
-};
-
 const BlogNavigation = ({ cookie }: { cookie?: string }) => {
-  const { theme, setTheme } = useTheme();
-
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
   const [isMainIconHover, setIsMainIconHover] = useState<boolean>(false);
   const [clickTheme, setClickTheme] = useState<boolean>(false);
@@ -48,25 +39,21 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
 
   const changeMode = () => {
     setClickTheme(true);
-    router.refresh();
 
-    if (!theme) return;
+    if (!cookie) return;
 
-    if (theme === 'light') {
-      setTheme('dark');
+    if (cookie === 'light') {
       setCookie('dark');
     } else {
-      setTheme('light');
       setCookie('light');
     }
 
-    setTimeout(() => {
-      setClickTheme(false);
-    }, 700);
+    // 테마변경시 layout리렌더링 :data-theme변경
+    router.refresh();
   };
 
   const componentStyle = {
-    myH1: 'cursor-pointer text-second-color hover:text-base-color',
+    myH1: 'cursor-pointer hover:text-second-color',
   };
 
   return (
@@ -85,21 +72,23 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
           {currentPostSource.map(({ code, frontmatter }) => {
             const Component = getMDXComponent(code);
             return (
-              <Component
-                key={frontmatter.title}
-                components={{
-                  p: () => null,
-                  pre: () => null,
-                  ul: () => null,
-                  ol: () => null,
-                  br: () => null,
-                  hr: () => null,
-                  a: () => null,
-                  h3: () => null,
-                  h1: props => <div className={componentStyle.myH1} {...props} />,
-                  h2: props => <div className={componentStyle.myH1 + ' pl-2'} {...props} />,
-                }}
-              />
+              <div className="pl-3 border-l border-second-color">
+                <Component
+                  key={frontmatter.title}
+                  components={{
+                    p: () => null,
+                    pre: () => null,
+                    ul: () => null,
+                    ol: () => null,
+                    br: () => null,
+                    hr: () => null,
+                    a: () => null,
+                    h3: () => null,
+                    h1: props => <div className={componentStyle.myH1} {...props} />,
+                    h2: props => <div className={componentStyle.myH1 + ' pl-2'} {...props} />,
+                  }}
+                />
+              </div>
             );
           })}
         </div>
@@ -117,10 +106,10 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
           <div
             className={
               'absolute top-1/2 -translate-y-1/2 w-[104px] h-6' +
-              (theme === 'light' ? ' left-2' : theme === 'dark' ? ' -left-8' : '') +
-              (clickTheme && theme === 'dark'
+              (cookie === 'light' ? ' left-2' : cookie === 'dark' ? ' -left-8' : '') +
+              (clickTheme && cookie === 'dark'
                 ? ' animate-todarkmode'
-                : clickTheme && theme === 'light'
+                : clickTheme && cookie === 'light'
                 ? ' animate-tolightmode'
                 : '')
             }>
