@@ -7,7 +7,8 @@ import { usePathname } from 'next/navigation';
 import { useRecoilValue } from 'recoil';
 import { postState } from '@/recoil/posts';
 import { getMDXComponent } from 'mdx-bundler/client';
-import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
+import setCookie from '@/utils/set-cookie';
 
 type TBlogNav = {
   name: string;
@@ -20,14 +21,14 @@ const navLinkto: TBlogNav[] = [
   { name: '그냥생각', link: '/blog/daily' },
 ];
 
-const BlogNavigation = () => {
-  const { theme, setTheme } = useTheme();
-
+const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
   const [isMainIconHover, setIsMainIconHover] = useState<boolean>(false);
   const [clickTheme, setClickTheme] = useState<boolean>(false);
   const path = usePathname(); // /blog/develop/2023/8/develop
   const currentPostSource = useRecoilValue(postState);
+
+  const router = useRouter();
 
   useEffect(() => {
     const paths = path.split('/');
@@ -39,25 +40,26 @@ const BlogNavigation = () => {
   const changeMode = () => {
     setClickTheme(true);
 
-    if (theme === 'light') {
-      setTheme('dark');
+    if (!cookie) return;
+
+    if (cookie === 'light') {
+      setCookie('dark');
     } else {
-      setTheme('light');
+      setCookie('light');
     }
 
-    setTimeout(() => {
-      setClickTheme(false);
-    }, 700);
+    // 테마변경시 layout리렌더링 :data-theme변경
+    router.refresh();
   };
 
   const componentStyle = {
-    myH1: 'cursor-pointer text-second-color hover:text-base-color',
+    myH1: 'cursor-pointer hover:text-second-color',
   };
 
   return (
     <div className="flex flex-col justify-between h-4/5 font-semibold">
       {!isDetailPage && (
-        <ul className="space-y-8">
+        <ul className="space-y-8 sm:space-y-5">
           {navLinkto.map(({ name, link }) => (
             <li key={name} className="hover:text-second-color transition">
               <Link href={link}>{name}</Link>
@@ -70,26 +72,28 @@ const BlogNavigation = () => {
           {currentPostSource.map(({ code, frontmatter }) => {
             const Component = getMDXComponent(code);
             return (
-              <Component
-                key={frontmatter.title}
-                components={{
-                  p: () => null,
-                  pre: () => null,
-                  ul: () => null,
-                  ol: () => null,
-                  br: () => null,
-                  hr: () => null,
-                  a: () => null,
-                  h3: () => null,
-                  h1: props => <div className={componentStyle.myH1} {...props} />,
-                  h2: props => <div className={componentStyle.myH1 + ' pl-2'} {...props} />,
-                }}
-              />
+              <div className="pl-3 border-l border-second-color">
+                <Component
+                  key={frontmatter.title}
+                  components={{
+                    p: () => null,
+                    pre: () => null,
+                    ul: () => null,
+                    ol: () => null,
+                    br: () => null,
+                    hr: () => null,
+                    a: () => null,
+                    h3: () => null,
+                    h1: props => <div className={componentStyle.myH1} {...props} />,
+                    h2: props => <div className={componentStyle.myH1 + ' pl-2'} {...props} />,
+                  }}
+                />
+              </div>
             );
           })}
         </div>
       )}
-      <div className="space-y-10 flex-col flex">
+      <div className="space-y-10 flex-col flex sm:flex-row sm:justify-between sm:items-center sm:space-y-0 sm: sm:w-36 sm:absolute sm:top-0 sm:p-8 sm:right-0">
         {/* {!isDetailPage && (
           <button type="button">
             <Image src={Icon.Search} alt="검색" />
@@ -102,10 +106,10 @@ const BlogNavigation = () => {
           <div
             className={
               'absolute top-1/2 -translate-y-1/2 w-[104px] h-6' +
-              (theme === 'light' ? ' left-2' : theme === 'dark' ? ' -left-8' : '') +
-              (clickTheme && theme === 'dark'
+              (cookie === 'light' ? ' left-2' : cookie === 'dark' ? ' -left-8' : '') +
+              (clickTheme && cookie === 'dark'
                 ? ' animate-todarkmode'
-                : clickTheme && theme === 'light'
+                : clickTheme && cookie === 'light'
                 ? ' animate-tolightmode'
                 : '')
             }>
