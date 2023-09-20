@@ -25,7 +25,7 @@ const setCookie = (value: string) => {
   let exdate = new Date();
   exdate.setDate(exdate.getDate() + 7);
   let cookieValue = value;
-  document.cookie = `theme=${cookieValue}`;
+  document.cookie = `theme=${cookieValue};Path=/;`;
 };
 
 const BlogNavigation = ({ cookie }: { cookie?: string }) => {
