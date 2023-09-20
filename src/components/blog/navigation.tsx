@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { postState } from '@/recoil/posts';
 import { getMDXComponent } from 'mdx-bundler/client';
 import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 
 type TBlogNav = {
   name: string;
@@ -20,7 +21,14 @@ const navLinkto: TBlogNav[] = [
   { name: '그냥생각', link: '/blog/daily' },
 ];
 
-const BlogNavigation = () => {
+const setCookie = (value: string) => {
+  let exdate = new Date();
+  exdate.setDate(exdate.getDate() + 7);
+  let cookieValue = value;
+  document.cookie = `theme=${cookieValue}`;
+};
+
+const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   const { theme, setTheme } = useTheme();
 
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
@@ -28,6 +36,8 @@ const BlogNavigation = () => {
   const [clickTheme, setClickTheme] = useState<boolean>(false);
   const path = usePathname(); // /blog/develop/2023/8/develop
   const currentPostSource = useRecoilValue(postState);
+
+  const router = useRouter();
 
   useEffect(() => {
     const paths = path.split('/');
@@ -38,11 +48,16 @@ const BlogNavigation = () => {
 
   const changeMode = () => {
     setClickTheme(true);
+    router.refresh();
+
+    if (!theme) return;
 
     if (theme === 'light') {
       setTheme('dark');
+      setCookie('dark');
     } else {
       setTheme('light');
+      setCookie('light');
     }
 
     setTimeout(() => {

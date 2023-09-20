@@ -11,7 +11,7 @@ const Home = async () => {
     <>
       <Image src={BlogLogo} alt="logo" className="sm:w-14" />
       {passingData && <TabContents data={passingData} />}
-      <footer className="fixed bottom-0 bg-white w-full p-5 text-sm text-center text-second-color">
+      <footer className="fixed bottom-0 bg-white dark:bg-darkmode-base-color w-full p-5 text-sm text-center text-second-color">
         ©rlorxl. 2023
       </footer>
     </>

@@ -1,20 +1,22 @@
 'use client';
 import { TPost } from '@/types/post';
 import { getMDXComponent } from 'mdx-bundler/client';
-import React, { HTMLAttributes, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Highlight, themes } from 'prism-react-renderer';
 import { useSetRecoilState } from 'recoil';
 import { postState } from '@/recoil/posts';
+import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
-const CustomCode = (props: any) => {
-  // console.log(props);
-
+const CustomCode = (props: any, cookie: string) => {
   const code = props.children.props.children.trim();
   const className = props.children.props.className || '';
   const language = className.replace(/language-/, '');
 
   return (
-    <Highlight theme={themes.palenight} code={code} language={language}>
+    <Highlight
+      theme={cookie === 'dark' ? themes.nightOwl : themes.nightOwlLight}
+      code={code}
+      language={language}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre className="rounded-md p-4 text-sm mt-6 mb-6 overflow-x-scroll" style={style}>
           {tokens.map((line, i) => (
@@ -30,8 +32,15 @@ const CustomCode = (props: any) => {
   );
 };
 
-const PostDetail = ({ post }: { post: TPost[] }) => {
+const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie }) => {
   const setPost = useSetRecoilState(postState);
+  const [cookieValue, setCookieValue] = useState<string>('');
+
+  useEffect(() => {
+    console.log(cookie);
+    if (!cookie) return;
+    setCookieValue(cookie.value);
+  }, [cookie]);
 
   useEffect(() => {
     if (!post) return;
@@ -83,7 +92,7 @@ const PostDetail = ({ post }: { post: TPost[] }) => {
                     {...props}
                   />
                 ),
-                pre: props => CustomCode(props),
+                pre: props => CustomCode(props, cookieValue),
               }}
             />
           </div>

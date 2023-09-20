@@ -3,6 +3,12 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Work+Sans:wght@400;700&display=swap');
 
+:root {
+  --darkmode-base-color: #282930;
+  --darkmode-text-color: #cbcfdc;
+  --true-black: #000;
+}
+
 @layer base {
   * {
     @apply box-border p-0 m-0;
@@ -21,9 +27,9 @@
     @apply no-underline;
   }
 
-  [data-theme='dark'] [data-hide-on-theme='dark'],
-  [data-theme='light'] [data-hide-on-theme='light'] {
-    display: none;
+  [data-theme='dark'] {
+    background-color: var(--darkmode-base-color);
+    color: var(--darkmode-text-color);
   }
 }
 
