@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import BlogLogo from '../../public/mainlogo.svg';
 import TabContents from '@/components/main/tab-contents';
-import { getAllPosts } from '@/utils/get-posts';
+import { getAllPosts } from '@/utils/common/get-posts';
 
 const Home = async () => {
   const allPosts = await getAllPosts();

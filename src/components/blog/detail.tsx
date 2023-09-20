@@ -37,7 +37,6 @@ const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie })
   const [cookieValue, setCookieValue] = useState<string>('');
 
   useEffect(() => {
-    console.log(cookie);
     if (!cookie) return;
     setCookieValue(cookie.value);
   }, [cookie]);

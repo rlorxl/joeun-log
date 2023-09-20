@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Logo from '../../../public/logo.svg';
 import LogoWhite from '../../../public/logo-white.svg';
 import BlogNavigation from '@/components/blog/navigation';
-import getCookie from '@/utils/get-cookie';
+import getCookie from '@/utils/common/get-cookie';
 
 const BlogLayout = ({ children }: { children: React.ReactNode }) => {
   const theme = getCookie();

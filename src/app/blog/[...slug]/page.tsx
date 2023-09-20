@@ -1,8 +1,8 @@
 import React from 'react';
 import PostDetail from '@/components/blog/detail';
-import { getPost } from '@/utils/get-posts';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
+import { getPost } from '@/utils/common/get-posts';
 
 export const generateMetadata = async ({
   params,

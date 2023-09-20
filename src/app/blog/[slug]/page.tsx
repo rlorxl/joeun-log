@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { getFiles } from '@/utils/get-posts';
 import Posts from '@/components/blog/posts';
+import { getFiles } from '@/utils/common/get-posts';
 
 const getCategoryPosts = async (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
