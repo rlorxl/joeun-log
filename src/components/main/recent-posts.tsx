@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import Image from 'next/image';
-import ArrowRight from '../../../public/icon/arrow-right.svg';
+import ArrowRight from '../../../public/assets/icon/arrow-right.svg';
 import { toUrl } from '../../utils/url';
 
 const slideUpAni = (i: number): string => {

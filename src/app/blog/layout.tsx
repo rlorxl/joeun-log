@@ -2,8 +2,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Logo from '../../../public/logo.svg';
-import LogoWhite from '../../../public/logo-white.svg';
+import Logo from '../../../public/assets/logo.svg';
+import LogoWhite from '../../../public/assets/logo-white.svg';
 import BlogNavigation from '@/components/blog/navigation';
 import getCookie from '@/utils/common/get-cookie';
 

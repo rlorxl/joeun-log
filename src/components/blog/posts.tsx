@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
-import ArrowRight from '../../../public/icon/arrow-right.svg';
+import ArrowRight from '../../../public/assets/icon/arrow-right.svg';
 import Image from 'next/image';
 import { sortingData } from '@/utils/data-sorting';
 import { TPost } from '@/types/post';

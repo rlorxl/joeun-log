@@ -7,6 +7,7 @@
   --darkmode-base-color: #282930;
   --darkmode-text-color: #e0e0e0;
   --true-black: #000;
+  --white: #fff;
 }
 
 @layer base {
@@ -29,11 +30,19 @@
 
   [data-theme='dark'] {
     background-color: var(--darkmode-base-color);
+    color: var(--white);
+  }
+
+  [data-theme='dark'] p {
     color: var(--darkmode-text-color);
   }
 
   [data-theme='dark'] code {
     color: var(--darkmode-base-color);
+  }
+
+  [data-theme='dark'] nav {
+    background-color: var(--darkmode-base-color);
   }
 }
 

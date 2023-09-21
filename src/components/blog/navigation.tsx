@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import * as Icon from '../../../public/icon';
+import * as Icon from '../../../public/assets/icon';
 import { usePathname } from 'next/navigation';
 import { useRecoilValue } from 'recoil';
 import { postState } from '@/recoil/posts';
