@@ -124,11 +124,7 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
             className={
               'absolute top-1/2 -translate-y-1/2 w-[104px] h-6' +
               (cookie === DARK_MODE ? ' -left-8' : ' left-2') +
-              (clickTheme && cookie === DARK_MODE
-                ? ' animate-todarkmode'
-                : clickTheme && cookie === LIGHT_MODE
-                ? ' animate-tolightmode'
-                : '')
+              (clickTheme && cookie === DARK_MODE ? ' animate-todarkmode' : ' animate-tolightmode')
             }>
             <Image src={Icon.Mode} alt="라이트모드" />
           </div>
