@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import * as Icon from '../../../public/assets/icon';
+import { Icon as GoBackIcon } from '@iconify/react/dist/iconify.js';
 import { usePathname } from 'next/navigation';
 import { useRecoilValue } from 'recoil';
 import { postState } from '@/recoil/posts';
@@ -38,19 +39,17 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   const [clickTheme, setClickTheme] = useState<boolean>(false);
 
   const router = useRouter();
-  const path = usePathname(); // /blog/develop/2023/8/develo
+  const path = usePathname(); // /blog/develop/2023/8/develop
   const currentPostSource = useRecoilValue(postState);
 
   useEffect(() => {
     const paths = path.split('/');
-
     if (paths.length > 3) setIsDetailPage(true);
     else setIsDetailPage(false);
   }, [path]);
 
   useEffect(() => {
     if (!mounted) setMounted(true);
-    console.log(cookie);
   }, []);
 
   const changeMode = () => {
@@ -69,15 +68,11 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
     router.refresh();
   };
 
-  const componentStyle = {
-    myH1: 'cursor-pointer hover:text-second-color',
-  };
-
   return (
-    <div className="flex flex-col justify-between h-4/5 font-semibold">
+    <div className="flex flex-col justify-between h-4/5">
       {!mounted && <div className="min-h-[300px]" />}
       {!isDetailPage && mounted && (
-        <ul className="space-y-8 sm:space-y-5">
+        <ul className="space-y-8 sm:space-y-5 font-semibold">
           {navLinkto.map(({ name, link }) => (
             <li key={name} className="hover:text-second-color transition">
               <Link href={link}>{name}</Link>
@@ -86,23 +81,36 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
         </ul>
       )}
       {isDetailPage && (
-        <div>
-          {currentPostSource.map(({ code, frontmatter }) => {
+        <div className="text-sm">
+          <Link href={''} className="mb-10 flex">
+            <GoBackIcon icon="pajamas:go-back" className="mr-2" />
+            목록
+          </Link>
+          {currentPostSource.map(({ code, frontmatter }, idx) => {
             const Component = getMDXComponent(code);
             return (
-              <div key={frontmatter.title} className="pl-3 border-l border-second-color">
+              <div key={frontmatter.title} className="pl-3 border-l border-sPecond-color -pt-10">
                 <Component
                   components={{
+                    blockquote: () => null,
                     p: () => null,
                     pre: () => null,
                     ul: () => null,
                     ol: () => null,
-                    br: () => null,
                     hr: () => null,
                     a: () => null,
                     h3: () => null,
-                    h1: props => <div className={componentStyle.myH1} {...props} />,
-                    h2: props => <div className={componentStyle.myH1 + ' pl-2'} {...props} />,
+                    br: () => null,
+                    h1: props => (
+                      <div className="mb-2 cursor-pointer hover:text-second-color" {...props}>
+                        {props.children}
+                      </div>
+                    ),
+                    h2: props => (
+                      <div className="mb-2 cursor-pointer hover:text-second-color" {...props}>
+                        {props.children}
+                      </div>
+                    ),
                   }}
                 />
               </div>

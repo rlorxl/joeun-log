@@ -1,0 +1,146 @@
+---
+title: 다크모드 구현 - Next13 layout 강제 리렌더링
+category: develop
+published: 2023-9-22
+keywords: Next13, 다크모드
+description: '다크모드 구현 - Next13 layout 강제 리렌더링'
+---
+
+Next13과 cookie를 사용해 다크모드를 구현하면서 생긴 이슈와 해결법.
+
+<br />
+
+## layout 컴포넌트 리렌더링
+
+다크모드를 구현하는데 next-themes를 사용해서 편하게 다크모드 설정을 하려고 했다.
+
+하지만 다크모드인 상태에서 새로고침을 하면 배경이 흰색으로 한번 변했다가 다크모드로 바뀌었다.
+
+> 이유 :
+> 클라이언트에서 useTheme를 확인한후 스타일이 입혀지는데 서버 컴포넌트 실행후에 클라이언트 컴포넌트가 실행되기 때문에 html태그에 class가 적용되는 시점과 DOM트리가 구성되는 시점에 차이가 있어서 기본인 흰화면이 먼저 렌더링된다.
+
+따라서 script파일을 읽기 전에 서버단에서 미리 다크모드 적용이 되어있게 만들어야 한다.
+
+쿠키를 이용해서 버튼이 눌릴때마다 쿠키에 테마가 저장되게 하고 body에는 data-theme속성을 추가해 쿠키값에 따라서 스타일이 바뀌도록 구현했다.
+
+```js
+[data-theme='dark'] {
+    background-color: var(--darkmode-base-color);
+    color: var(--darkmode-text-color);
+ }
+```
+
+<br />
+
+하지만 처음에 테마변경 이후에 이벤트가 먹지 않았다.
+
+쿠키를 확인해보니 쿠키는 변경이 되고 data-theme 값만 변경되지 않는다.
+
+이유는 layout은 리렌더링이 발생하지 않기 때문이었다.
+
+<br />
+
+**🔎 다시 next-theme를 사용해서 클라이언트 컴포넌트에서 useTheme로 data-theme를 변경하면 안될까?**
+
+가능하지만 의미가 없다. 앞서 말했듯 클라이언트 컴포넌트 마운트 시점 이전에 스타일을 변경시켜야한다.
+
+이벤트가 발생할 때마다 RootLayout에서 쿠키를 가져오는 함수가 실행되어야한다.
+
+클라이언트에서 이벤트가 발생했을 때 서버 컴포넌트가 트리거 될 수 있는 방법, 서버 컴포넌트를 강제 렌더링하는 방법을 찾아봤다.
+
+비슷한 이슈로 질문한 글을 찾았다.
+
+[https://www.reddit.com/r/nextjs/comments/13egbrc/force_rerender_of_the_layout/?rdt=53005](https://www.reddit.com/r/nextjs/comments/13egbrc/force_rerender_of_the_layout/?rdt=53005)
+
+<br />
+
+답변에서 공식문서로 들어갈 수 있었는데
+
+결론은 router를 이용하면 된다.
+
+클라이언트에서 **router.refresh()** 로 서버 컴포넌트를 강제 리렌더링 할 수 있다. [🔗 use-router](https://nextjs.org/docs/app/api-reference/functions/use-router)
+
+---
+
+## 최초 렌더링시 쿠키 저장하기
+
+쿠키가 저장이 되어있을때 말고 최초에 모드를 설정하는게 필요한데 그걸 까먹었다..
+
+```js
+// app/layout.tsx
+
+const theme = getCookie();
+
+<body data-theme={theme.value}>
+  <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
+    <RecoilRootWrapper>{children}</RecoilRootWrapper>
+  </main>
+</body>;
+```
+
+처음 실행되었을때는 theme값이 undefined이기 때문에 data-theme가 추가되지 않는다.
+
+getCookie함수 내부에서 쿠키값을 확인해서 없으면 테마 기본설정을 확인하는 코드를 넣어서 theme에 반환되는 값을 다르게 하려고 했는데
+
+문제는 next13에서는 서버 컴포넌트 안에서 전역객체나 리액트 훅을 다이렉트로 사용할 수 없기 때문에 브라우저의 기본 테마 설정을 확인할 때 window객체가 필요한데 이걸 쓸 수가 없다.
+
+이것 때문에 쿠키를 가져올때는 next의 cookies를 사용하고, 저장할 때는 기본 window객체를 이용하는 코드를 쓰고 있다.
+
+[🔗 composition-patterns](https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#supported-pattern-passing-server-components-to-client-components-as-props)
+
+공식문서를 확인해보면 **서버 컴포넌트를 클라이언트 컴포넌트의 props로 넘길 수 있고 해당 클라이언트 컴포넌트를 rootlayout과 같은 부모 서버 컴포넌트에서 불러와서 사용할 수 있다**고 한다.
+
+Context Providers부분을 확인하면 useContext사용시에도 Provider를 서버 컴포넌트에서 다이렉트로 사용하지 말고 **클라이언트 컴포넌트로 감싸서 클라이언트 컴포넌트 내부에서 useContext를 사용하고 해당 클라이언트 컴포넌트를 layout에서 사용**하는등 래퍼컴포넌트를 만들어서 쓰라고 되어있다.
+
+결론적으로 기본 테마설정을 확인하는 목적의 래퍼 클라이언트 컴포넌트를 만들고 최초 렌더링시에는 래퍼 컴포넌트의 useEffect안에서 기본설정을 확인한 후 data-theme값으로 할당해서 layout으로 리턴되도록 초기셋팅을 하고 이후에 쿠키가 존재할 때는 쿠키값을 props로 전달해서 마운트 이전에 data-theme값이 할당되도록 수정했다.
+
+```js
+// app/layout.tsx
+
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  const theme = getCookie();
+
+  return (
+    <html lang="en">
+      <CheckDefaultScheme cookie={theme}>
+        <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
+          <RecoilRootWrapper>{children}</RecoilRootWrapper>
+        </main>
+      </CheckDefaultScheme>
+    </html>
+  );
+};
+
+export default RootLayout;
+
+
+// default-scheme.tsx
+'use client';
+...
+const CheckDefaultScheme = ({
+  children,
+  cookie,
+}: {
+  children: React.ReactNode;
+  cookie?: RequestCookie;
+}) => {
+  const [defaultScheme, setDefaultScheme] = useState<string | null>(null);
+
+  useEffect(() => {
+    const isDarkmode = window.matchMedia(MEDIA).matches;
+
+    if (!isDarkmode) {
+      setCookie(LIGHT_MODE);
+    } else {
+      setCookie(DARK_MODE);
+      setDefaultScheme(DARK_MODE);
+    }
+  }, []);
+
+  if (cookie) return <body data-theme={cookie.value}>{children}</body>;
+
+  return <body data-theme={defaultScheme}>{children}</body>;
+};
+
+export default CheckDefaultScheme;
+```

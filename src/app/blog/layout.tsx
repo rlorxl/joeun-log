@@ -12,7 +12,7 @@ const BlogLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="relative py-20 h-screen sm:py-0 sm:w-full">
-      <nav className="flex-col flex justify-between fixed h-4/5 sm:dark:bg-darkmode-base-color sm:bg-white sm:w-full sm:p-8 sm:h-auto sm:z-10 sm:sticky sm:top-0">
+      <nav className="flex-col flex justify-between w-[195px] fixed h-4/5 sm:dark:bg-darkmode-base-color sm:bg-white sm:w-full sm:p-8 sm:h-auto sm:z-10 sm:sticky sm:top-0">
         <Link href="/blog" className="mb-8">
           {theme?.value === 'dark' ? (
             <Image src={LogoWhite} alt="logo" width={40} />

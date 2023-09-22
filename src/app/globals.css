@@ -44,6 +44,15 @@
   [data-theme='dark'] nav {
     background-color: var(--darkmode-base-color);
   }
+
+  [data-theme='dark'] [data-class='tag'] {
+    color: var(--darkmode-base-color);
+  }
+
+  nav br,
+  [data-class='post'] br {
+    display: none;
+  }
 }
 
 @layer utilities {
@@ -64,7 +73,7 @@
   }
 
   .post-width {
-    width: 800px;
+    width: 700px;
   }
 }
 

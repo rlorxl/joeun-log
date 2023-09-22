@@ -18,26 +18,6 @@ const sofia = Sofia_Sans({
 });
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  // const theme = getCookie();
-
-  // return (
-  //   <html lang="en">
-  //     {theme && (
-  //       <body data-theme={theme.value}>
-  //         <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
-  //           <RecoilRootWrapper>{children}</RecoilRootWrapper>
-  //         </main>
-  //       </body>
-  //     )}
-  //     {!theme && (
-  //       <CheckDefaultScheme>
-  //         <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
-  //           <RecoilRootWrapper>{children}</RecoilRootWrapper>
-  //         </main>
-  //       </CheckDefaultScheme>
-  //     )}
-  //   </html>
-  // );
   const theme = getCookie();
 
   return (
