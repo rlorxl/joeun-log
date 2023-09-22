@@ -24,11 +24,11 @@ const getCategoryPosts = async (categoryId: string) => {
 
 const CategoryPage = async ({ params }: { params: { slug: string } }) => {
   const categoryPosts = await getCategoryPosts(params.slug);
-  const passingData = categoryPosts.map(({ code, frontmatter }) => ({ code, frontmatter }));
+  const passingData = categoryPosts?.map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   return (
     <div className="ml-60 blog-width space-y-5 sm:w-full sm:ml-0 sm:mt-10">
-      <Posts posts={passingData} />
+      {passingData && <Posts posts={passingData} />}
     </div>
   );
 };
