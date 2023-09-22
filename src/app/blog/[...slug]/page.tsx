@@ -1,8 +1,9 @@
 import React from 'react';
 import PostDetail from '@/components/blog/detail';
-import { getPost } from '@/utils/get-posts';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
+import { getPost } from '@/utils/common/get-posts';
+import getCookie from '@/utils/common/get-cookie';
 
 export const generateMetadata = async ({
   params,
@@ -50,13 +51,9 @@ export const generateMetadata = async ({
   };
 };
 
-const getCookie = () => {
-  const cookieStore = cookies();
-  const theme = cookieStore.get('theme');
-  return theme;
-};
-
 const DetailPage = async ({ params }: { params: { slug: string } }) => {
+  // TODO: 물음표(?) 제거하기 - 쿼리스트링으로 인식
+
   const postDetails = await getPost(params.slug);
   const passingData = Array(postDetails).map(({ code, frontmatter }) => ({ code, frontmatter }));
 

@@ -29,10 +29,56 @@ export const getFiles = async (dir: string, posts: string[]) => {
   return files;
 };
 
+/* 
+개별 포스트를 가져오는 함수.
+인코딩된 문자 url을 디코딩해서 제대로 된 파일명으로 바꾸고 mdx파일을 가져온다.
+
+findConnectedDash: '---'를 ' - '로 변환한다.
+replaceWords: 변환된 특수문자를 올바른 특수문자로 변환한다. (문자 추가예정)
+
+*/
 export const getPost = cache(async (segments: string) => {
   let paths = Array.from(segments);
   let rootPath = '';
   let filename = '';
+
+  const findConnectedDash = (target: string) => {
+    // const dashIdx = target.indexOf('---'); // 6
+    // const arr = target.split('-'); // [ 'Next13', '', '', 'cookie로', '다크모드', '구현하기' ]
+    // const nogap = arr.filter(str => str !== ''); // [ 'Next13', 'cookie로', '다크모드', '구현하기' ]
+    // const t1 = nogap.join(' ').split(''); // Next13 cookie로 다크모드 구현하기
+    // t1.splice(dashIdx, 0, ' ');
+    // t1.splice(dashIdx + 1, 0, '-');
+    // return t1;
+    let filename;
+    let indexes: number[] = [];
+
+    target.split('').forEach((str, i, arr) => {
+      if (str === '-' && arr[i + 1] === '-' && arr[i + 2] === '-') indexes.push(i + 1);
+    });
+
+    filename = target.replaceAll('-', ' ');
+
+    const filenameArr = filename.split('');
+
+    indexes.forEach(idx => filenameArr.splice(idx, 1, '-'));
+    filename = filenameArr.join('');
+
+    return filename;
+  };
+
+  const replaceWords = (target: string): string => {
+    let filename = target; // Next13---cookie로-다크모드-구현하기
+    const comma = '%2C';
+    const colon = '%3A';
+
+    const replaceDash = findConnectedDash(filename);
+    const replaceComma = replaceDash.replaceAll(comma, ',');
+    const replaceColon = replaceComma.replaceAll(colon, ':');
+    filename = replaceColon;
+
+    return filename;
+  };
 
   paths.forEach((path, i, paths) => {
     if (i !== paths.length - 1) {
@@ -45,10 +91,12 @@ export const getPost = cache(async (segments: string) => {
       */
       const url = process.env.LOCAL_URL + '/' + path; // 로컬 환경변수
       const decodedUri = decodeURI(url);
-      const arr = decodedUri.split('/');
-      filename = arr[arr.length - 1].replaceAll('-', ' ');
+      const arr = decodedUri.split('/'); // [ 'http:', '', 'localhost:3000', 'title' ]
+      filename = replaceWords(arr[arr.length - 1]);
     }
   });
+
+  // console.log(filename);
 
   const rootDirectory = `public/posts${rootPath}`; // public/posts/develop/2023/8
 
@@ -61,12 +109,16 @@ export const getPost = cache(async (segments: string) => {
     mdxs.forEach(source => {
       if (source.frontmatter.title === filename) mdx = source;
     });
+
+    // const data = Array(mdx).map(({ code, frontmatter }) => ({ code, frontmatter }));
+
     return mdx;
   } catch (err) {
     console.log(err);
   }
 });
 
+/* 전체 포스트 리스트를 가져오는 함수 */
 export const getAllPosts = async () => {
   try {
     let mdxSources: { [key: string]: any }[] = [];

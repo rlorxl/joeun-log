@@ -6,7 +6,6 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import { sortingData } from '../../utils/data-sorting';
-import { toSmallDevice } from '@/utils/responsive-class';
 
 type TContents = {
   name: string;
