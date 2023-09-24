@@ -123,9 +123,8 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
           className="w-10 h-10 transition duration-200 ease relative overflow-hidden flex hover:bg-slate-100 rounded-full justify-center items-center">
           <div
             className={
-              'absolute top-1/2 -translate-y-1/2 w-[104px] h-6' +
-              (cookie === DARK_MODE ? ' -left-8' : ' left-2') +
-              (clickTheme && cookie === DARK_MODE ? ' animate-todarkmode' : ' animate-tolightmode')
+              'absolute top-1/2 -translate-y-1/2 w-[104px] h-6 transition-all ease-in-out duration-700' +
+              (cookie === DARK_MODE ? ' -left-8' : ' left-2')
             }>
             <Image src={Icon.Mode} alt="라이트모드" />
           </div>
