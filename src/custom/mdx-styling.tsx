@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Highlight, themes } from 'prism-react-renderer';
 
 const CustomCode = (props: any) => {
@@ -59,22 +58,32 @@ const MyBlockquote = (props: any) => (
 const MyATag = (props: any) => <a className="text-pink-500 my-4" {...props} />;
 
 // navigation style
+const scrollTo = (e: { target: HTMLDivElement }) => {
+  const target = e.target;
+  const dataId = target.dataset.id;
+  const $link = document.getElementById(`${dataId}`);
+  if (!$link) return;
+  $link.scrollIntoView();
+};
+
 const NavHeading1 = (props: any) => (
-  <Link
-    href={`#${props.children}`}
+  <div
+    data-id={props.children}
     className="block cursor-pointer hover:text-second-color"
+    onClick={scrollTo}
     {...props}>
     {props.children}
-  </Link>
+  </div>
 );
 
 const NavHeading2 = (props: any) => (
-  <Link
-    href={`#${props.children}`}
+  <div
+    data-id={props.children}
     className="block cursor-pointer hover:text-second-color ml-4"
+    onClick={scrollTo}
     {...props}>
     {props.children}
-  </Link>
+  </div>
 );
 
 export {

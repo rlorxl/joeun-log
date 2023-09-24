@@ -1,10 +1,11 @@
 'use client';
 import { TPost } from '@/types/post';
 import { getMDXComponent } from 'mdx-bundler/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { postState } from '@/recoil/posts';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
+import TopButton from '../../../public/assets/icon/top.svg';
 import {
   MyH1,
   MyH2,
@@ -19,6 +20,7 @@ import {
   MyBlockquote,
   MyATag,
 } from '@/custom/mdx-styling';
+import Image from 'next/image';
 
 const detailPageComponents = {
   h1: MyH1,
@@ -37,6 +39,8 @@ const detailPageComponents = {
 
 const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie }) => {
   const setPost = useSetRecoilState(postState);
+
+  const mainTitle = useRef<HTMLDivElement>(null);
   // const [cookieValue, setCookieValue] = useState<string>('');
 
   // useEffect(() => {
@@ -44,13 +48,17 @@ const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie })
   //   setCookieValue(cookie.value);
   // }, [cookie]);
 
+  const scrollTop = () => {
+    mainTitle.current?.scrollIntoView({ block: 'start', inline: 'nearest' });
+  };
+
   useEffect(() => {
     if (!post) return;
     setPost(post);
   }, [post]);
 
   return (
-    <div className="pb-14">
+    <div className="pb-14 py-20" ref={mainTitle}>
       {post.map(({ code, frontmatter }, idx) => {
         const Comopnent = getMDXComponent(code);
         return (
@@ -70,6 +78,9 @@ const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie })
           </div>
         );
       })}
+      <button type="button" className="fixed right-20 bottom-16" onClick={scrollTop}>
+        <Image src={TopButton} alt="위로" width={'18'} />
+      </button>
     </div>
   );
 };

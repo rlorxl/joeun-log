@@ -84,7 +84,7 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-4/5">
+    <div className="flex flex-col justify-between h-4/5 py-20">
       {!mounted && <div className="min-h-[300px]" />}
       {!isDetailPage && mounted && (
         <ul className="space-y-8 sm:space-y-5 font-semibold">
