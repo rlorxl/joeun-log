@@ -20,6 +20,7 @@
   html,
   body {
     @apply overflow-x-hidden;
+    @apply scroll-smooth;
   }
 
   body {

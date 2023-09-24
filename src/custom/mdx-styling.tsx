@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Highlight, themes } from 'prism-react-renderer';
 
 const CustomCode = (props: any) => {
@@ -22,11 +23,17 @@ const CustomCode = (props: any) => {
   );
 };
 
-const MyH1 = (props: any) => <h1 className="text-3xl font-semibold mb-5" {...props} />;
+const MyH1 = (props: any) => (
+  <h1 id={props.children} className="text-3xl font-semibold mb-5" {...props} />
+);
 
-const MyH2 = (props: any) => <h2 className="text-2xl font-semibold mb-5" {...props} />;
+const MyH2 = (props: any) => (
+  <h2 id={props.children} className="text-2xl font-semibold mb-5" {...props} />
+);
 
-const MyH3 = (props: any) => <h3 className="text-xl font-semibold mb-5" {...props} />;
+const MyH3 = (props: any) => (
+  <h3 id={props.children} className="text-xl font-semibold mb-5" {...props} />
+);
 
 const MyParagraph = (props: any) => <p className="mb-2 leading-7" {...props} />;
 
@@ -52,10 +59,22 @@ const MyBlockquote = (props: any) => (
 const MyATag = (props: any) => <a className="text-pink-500 my-4" {...props} />;
 
 // navigation style
-const NavHeading = (props: any) => (
-  <div className="mb-2 cursor-pointer hover:text-second-color" {...props}>
+const NavHeading1 = (props: any) => (
+  <Link
+    href={`#${props.children}`}
+    className="block cursor-pointer hover:text-second-color"
+    {...props}>
     {props.children}
-  </div>
+  </Link>
+);
+
+const NavHeading2 = (props: any) => (
+  <Link
+    href={`#${props.children}`}
+    className="block cursor-pointer hover:text-second-color ml-4"
+    {...props}>
+    {props.children}
+  </Link>
 );
 
 export {
@@ -71,5 +90,6 @@ export {
   MyPre,
   MyBlockquote,
   MyATag,
-  NavHeading,
+  NavHeading1,
+  NavHeading2,
 };

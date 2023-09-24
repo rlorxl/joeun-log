@@ -11,7 +11,7 @@ import { getMDXComponent } from 'mdx-bundler/client';
 import { useRouter } from 'next/navigation';
 import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constants';
 import setCookie from '@/utils/common/set-cookie';
-import { NavHeading } from '@/custom/mdx-styling';
+import { NavHeading1, NavHeading2 } from '@/custom/mdx-styling';
 
 type TBlogNav = {
   name: string;
@@ -34,8 +34,8 @@ const navigationComponents = {
   a: () => null,
   h3: () => null,
   br: () => null,
-  h1: NavHeading,
-  h2: NavHeading,
+  h1: NavHeading1,
+  h2: NavHeading2,
 };
 
 const initialThemeChange = () => {
@@ -104,7 +104,9 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
           {currentPostSource.map(({ code, frontmatter }, idx) => {
             const Component = getMDXComponent(code);
             return (
-              <div key={frontmatter.title} className="pl-3 border-l border-sPecond-color -pt-10">
+              <div
+                key={frontmatter.title}
+                className="pl-3 border-l border-sPecond-color -pt-10 space-y-2">
                 <Component components={navigationComponents} />
               </div>
             );
