@@ -11,23 +11,11 @@ const CheckDefaultScheme = ({
   children: React.ReactNode;
   cookie?: RequestCookie;
 }) => {
-  // const [defaultScheme, setDefaultScheme] = useState<string>(LIGHT_MODE);
-
-  // useEffect(() => {
-  //   const isDarkmode = window.matchMedia(MEDIA).matches;
-  //   if (!isDarkmode) {
-  //     setCookie(LIGHT_MODE);
-  //   } else {
-  //     setCookie(DARK_MODE);
-  //     setDefaultScheme(DARK_MODE);
-  //   }
-  // }, []);
-
-  // return <body data-theme={defaultScheme}>{children}</body>;
-
   const [defaultScheme, setDefaultScheme] = useState<string | null>(null);
 
   useEffect(() => {
+    if (cookie) return;
+
     const isDarkmode = window.matchMedia(MEDIA).matches;
 
     if (!isDarkmode) {

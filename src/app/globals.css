@@ -4,6 +4,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Work+Sans:wght@400;700&display=swap');
 
 :root {
+  --base-color: #535b77;
+  --second-color: #9199b5;
   --darkmode-base-color: #282930;
   --darkmode-text-color: #e0e0e0;
   --true-black: #000;
@@ -47,6 +49,10 @@
 
   [data-theme='dark'] [data-class='tag'] {
     color: var(--darkmode-base-color);
+  }
+
+  [data-theme='dark'] blockquote p {
+    color: var(--base-color);
   }
 
   nav br,

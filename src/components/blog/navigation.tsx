@@ -11,6 +11,7 @@ import { getMDXComponent } from 'mdx-bundler/client';
 import { useRouter } from 'next/navigation';
 import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constants';
 import setCookie from '@/utils/common/set-cookie';
+import { NavHeading } from '@/custom/mdx-styling';
 
 type TBlogNav = {
   name: string;
@@ -22,6 +23,20 @@ const navLinkto: TBlogNav[] = [
   { name: '취준일기', link: '/blog/diary' },
   { name: '그냥생각', link: '/blog/daily' },
 ];
+
+const navigationComponents = {
+  blockquote: () => null,
+  p: () => null,
+  pre: () => null,
+  ul: () => null,
+  ol: () => null,
+  hr: () => null,
+  a: () => null,
+  h3: () => null,
+  br: () => null,
+  h1: NavHeading,
+  h2: NavHeading,
+};
 
 const initialThemeChange = () => {
   const isDarkmode = window.matchMedia(MEDIA).matches;
@@ -82,37 +97,15 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
       )}
       {isDetailPage && (
         <div className="text-sm">
-          <Link href={''} className="mb-10 flex">
+          <button className="mb-10 flex" onClick={() => router.back()}>
             <GoBackIcon icon="pajamas:go-back" className="mr-2" />
             목록
-          </Link>
+          </button>
           {currentPostSource.map(({ code, frontmatter }, idx) => {
             const Component = getMDXComponent(code);
             return (
               <div key={frontmatter.title} className="pl-3 border-l border-sPecond-color -pt-10">
-                <Component
-                  components={{
-                    blockquote: () => null,
-                    p: () => null,
-                    pre: () => null,
-                    ul: () => null,
-                    ol: () => null,
-                    hr: () => null,
-                    a: () => null,
-                    h3: () => null,
-                    br: () => null,
-                    h1: props => (
-                      <div className="mb-2 cursor-pointer hover:text-second-color" {...props}>
-                        {props.children}
-                      </div>
-                    ),
-                    h2: props => (
-                      <div className="mb-2 cursor-pointer hover:text-second-color" {...props}>
-                        {props.children}
-                      </div>
-                    ),
-                  }}
-                />
+                <Component components={navigationComponents} />
               </div>
             );
           })}
