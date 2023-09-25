@@ -59,7 +59,7 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
   const theme = getCookie();
 
   return (
-    <div className="ml-80 relative post-width space-y-5 overflow-x-hidden overflow-y-scroll scrollbar-hide sm:w-full sm:ml-0 sm:p-8">
+    <div className="ml-80 relative space-y-5 sm:w-full sm:ml-0 sm:p-8">
       {passingData && <PostDetail post={passingData} cookie={theme} />}
     </div>
   );

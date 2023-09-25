@@ -6,50 +6,17 @@ import { useSetRecoilState } from 'recoil';
 import { postState } from '@/recoil/posts';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import TopButton from '../../../public/assets/icon/top.svg';
-import {
-  MyH1,
-  MyH2,
-  MyH3,
-  MyParagraph,
-  MyHr,
-  MyBr,
-  MyOl,
-  MyUl,
-  MyCode,
-  MyPre,
-  MyBlockquote,
-  MyATag,
-} from '@/custom/mdx-styling';
 import Image from 'next/image';
-
-const detailPageComponents = {
-  h1: MyH1,
-  h2: MyH2,
-  h3: MyH3,
-  p: MyParagraph,
-  hr: MyHr,
-  br: MyBr,
-  ol: MyOl,
-  ul: MyUl,
-  code: MyCode,
-  pre: MyPre,
-  blockquote: MyBlockquote,
-  a: MyATag,
-};
+import { detailPageComponents } from '@/custom/mdx-styling';
 
 const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie }) => {
   const setPost = useSetRecoilState(postState);
-
-  const mainTitle = useRef<HTMLDivElement>(null);
-  // const [cookieValue, setCookieValue] = useState<string>('');
-
-  // useEffect(() => {
-  //   if (!cookie) return;
-  //   setCookieValue(cookie.value);
-  // }, [cookie]);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   const scrollTop = () => {
-    mainTitle.current?.scrollIntoView({ block: 'start', inline: 'nearest' });
+    const $mainBox = mainRef.current;
+    if (!$mainBox) return;
+    $mainBox.scrollIntoView({ block: 'start', inline: 'nearest' });
   };
 
   useEffect(() => {
@@ -58,7 +25,7 @@ const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie })
   }, [post]);
 
   return (
-    <div className="pb-14 py-20" ref={mainTitle}>
+    <div className="post-width pb-14 py-20 overflow-y-scroll scrollbar-hide" ref={mainRef}>
       {post.map(({ code, frontmatter }, idx) => {
         const Comopnent = getMDXComponent(code);
         return (

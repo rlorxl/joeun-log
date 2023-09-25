@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Icon from '../../../public/assets/icon';
 import { Icon as GoBackIcon } from '@iconify/react/dist/iconify.js';
 import { usePathname } from 'next/navigation';
@@ -11,7 +11,7 @@ import { getMDXComponent } from 'mdx-bundler/client';
 import { useRouter } from 'next/navigation';
 import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constants';
 import setCookie from '@/utils/common/set-cookie';
-import { NavHeading1, NavHeading2 } from '@/custom/mdx-styling';
+import { NavHeading, navigationComponents } from '@/custom/mdx-styling';
 
 type TBlogNav = {
   name: string;
@@ -23,20 +23,6 @@ const navLinkto: TBlogNav[] = [
   { name: '취준일기', link: '/blog/diary' },
   { name: '그냥생각', link: '/blog/daily' },
 ];
-
-const navigationComponents = {
-  blockquote: () => null,
-  p: () => null,
-  pre: () => null,
-  ul: () => null,
-  ol: () => null,
-  hr: () => null,
-  a: () => null,
-  h3: () => null,
-  br: () => null,
-  h1: NavHeading1,
-  h2: NavHeading2,
-};
 
 const initialThemeChange = () => {
   const isDarkmode = window.matchMedia(MEDIA).matches;
@@ -51,7 +37,8 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
   const [isMainIconHover, setIsMainIconHover] = useState<boolean>(false);
-  const [clickTheme, setClickTheme] = useState<boolean>(false);
+
+  const names = useRef<{ name: string; position: number }[]>([]);
 
   const router = useRouter();
   const path = usePathname(); // /blog/develop/2023/8/develop
@@ -68,8 +55,6 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   }, []);
 
   const changeMode = () => {
-    setClickTheme(true);
-
     if (!cookie) {
       // 쿠키에 저장된 테마가 undefined일 때 (최초 클릭)
       initialThemeChange();
@@ -84,7 +69,7 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-4/5 py-20">
+    <div className="flex flex-col justify-between h-4/5">
       {!mounted && <div className="min-h-[300px]" />}
       {!isDetailPage && mounted && (
         <ul className="space-y-8 sm:space-y-5 font-semibold">
@@ -107,7 +92,13 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
               <div
                 key={frontmatter.title}
                 className="pl-3 border-l border-sPecond-color -pt-10 space-y-2">
-                <Component components={navigationComponents} />
+                <Component
+                  components={Object.assign(navigationComponents, {
+                    h1: (props: any) => NavHeading(props, names, 'h1'),
+                    h2: (props: any) => NavHeading(props, names, 'h2'),
+                    h3: (props: any) => NavHeading(props, names, 'h3'),
+                  })}
+                />
               </div>
             );
           })}

@@ -1,5 +1,8 @@
+import useScroll from '@/hooks/useScroll';
 import { Highlight, themes } from 'prism-react-renderer';
+import React, { MutableRefObject, useEffect, useState } from 'react';
 
+/* /blog/[...slug].tsx - pre tag styling */
 const CustomCode = (props: any) => {
   const code = props.children.props.children.trim();
   const className = props.children.props.className || '';
@@ -57,7 +60,7 @@ const MyBlockquote = (props: any) => (
 
 const MyATag = (props: any) => <a className="text-pink-500 my-4" {...props} />;
 
-// navigation style
+// * navigation style ------------------------------------------------------------------------------
 const scrollTo = (e: { target: HTMLDivElement }) => {
   const target = e.target;
   const dataId = target.dataset.id;
@@ -66,39 +69,55 @@ const scrollTo = (e: { target: HTMLDivElement }) => {
   $link.scrollIntoView();
 };
 
-const NavHeading1 = (props: any) => (
-  <div
-    data-id={props.children}
-    className="block cursor-pointer hover:text-second-color"
-    onClick={scrollTo}
-    {...props}>
-    {props.children}
-  </div>
-);
+const NavHeading = (
+  props: any,
+  names: React.MutableRefObject<{ name: string; position: number }[]>,
+  size: string,
+) => {
+  const text = props.children;
+  const { content } = useScroll(text, names);
 
-const NavHeading2 = (props: any) => (
-  <div
-    data-id={props.children}
-    className="block cursor-pointer hover:text-second-color ml-4"
-    onClick={scrollTo}
-    {...props}>
-    {props.children}
-  </div>
-);
-
-export {
-  MyH1,
-  MyH2,
-  MyH3,
-  MyParagraph,
-  MyHr,
-  MyBr,
-  MyOl,
-  MyUl,
-  MyCode,
-  MyPre,
-  MyBlockquote,
-  MyATag,
-  NavHeading1,
-  NavHeading2,
+  return (
+    <div
+      data-id={text}
+      className={
+        `block cursor-pointer hover:text-second-color` +
+        (size === 'h2' ? ' ml-4' : '') +
+        (size === 'h3' ? ' ml-8' : '') +
+        (text === content ? ' text-violet-400' : '')
+      }
+      onClick={scrollTo}
+      {...props}>
+      {text}
+    </div>
+  );
 };
+
+const detailPageComponents = {
+  h1: MyH1,
+  h2: MyH2,
+  h3: MyH3,
+  p: MyParagraph,
+  hr: MyHr,
+  br: MyBr,
+  ol: MyOl,
+  ul: MyUl,
+  code: MyCode,
+  pre: MyPre,
+  blockquote: MyBlockquote,
+  a: MyATag,
+};
+
+const navigationComponents = {
+  blockquote: () => null,
+  p: () => null,
+  pre: () => null,
+  ul: () => null,
+  ol: () => null,
+  hr: () => null,
+  a: () => null,
+  h3: () => null,
+  br: () => null,
+};
+
+export { detailPageComponents, navigationComponents, NavHeading };

@@ -8,7 +8,7 @@ const Home = async () => {
   const passingData = allPosts?.map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   return (
-    <div className="w-full h-full bg-yellow-50">
+    <div className="w-full h-full flex flex-col items-center">
       <Image src={BlogLogo} alt="logo" className="sm:w-14" />
       {passingData && <TabContents data={passingData} />}
       <footer className="fixed bottom-0 w-full p-5 text-sm text-center text-second-color">

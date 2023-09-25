@@ -60,6 +60,15 @@
   [data-class='post'] br {
     display: none;
   }
+
+  #content {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  #content::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer utilities {
