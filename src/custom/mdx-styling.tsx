@@ -120,4 +120,18 @@ const navigationComponents = {
   br: () => null,
 };
 
-export { detailPageComponents, navigationComponents, NavHeading };
+const blogPageComponents = {
+  h1: () => null,
+  h2: () => null,
+  h3: () => null,
+  ol: () => null,
+  li: () => null,
+  img: () => null,
+  pre: () => null,
+  hr: () => null,
+  blockquote: () => null,
+  strong: () => null,
+  a: () => null,
+};
+
+export { detailPageComponents, navigationComponents, blogPageComponents, NavHeading };
