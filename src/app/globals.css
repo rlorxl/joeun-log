@@ -4,6 +4,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Work+Sans:wght@400;700&display=swap');
 
 :root {
+  --base-color: #535b77;
+  --second-color: #9199b5;
   --darkmode-base-color: #282930;
   --darkmode-text-color: #e0e0e0;
   --true-black: #000;
@@ -18,6 +20,7 @@
   html,
   body {
     @apply overflow-x-hidden;
+    @apply scroll-smooth;
   }
 
   body {
@@ -49,8 +52,21 @@
     color: var(--darkmode-base-color);
   }
 
+  [data-theme='dark'] blockquote p {
+    color: var(--base-color);
+  }
+
   nav br,
   [data-class='post'] br {
+    display: none;
+  }
+
+  #content {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  #content::-webkit-scrollbar {
     display: none;
   }
 }

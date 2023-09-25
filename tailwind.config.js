@@ -68,18 +68,5 @@ module.exports = {
       // => @media (max-width: 639px) { ... }
     },
   },
-  plugins: [
-    'tailwind-scrollbar-hide',
-    // plugin(function ({ matchUtilities, theme }) {
-    //   matchUtilities(
-    //     {
-    //       slideUp: val => ({
-    //         slideUpTime: val,
-    //       }),
-    //     },
-    //     { values: theme('slideUpTime') },
-    //   );
-    // }),
-  ],
-  darkMode: ['class'], // html요소의 class속성에서 모드 정보를 찾을 수 있음.
+  plugins: ['tailwind-scrollbar-hide'],
 };

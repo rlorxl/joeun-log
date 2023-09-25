@@ -1,7 +1,6 @@
 import React from 'react';
 import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import { getPost } from '@/utils/common/get-posts';
 import getCookie from '@/utils/common/get-cookie';
 
@@ -60,7 +59,7 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
   const theme = getCookie();
 
   return (
-    <div className="ml-80 post-width space-y-5 overflow-x-hidden overflow-y-scroll scrollbar-hide sm:w-full sm:ml-0 sm:p-8">
+    <div className="ml-80 relative space-y-5 sm:w-full sm:ml-0 sm:p-8">
       {passingData && <PostDetail post={passingData} cookie={theme} />}
     </div>
   );

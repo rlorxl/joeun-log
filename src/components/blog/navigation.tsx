@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Icon from '../../../public/assets/icon';
 import { Icon as GoBackIcon } from '@iconify/react/dist/iconify.js';
 import { usePathname } from 'next/navigation';
@@ -11,6 +11,7 @@ import { getMDXComponent } from 'mdx-bundler/client';
 import { useRouter } from 'next/navigation';
 import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constants';
 import setCookie from '@/utils/common/set-cookie';
+import { NavHeading, navigationComponents } from '@/custom/mdx-styling';
 
 type TBlogNav = {
   name: string;
@@ -36,7 +37,8 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
   const [isMainIconHover, setIsMainIconHover] = useState<boolean>(false);
-  const [clickTheme, setClickTheme] = useState<boolean>(false);
+
+  const names = useRef<{ name: string; position: number }[]>([]);
 
   const router = useRouter();
   const path = usePathname(); // /blog/develop/2023/8/develop
@@ -53,8 +55,6 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   }, []);
 
   const changeMode = () => {
-    setClickTheme(true);
-
     if (!cookie) {
       // 쿠키에 저장된 테마가 undefined일 때 (최초 클릭)
       initialThemeChange();
@@ -82,36 +82,22 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
       )}
       {isDetailPage && (
         <div className="text-sm">
-          <Link href={''} className="mb-10 flex">
+          <button className="mb-10 flex" onClick={() => router.back()}>
             <GoBackIcon icon="pajamas:go-back" className="mr-2" />
             목록
-          </Link>
+          </button>
           {currentPostSource.map(({ code, frontmatter }, idx) => {
             const Component = getMDXComponent(code);
             return (
-              <div key={frontmatter.title} className="pl-3 border-l border-sPecond-color -pt-10">
+              <div
+                key={frontmatter.title}
+                className="pl-3 border-l border-sPecond-color -pt-10 space-y-2">
                 <Component
-                  components={{
-                    blockquote: () => null,
-                    p: () => null,
-                    pre: () => null,
-                    ul: () => null,
-                    ol: () => null,
-                    hr: () => null,
-                    a: () => null,
-                    h3: () => null,
-                    br: () => null,
-                    h1: props => (
-                      <div className="mb-2 cursor-pointer hover:text-second-color" {...props}>
-                        {props.children}
-                      </div>
-                    ),
-                    h2: props => (
-                      <div className="mb-2 cursor-pointer hover:text-second-color" {...props}>
-                        {props.children}
-                      </div>
-                    ),
-                  }}
+                  components={Object.assign(navigationComponents, {
+                    h1: (props: any) => NavHeading(props, names, 'h1'),
+                    h2: (props: any) => NavHeading(props, names, 'h2'),
+                    h3: (props: any) => NavHeading(props, names, 'h3'),
+                  })}
                 />
               </div>
             );
@@ -130,9 +116,8 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
           className="w-10 h-10 transition duration-200 ease relative overflow-hidden flex hover:bg-slate-100 rounded-full justify-center items-center">
           <div
             className={
-              'absolute top-1/2 -translate-y-1/2 w-[104px] h-6' +
-              (cookie === DARK_MODE ? ' -left-8' : ' left-2') +
-              (clickTheme && cookie === DARK_MODE ? ' animate-todarkmode' : ' animate-tolightmode')
+              'absolute top-1/2 -translate-y-1/2 w-[104px] h-6 transition-all ease-in-out duration-700' +
+              (cookie === DARK_MODE ? ' -left-8' : ' left-2')
             }>
             <Image src={Icon.Mode} alt="라이트모드" />
           </div>
