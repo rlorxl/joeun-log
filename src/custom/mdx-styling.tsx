@@ -82,8 +82,8 @@ const NavHeading = (
       data-id={text}
       className={
         `block cursor-pointer hover:text-second-color` +
-        (size === 'h2' ? ' ml-4' : '') +
-        (size === 'h3' ? ' ml-8' : '') +
+        (size === 'h2' ? ' ml-2' : '') +
+        (size === 'h3' ? ' ml-4' : '') +
         (text === content ? ' text-violet-400' : '')
       }
       onClick={scrollTo}
