@@ -2,8 +2,8 @@
 const nextConfig = {
   experimental: {
     mdxRs: true,
-    appDir: true,
     nextScriptWorkers: true,
+    target: 'serverless',
   },
 };
 

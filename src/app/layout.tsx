@@ -6,8 +6,16 @@ import getCookie from '@/utils/common/get-cookie';
 import CheckDefaultScheme from '@/wrapper/default-scheme';
 
 export const metadata: Metadata = {
-  title: 'rlorxl',
-  description: 'welcome to rlorxl blog',
+  title: 'Joeunssm',
+  description: '조은의 블로그',
+  icons: [
+    {
+      rel: 'icon',
+      // type: 'image/svg',
+      sizes: '32x32',
+      url: '/favicon.svg',
+    },
+  ],
 };
 
 const sofia = Sofia_Sans({
