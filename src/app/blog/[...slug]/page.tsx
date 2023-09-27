@@ -11,8 +11,7 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const postDetails = await getPost(params.slug);
   if (!postDetails) return {};
-  const passingData = Array(postDetails).map(({ code, frontmatter }) => ({ code, frontmatter }));
-  const { frontmatter } = passingData[0];
+  const { frontmatter } = postDetails[0];
 
   return {
     title: frontmatter.title,
@@ -55,21 +54,27 @@ export const generateStaticParams = async () => {
   const posts = await getAllPosts();
 
   if (!posts) return [];
-  return posts.map((post: any) => ({ slug: post.slug }));
+
+  const slugs = posts.map(({ matter }) => {
+    const date = matter.data.published.split('-').slice(0, 2);
+    const title = matter.data.title.replaceAll(' ', '-');
+    date.push(title);
+    return date;
+  });
+
+  return slugs.map(item => ({ slug: item }));
 };
 
 const DetailPage = async ({ params }: { params: { slug: string } }) => {
   // TODO: 물음표(?) 제거하기 - 쿼리스트링으로 인식
 
   const postDetails = await getPost(params.slug);
-  if (!postDetails) return;
-  const passingData = Array(postDetails).map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   const theme = getCookie();
 
   return (
     <div className="ml-80 relative space-y-5 sm:w-full sm:ml-0 sm:p-8">
-      {passingData && <PostDetail post={passingData} cookie={theme} />}
+      {postDetails && <PostDetail post={postDetails} cookie={theme} />}
     </div>
   );
 };
