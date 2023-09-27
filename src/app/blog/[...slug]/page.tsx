@@ -10,6 +10,7 @@ export const generateMetadata = async ({
   params: { slug: string };
 }): Promise<Metadata> => {
   const postDetails = await getPost(params.slug);
+  if (!postDetails) return {};
   const passingData = Array(postDetails).map(({ code, frontmatter }) => ({ code, frontmatter }));
   const { frontmatter } = passingData[0];
 
@@ -53,14 +54,15 @@ export const generateMetadata = async ({
 export const generateStaticParams = async () => {
   const posts = await getAllPosts();
 
-  const slugs = posts?.map(post => ({ slug: post.slug }));
-  return slugs;
+  if (!posts) return [];
+  return posts.map((post: any) => ({ slug: post.slug }));
 };
 
 const DetailPage = async ({ params }: { params: { slug: string } }) => {
   // TODO: 물음표(?) 제거하기 - 쿼리스트링으로 인식
 
   const postDetails = await getPost(params.slug);
+  if (!postDetails) return;
   const passingData = Array(postDetails).map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   const theme = getCookie();

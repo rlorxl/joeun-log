@@ -21,6 +21,7 @@
     "esbuild": "^0.19.2",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "eslint-plugin-html": "^7.1.0",
     "gray-matter": "^4.0.3",
     "mdx-bundler": "^9.2.1",
     "next": "13.4.19",

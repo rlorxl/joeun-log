@@ -102,13 +102,13 @@ export const getPost = cache(async (segments: string) => {
     const files = fs.readdirSync(rootDirectory); // [ 'develop.mdx', 'test.mdx' ]
 
     const mdxs = await getFiles(rootDirectory, files);
-    let mdx;
+
+    let mdx: { [key: string]: any } = {};
     mdxs.forEach(source => {
       if (source.frontmatter.title === filename) mdx = source;
     });
 
     // const data = Array(mdx).map(({ code, frontmatter }) => ({ code, frontmatter }));
-
     return mdx;
   } catch (err) {
     console.log(err);
