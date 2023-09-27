@@ -25,11 +25,14 @@ const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie })
   }, [post]);
 
   return (
-    <div className="post-width pb-14 py-20 overflow-y-scroll scrollbar-hide" ref={mainRef}>
+    <div
+      data-class="detail"
+      className="post-width min-h-[1200px] pb-14 py-20 overflow-y-scroll scrollbar-hide sm:w-full"
+      ref={mainRef}>
       {post.map(({ code, frontmatter }, idx) => {
         const Comopnent = getMDXComponent(code);
         return (
-          <div key={idx}>
+          <div key={idx} className="sm:">
             <section className="mb-16">
               <p className="text-4xl font-bold mb-4">{frontmatter.title}</p>
               <div>
