@@ -96,15 +96,12 @@ export const getPost = cache(async (segments: string) => {
     }
   });
 
-  // console.log(filename);
-
   const rootDirectory = `public/posts${rootPath}`; // public/posts/develop/2023/8
 
   try {
     const files = fs.readdirSync(rootDirectory); // [ 'develop.mdx', 'test.mdx' ]
 
     const mdxs = await getFiles(rootDirectory, files);
-    // console.log(mdxs);
     let mdx;
     mdxs.forEach(source => {
       if (source.frontmatter.title === filename) mdx = source;

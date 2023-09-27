@@ -1,7 +1,7 @@
 import React from 'react';
 import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
-import { getPost } from '@/utils/common/get-posts';
+import { getAllPosts, getPost } from '@/utils/common/get-posts';
 import getCookie from '@/utils/common/get-cookie';
 
 export const generateMetadata = async ({
@@ -48,6 +48,13 @@ export const generateMetadata = async ({
       type: 'website',
     },
   };
+};
+
+export const generateStaticParams = async () => {
+  const posts = await getAllPosts();
+
+  const slugs = posts?.map(post => ({ slug: post.slug }));
+  return slugs;
 };
 
 const DetailPage = async ({ params }: { params: { slug: string } }) => {
