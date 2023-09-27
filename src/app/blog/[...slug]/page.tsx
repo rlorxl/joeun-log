@@ -4,6 +4,37 @@ import { Metadata } from 'next';
 import { getAllPosts, getPost } from '@/utils/common/get-posts';
 import getCookie from '@/utils/common/get-cookie';
 
+const findConnectedDash = (target: string) => {
+  let filename;
+  let indexes: number[] = [];
+
+  target.split('').forEach((str, i, arr) => {
+    if (str === '-' && arr[i + 1] === '-' && arr[i + 2] === '-') indexes.push(i + 1);
+  });
+
+  filename = target.replaceAll('-', ' ');
+
+  const filenameArr = filename.split('');
+
+  indexes.forEach(idx => filenameArr.splice(idx, 1, '-'));
+  filename = filenameArr.join('');
+
+  return filename;
+};
+
+const replaceWords = (target: string): string => {
+  let filename = target; // Next13---cookie로-다크모드-구현하기
+  const comma = '%2C';
+  const colon = '%3A';
+
+  const replaceDash = findConnectedDash(filename);
+  const replaceComma = replaceDash.replaceAll(comma, ',');
+  const replaceColon = replaceComma.replaceAll(colon, ':');
+  filename = replaceColon;
+
+  return filename;
+};
+
 export const generateMetadata = async ({
   params,
 }: {
@@ -58,7 +89,8 @@ export const generateStaticParams = async () => {
   const slugs = posts.map(({ matter }) => {
     const date = matter.data.published.split('-').slice(0, 2);
     const title = matter.data.title.replaceAll(' ', '-');
-    date.push(title);
+    const decodedTitle = replaceWords(title);
+    date.push(decodedTitle);
     return date;
   });
 
