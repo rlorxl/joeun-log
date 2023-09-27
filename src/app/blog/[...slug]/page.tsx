@@ -89,7 +89,11 @@ export const generateStaticParams = async () => {
   const slugs = posts.map(({ matter }) => {
     const date = matter.data.published.split('-').slice(0, 2);
     const title = matter.data.title.replaceAll(' ', '-');
-    const decodedTitle = replaceWords(title);
+
+    const url = process.env.LOCAL_URL + '/' + title;
+    const decodedUri = decodeURI(url);
+    const arr = decodedUri.split('/'); // [ 'http:', '', 'localhost:3000', 'title' ]
+    const decodedTitle = replaceWords(arr[arr.length - 1]);
     date.push(decodedTitle);
     return date;
   });
