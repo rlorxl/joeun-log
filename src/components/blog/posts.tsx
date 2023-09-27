@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { sortingData } from '@/utils/data-sorting';
 import { TPost } from '@/types/post';
 import { toUrl } from '@/utils/url';
+import { blogPageComponents } from '@/custom/mdx-styling';
 
 const popupAni = (i: number): string => {
   let classname = '';
@@ -32,18 +33,19 @@ const popupAni = (i: number): string => {
 const Posts = ({ posts }: { posts: TPost[] }) => {
   const [mounted, setMounted] = useState<boolean>(false);
 
-  const paragraph = useRef<string[]>([]);
-  const paragraphList = useRef<string[]>(Array(posts.length).fill(''));
+  const paragraph = useRef<any[]>([]);
+  const paragraphList = useRef<any[]>(Array(posts.length).fill(''));
 
   const renderparagraph = (props: any, idx: number) => {
     let text = props.children;
 
-    if (paragraph.current.length <= 3 && paragraphList.current[idx] === '') {
+    if (paragraph.current.length <= 5 && paragraphList.current[idx] === '') {
       paragraph.current.push(text);
+      paragraph.current.push(' ');
     } else if (paragraphList.current[idx] === '') {
-      paragraphList.current[idx] = paragraph.current.join(' ');
+      paragraphList.current[idx] = paragraph.current;
       paragraph.current = [];
-      return <>{paragraphList.current[idx]}</>;
+      return <> {paragraphList.current[idx]}</>;
     }
 
     return null;
@@ -73,7 +75,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             data-class="post"
             key={frontmatter.title}
             className={
-              'border-b last:border-b-0 pb-5 border-b-darkmode-text-color space-y-4 sm:px-8' +
+              'border-b last:border-b-0 pb-8 border-b-darkmode-text-color space-y-4 sm:px-8' +
               popupAni(idx)
             }>
             <h1 className="text-2xl font-semibold mb-4">
@@ -85,20 +87,12 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
               href={toUrl(frontmatter)}
               className="block h-12 overflow-hidden hover:text-second-color">
               <Component
-                components={{
-                  h1: () => null,
-                  h2: () => null,
-                  h3: () => null,
-                  ol: () => null,
-                  li: () => null,
-                  img: () => null,
-                  pre: () => null,
-                  hr: () => null,
-                  blockquote: () => null,
-                  p: props => renderparagraph(props, idx),
-                  strong: () => null,
-                  a: () => null,
-                }}
+                components={Object.assign(
+                  {
+                    p: (props: any) => renderparagraph(props, idx),
+                  },
+                  blogPageComponents,
+                )}
               />
             </Link>
             <div className="flex-between">

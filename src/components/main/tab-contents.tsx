@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import { sortingData } from '../../utils/data-sorting';
+import Contact from './contact';
 
 type TContents = {
   name: string;
@@ -15,7 +16,7 @@ type TContents = {
 let contents: TContents[] = [
   { name: 'blog', content: <RecentPosts /> },
   { name: 'me', content: <Me /> },
-  { name: 'contact', content: 'imjoeun08@naver.com' },
+  { name: 'contact', content: <Contact /> },
 ];
 
 const TabContents = ({

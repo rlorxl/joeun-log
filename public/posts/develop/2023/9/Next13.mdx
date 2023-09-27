@@ -1,0 +1,329 @@
+---
+title: Next.js 13 찍먹하기
+category: develop
+published: 2023-9-25
+keywords: Next.js 13
+description: '블로그를 만들고 느꼈던 <Next.js 13>에서 바뀐점'
+---
+
+Next.js의 13버전을 사용해서 블로그를 만들어보았다. 아직 완성은 아니지만 느낀 점들을 잊어버리기 전에 경험한것들만 미리 정리를 해본다.
+개인적으로 12버전에선 거의 리액트 그대로에 플러스 알파 된 느낌으로 페이지기반 라우터 + api routes의 조합으로 편리한 라우팅과, http요청을 할 수 있었고
+메소드를 사용해 명시적으로 사전렌더링할 페이지를 결정할 수 있었다.
+
+하지만 13버전은 완전히 Next.js만의 규칙들로 이루어져서 좀 더 낯설게 느껴졌다.
+특히 새로 도입된 App Router를 시도해봤다. 베타버전이라고 쓰여있긴 하지만 궁금해서 써봤다.
+기존에 페이지 기반 라우팅은 폴더명을 경로이름으로 지정할 수 있어 굉장히 명시적이고 쉽게 느껴졌는데 App Router는 간단하긴한데 헷갈리는 점이 있었다.
+
+( 이 게시물은 Next.js 공식문서의 내용을 기반으로 중간중간 써보며 느낀점을 함께 작성하였습니다. )
+
+---
+
+# App 라우터
+
+메인 컨셉. 최상위인 `app/`디렉토리 안에 layout.js, page.js와 같은 파일들이 위치하게 된다.
+
+<br />
+
+## Layout.js
+
+**layout.js**는 말그대로 레이아웃을 포함하는 컴포넌트다.
+
+기본적으로 리렌더링이 일어나지 않는다.
+
+레이아웃은 중첩되어 있는 다수의 하위 폴더의 레이아웃에 함께 적용되고 유지된다.
+
+최상위 Root layout은 반드시 html, body태그를 포함해야 하고 children을 감싸고 있는 형태로 모든 페이지에 적용이 된다.
+
+<br />
+
+### multiple root layouts
+
+Root layout은 여러개일 수도 있다. 최상위 layout을 두지 않고 `(folderA)`, `(folderB)`와 같은 폴더 하위에 각각 layout을 만들어 여러개의 Root layout을 둘 수 있다. 각 layout은 각각의 html과 body태그를 갖는다.
+
+최상위 layout이 없다면 최상위의 page는 `(folderA)`나 `(folderB)` 중 하나에 종속되어야 한다. ex_app/(folderA)/page.js
+
+다중 layout일 때 에서 하나의 페이지에서 다른 layout의 하위 페이지로 넘어갈 때는 전체페이지 로드가 일어난다.
+
+<br />
+
+## Page.js
+
+레이아웃이 감싸고 있는 하위의 컴포넌트.
+
+`app/page.tsx`의 경로는 `/`!
+
+`app/dashboard/page.tsx`의 경로는 `/dashboard`!
+
+```
+app
+ ┣ 📂blog
+ ┃ ┃ ┣ 📂[...slug]
+ ┃ ┃ ┗ page.tsx 👉 '/blog/[...slug]'
+ ┃ ┃ ┣ 📂[slug]
+ ┃ ┃ ┗ page.tsx 👉 '/blog/[slug]'
+ ┃ ┃ layout.tsx
+ ┃ ┗ page.tsx 👉 '/blog'
+ ┣ layout.tsx
+ ┗ pages.tsx  👉 '/'
+```
+
+---
+
+# 서버 컴포넌트와 클라이언트 컴포넌트
+
+가장 생소하게 느껴졌던 부분. 컴포넌트는 서버컴포넌트와 클라이언트 컴포넌트로 나뉘어진다.
+
+<br />
+
+## 먼저 서버컴포넌트에 대해 알아보자.
+
+layout.js, page.js는 기본적으로 모두 서버 컴포넌트이고 클라이언트 컴포넌트와는 구분된다.
+
+('use client'를 통해 클라이언트 컴포넌트로도 쓸 수 있다.)
+
+서버 컴포넌트는 그 자체로 앱에 기능적으로 작용하여 퍼포먼스를 향상시키는 역할을 한다.
+
+<br />
+
+**서버 컴포넌트의 이점**
+
+- 서버 컴포넌트는 필요한 데이터 소스를 가까이서 데이터페칭하도록 도우며 렌더링에 필요한 데이터의 페칭과 클라이언트의 요청시간을 줄여줌으로써 퍼포먼스를 향상시킨다.
+- 서버 컴포넌트는 토큰과 API key같은 민감한 데이터나 로직이 클라이언트로 노출되지 않도록 해준다.
+- 서버에서 렌더링된 컴포넌트는 **연속적으로 재사용되는 요청에 대한 캐시를 제공**하기 때문에 퍼포먼스를 높이고 많은 양의 렌더링과 각 요청에 대한 데이터페칭의 비용을 줄일 수 있다.
+- html을 생성해서 **사용자에게 뷰를 즉각적으로 보여줄 수 있다.** 렌더에 필요한 자바스크립트를 실행하거나 클라이언트 다운로드를 기다리지 않는다. (SEO에 도움) 렌더링된 html은 검색엔진 봇과 소셜 네트워크 봇에서 사용되어 페이지를 색인할 수 있고 페이지의 소셜 카드 미리보기(?)를 생성해 준다.
+- 청크단위로 렌더링을 나눌 수 있어 준비가 되었을 때 클라이언트로 점차 스트리밍할 수 있다. 사용자가 전체 페이지가 렌더되는 것을 기다리지 않고 페이지의 부분을 먼저 볼 수 있게 해 준다. (Streaming)
+
+<br />
+
+## 클라이언트 컴포넌트
+
+클라이언트 컴포넌트는 요청시에 렌더되는 인터랙티브 UI를 포함하면 된다.
+Next.js에서 클라이언트 컴포넌트는 선택적이다.
+컴포넌트 상단에 `'use client'`를 작성함으로써 어떤 컴포넌트를 클라이언트에서 렌더링할건지 명시적 선택을 할 수 있다.
+
+- 클라이언트 컴포넌트에서만 useState와 같은 리액트 훅을 사용할 수 있다. 이것은 유저와 업데이트되는 UI간에 즉각적인 피드백을 제공할 수 있음을 의미한다.
+- localStorage같은 브라우저 API를 포함할 수 있고 (서버 컴포넌트에서는 포함X) 특정 조건에 따라 UI를 다르게 보여줄 수 있다.
+
+<br />
+
+이처럼 서버 컴포넌트와 클라이언트 컴포넌트의 역할이 다르고 각 컴포넌트는 지정된 규칙에 따라서 렌더링 되어지기 때문에 자칫 넋놓고 코딩하다가는 쉽게 에러를 마주하게 된다. (엉엉)
+
+<br />
+
+**서버 컴포넌트에서만 가능한 것**
+
+- 데이터 페칭
+- 백엔드 리소스 가져오기
+- 서버에서 민감한 데이터 가져오기(액세스 토큰, API key등..)
+- 서버에 의존성을 유지
+
+**클라이언트 컴포넌트에서만 가능한 것**
+
+- 이벤트 리스너 달기
+- 리액트 훅 사용
+- 브라우저 API 사용
+- 커스텀 훅 사용 (브라우저 API나 리액트 훅이 포함된)
+- 리액트 클래스 컴포넌트 사용
+- **서버 컴포넌트를 자식 컴포넌트로 가지기**🔥 (서버 컴포넌트는 클라이언트 컴포넌트를 하위 컴포넌트로 가질 수 없음.)
+
+```js
+'use client'
+
+// You cannot import a Server Component into a Client Component.
+import ServerComponent from './Server-Component'
+
+export default function ClientComponent({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+
+      <ServerComponent />
+    </>
+  )
+}
+```
+
+불가능! 🙅‍♀️
+
+```js
+// This pattern works:
+// You can pass a Server Component as a child or prop of a
+// Client Component.
+import ClientComponent from './client-component';
+import ServerComponent from './server-component';
+
+// Pages in Next.js are Server Components by default
+export default function Page() {
+  return (
+    <ClientComponent>
+      <ServerComponent />
+    </ClientComponent>
+  );
+}
+```
+
+요건 가능! 🙆‍♀️
+
+<br />
+
+## 써드파티 패키지 & Provider이용하기
+
+많은 npm패키지들의 기능들은 클라이언트 전용인 경우가 많다. 이들은 'use client'가 있는 곳에서 작동하지만 서버 컴포넌트에서는 올바르게 작동하지 않는다.
+
+이 문제를 해결하려면 **써드파티(프로그래밍을 도와주는 외부 생산자를 뜻하는 용어.) 컴포넌트**로 클라이언트 컴포넌트를 래핑하면 된다.
+
+```js
+// app/carousel.tsx
+'use client';
+
+import { Carousel } from 'acme-carousel';
+
+export default Carousel;
+```
+
+이제 서버컴포넌트에서 래핑한 컴포넌트를 불러와서 사용할 수 있게된다.
+
+### Context Providers
+
+**Context Providers**는 전형적으로 앱의 루트에서 앱의 전체로 관여해야 하는 기능을 적용할 때 사용된다.
+리액트 컨텍스트는 서버 컴포넌트에서 지원되지 않기에 루트 레이아웃에서 그냥 사용하면 에러가 난다.
+해결하려면 컨텍스트를 클라이언트 컴포넌트 내부에서 호출하고 export한 후 루트 레이아웃에서 사용하면 된다.
+그러면 앱의 다른 모든 클라이언트 컴포넌트들에 이 컨텍스트가 적용이 된다.
+
+---
+
+# Data Fetching방식
+
+Next.js는 네이티브 fetch Web API를 제공한다.
+서버에서의 각 fetch요청에는 캐싱과 재요청을 할 수 있고 컴포넌트 트리가 렌더링되는 동안 자동적으로 메모이즈 된다.
+(Route handler는 컴포넌트 트리에 포함이 되어있지 않기 떄문에 메모이즈되지 않는다. (GET은 캐싱된다.))
+
+<br />
+
+## 직렬 data fetching
+
+중첩된 컴포넌트들에서 각 컴포넌트가 각자의 데이터를 필요로 하고 서로 의존성이 있는 경우의 순차적인 data fetching
+
+```js
+// ...
+
+async function Playlists({ artistID }: { artistID: string }) {
+  // Wait for the playlists
+  const playlists = await getArtistPlaylists(artistID)
+
+  return (
+    <ul>
+      {playlists.map((playlist) => (
+        <li key={playlist.id}>{playlist.name}</li>
+      ))}
+    </ul>
+  )
+}
+
+export default async function Page({
+  params: { username },
+}: {
+  params: { username: string }
+}) {
+  // Wait for the artist
+  const artist = await getArtist(username)
+
+  return (
+    <>
+      <h1>{artist.name}</h1>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Playlists artistID={artist.id} />
+      </Suspense>
+    </>
+  )
+}
+```
+
+<br />
+
+## 병렬 data fetching
+
+병렬로 데이터 페칭을 해야하는경우 컴포넌트 바깥에 두개 이상의 data fetching함수를 정의한 다음 컴포넌트안에서 **Promise.all**로 호출한다. (await X)
+이 때 두 데이터를 모두 받아오기 전까지 사용자는 렌더링된 결과를 볼 수 없다.
+
+```js
+import Albums from './albums'
+
+async function getArtist(username: string) {
+  const res = await fetch(`https://api.example.com/artist/${username}`)
+  return res.json()
+}
+
+async function getArtistAlbums(username: string) {
+  const res = await fetch(`https://api.example.com/artist/${username}/albums`)
+  return res.json()
+}
+
+export default async function Page({
+  params: { username },
+}: {
+  params: { username: string }
+}) {
+  // Initiate both requests in parallel
+  const artistData = getArtist(username)
+  const albumsData = getArtistAlbums(username)
+
+  // Wait for the promises to resolve
+  const [artist, albums] = await Promise.all([artistData, albumsData])
+
+  return (
+    <>
+      <h1>{artist.name}</h1>
+      <Albums list={albums}></Albums>
+    </>
+  )
+}
+```
+
+<br />
+
+## preloading
+
+preload패턴은 워터폴을 막는 다른 방법이다. 옵션으로 `preload`함수를 생성하여 병렬 데이터 가져오기를 최적화할 수 있다.
+이 접근 방식을 사용하면 Promise를 props로 전달할 필요가 없다.
+
+```js
+import { getItem } from '@/utils/get-item'
+
+export const preload = (id: string) => {
+  // void evaluates the given expression and returns undefined
+  // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
+  void getItem(id)
+}
+export default async function Item({ id }: { id: string }) {
+  const result = await getItem(id)
+  // ...
+}
+```
+
+<br />
+
+## 클라이언트에서의 fetch
+
+- Route Handler
+- 라이브러리
+
+클라이언트에서 데이터를 가져와야 한다면 클라이언트에서 Route Handler를 통하거나
+SWR, React Query등을 사용해서 클라이언트로 데이터를 반환하게 할 수 있다.
+
+```js
+// app/api/route.ts
+import { type NextRequest } from 'next/server'
+
+export async function GET(request: NextRequest) {
+  const requestHeaders = new Headers(request.headers)
+}
+```
+
+app디렉토리 안에 api폴더안에서 실행되는데 page라우터를 쓸 때와 동일하게 http메소드들을 이용할 수 있다.
