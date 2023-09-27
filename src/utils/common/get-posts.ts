@@ -89,7 +89,7 @@ export const getPost = cache(async (segments: string) => {
           'http://localhost:3000/blog/develop/2023/8/%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EB%B9%84%EB%8F%99%EA%B8%B0%EB%A1%9C%EC%A7%81-%EC%B2%98%EB%A6%AC%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC',
         );
       */
-      const url = process.env.LOCAL_URL + '/' + path; // 로컬 환경변수
+      const url = process.env.SITE_URL + '/' + path;
       const decodedUri = decodeURI(url);
       const arr = decodedUri.split('/'); // [ 'http:', '', 'localhost:3000', 'title' ]
       filename = replaceWords(arr[arr.length - 1]);
