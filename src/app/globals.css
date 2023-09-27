@@ -40,20 +40,17 @@
     color: var(--darkmode-text-color);
   }
 
-  [data-theme='dark'] code {
-    color: var(--darkmode-base-color);
-  }
-
-  [data-theme='dark'] nav {
-    background-color: var(--darkmode-base-color);
-  }
-
+  [data-theme='dark'] [data-class='detail'] code,
   [data-theme='dark'] [data-class='tag'] {
     color: var(--darkmode-base-color);
   }
 
   [data-theme='dark'] blockquote p {
     color: var(--base-color);
+  }
+
+  [data-theme='dark'] nav {
+    background-color: var(--darkmode-base-color);
   }
 
   nav br,
