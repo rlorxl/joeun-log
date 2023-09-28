@@ -68,7 +68,7 @@ export const generateStaticParams = async () => {
     // const replaceColon = replaceComma.replaceAll('%3A', ':');
 
     arr = [category, ...date, title];
-    console.log(arr);
+    // console.log(arr);
     return arr;
   });
 

@@ -5,6 +5,7 @@ import { postsState } from '@/recoil/posts';
 import Image from 'next/image';
 import ArrowRight from '../../../public/assets/icon/arrow-right.svg';
 import { toUrl } from '../../utils/url';
+import { useRouter } from 'next/navigation';
 
 const slideUpAni = (i: number): string => {
   let classname = '';
@@ -27,6 +28,7 @@ const slideUpAni = (i: number): string => {
 
 const RecentPosts = () => {
   const posts = useRecoilValue(postsState);
+  const router = useRouter();
 
   return (
     <>
@@ -37,9 +39,15 @@ const RecentPosts = () => {
             <ul className="space-y-2 sm:hidden">
               {posts.slice(0, 4).map(({ frontmatter }, idx) => (
                 <li key={frontmatter.title} className={'flex-between' + slideUpAni(idx)}>
-                  <Link href={toUrl(frontmatter)} className="mr-12 text-lg hover:underline">
+                  {/* <Link href={toUrl(frontmatter)} className="mr-12 text-lg hover:underline">
                     {frontmatter.title}
-                  </Link>
+                  </Link> */}
+                  <button
+                    type="button"
+                    className="mr-12 text-lg hover:underline"
+                    onClick={() => router.push(toUrl(frontmatter))}>
+                    {frontmatter.title}
+                  </button>
                   <p className="text-sm">{frontmatter.published}</p>
                 </li>
               ))}
