@@ -160,6 +160,29 @@ export const getPost2 = cache(async (segments: string) => {
   }
 });
 
+export const getCategoryPosts = async (categoryId: string) => {
+  const rootDirectory = `public/posts/${categoryId}`;
+  const years = fs.readdirSync(rootDirectory); // ['2023','2024']
+
+  if (years.length === 0) return [];
+
+  let mdxSources: { [key: string]: any }[] = [];
+
+  for (const year of years) {
+    const dirpath = `${rootDirectory}/${year}`;
+    const months = fs.readdirSync(dirpath);
+
+    for (const month of months) {
+      const dirpath_2 = `${dirpath}/${month}`;
+      const files = fs.readdirSync(dirpath_2);
+      const mdxs = await getFiles(dirpath_2, files);
+      mdxSources = [...mdxSources, ...mdxs];
+    }
+  }
+
+  return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
+};
+
 /* 전체 포스트 리스트를 가져오는 함수 */
 export const getAllPosts = async () => {
   try {
