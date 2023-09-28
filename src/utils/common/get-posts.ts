@@ -29,6 +29,44 @@ export const getFiles = async (dir: string, posts: string[]) => {
   return files;
 };
 
+const findConnectedDash = (target: string) => {
+  // const dashIdx = target.indexOf('---'); // 6
+  // const arr = target.split('-'); // [ 'Next13', '', '', 'cookie로', '다크모드', '구현하기' ]
+  // const nogap = arr.filter(str => str !== ''); // [ 'Next13', 'cookie로', '다크모드', '구현하기' ]
+  // const t1 = nogap.join(' ').split(''); // Next13 cookie로 다크모드 구현하기
+  // t1.splice(dashIdx, 0, ' ');
+  // t1.splice(dashIdx + 1, 0, '-');
+  // return t1;
+  let filename;
+  let indexes: number[] = [];
+
+  target.split('').forEach((str, i, arr) => {
+    if (str === '-' && arr[i + 1] === '-' && arr[i + 2] === '-') indexes.push(i + 1);
+  });
+
+  filename = target.replaceAll('-', ' ');
+
+  const filenameArr = filename.split('');
+
+  indexes.forEach(idx => filenameArr.splice(idx, 1, '-'));
+  filename = filenameArr.join('');
+
+  return filename;
+};
+
+export const replaceWords = (target: string): string => {
+  let filename = target; // Next13---cookie로-다크모드-구현하기
+  const comma = '%2C';
+  const colon = '%3A';
+
+  const replaceDash = findConnectedDash(filename);
+  const replaceComma = replaceDash.replaceAll(comma, ',');
+  const replaceColon = replaceComma.replaceAll(colon, ':');
+  filename = replaceColon;
+
+  return filename;
+};
+
 /* 
 개별 포스트를 가져오는 함수.
 인코딩된 문자 url을 디코딩해서 제대로 된 파일명으로 바꾸고 mdx파일을 가져온다.
@@ -41,44 +79,6 @@ export const getPost = cache(async (segments: string) => {
   let paths = Array.from(segments);
   let rootPath = '';
   let filename = '';
-
-  const findConnectedDash = (target: string) => {
-    // const dashIdx = target.indexOf('---'); // 6
-    // const arr = target.split('-'); // [ 'Next13', '', '', 'cookie로', '다크모드', '구현하기' ]
-    // const nogap = arr.filter(str => str !== ''); // [ 'Next13', 'cookie로', '다크모드', '구현하기' ]
-    // const t1 = nogap.join(' ').split(''); // Next13 cookie로 다크모드 구현하기
-    // t1.splice(dashIdx, 0, ' ');
-    // t1.splice(dashIdx + 1, 0, '-');
-    // return t1;
-    let filename;
-    let indexes: number[] = [];
-
-    target.split('').forEach((str, i, arr) => {
-      if (str === '-' && arr[i + 1] === '-' && arr[i + 2] === '-') indexes.push(i + 1);
-    });
-
-    filename = target.replaceAll('-', ' ');
-
-    const filenameArr = filename.split('');
-
-    indexes.forEach(idx => filenameArr.splice(idx, 1, '-'));
-    filename = filenameArr.join('');
-
-    return filename;
-  };
-
-  const replaceWords = (target: string): string => {
-    let filename = target; // Next13---cookie로-다크모드-구현하기
-    const comma = '%2C';
-    const colon = '%3A';
-
-    const replaceDash = findConnectedDash(filename);
-    const replaceComma = replaceDash.replaceAll(comma, ',');
-    const replaceColon = replaceComma.replaceAll(colon, ':');
-    filename = replaceColon;
-
-    return filename;
-  };
 
   paths.forEach((path, i, paths) => {
     if (i !== paths.length - 1) {

@@ -4,37 +4,6 @@ import { Metadata } from 'next';
 import { getAllPosts, getPost } from '@/utils/common/get-posts';
 import getCookie from '@/utils/common/get-cookie';
 
-const findConnectedDash = (target: string) => {
-  let filename;
-  let indexes: number[] = [];
-
-  target.split('').forEach((str, i, arr) => {
-    if (str === '-' && arr[i + 1] === '-' && arr[i + 2] === '-') indexes.push(i + 1);
-  });
-
-  filename = target.replaceAll('-', ' ');
-
-  const filenameArr = filename.split('');
-
-  indexes.forEach(idx => filenameArr.splice(idx, 1, '-'));
-  filename = filenameArr.join('');
-
-  return filename;
-};
-
-const replaceWords = (target: string): string => {
-  let filename = target; // Next13---cookie로-다크모드-구현하기
-  const comma = '%2C';
-  const colon = '%3A';
-
-  const replaceDash = findConnectedDash(filename);
-  const replaceComma = replaceDash.replaceAll(comma, ',');
-  const replaceColon = replaceComma.replaceAll(colon, ':');
-  filename = replaceColon;
-
-  return filename;
-};
-
 export const generateMetadata = async ({
   params,
 }: {
@@ -82,20 +51,25 @@ export const generateMetadata = async ({
 };
 
 export const generateStaticParams = async () => {
-  const posts = await getAllPosts();
+  const data = await getAllPosts();
 
-  if (!posts) return [];
+  if (!data) return [];
 
-  const slugs = posts.map(({ matter }) => {
+  const slugs = data.map(({ matter }) => {
+    let arr = [];
+    const category = matter.data.category;
     const date = matter.data.published.split('-').slice(0, 2);
     const title = matter.data.title.replaceAll(' ', '-');
 
-    const url = process.env.LOCAL_URL + '/' + title;
-    const decodedUri = decodeURI(url);
-    const arr = decodedUri.split('/'); // [ 'http:', '', 'localhost:3000', 'title' ]
-    const decodedTitle = replaceWords(arr[arr.length - 1]);
-    date.push(decodedTitle);
-    return date;
+    // const url = process.env.LOCAL_URL + '/' + title;
+    // const decodedUri = decodeURI(url).split('/');
+    // const name = decodedUri[decodedUri.length - 1];
+    // const replaceComma = name.replaceAll('%2C', ',');
+    // const replaceColon = replaceComma.replaceAll('%3A', ':');
+
+    arr = [category, ...date, title];
+    console.log(arr);
+    return arr;
   });
 
   return slugs.map(item => ({ slug: item }));
