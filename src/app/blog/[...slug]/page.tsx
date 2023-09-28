@@ -84,8 +84,6 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
   const data =
     params.slug.length === 1 ? await getCategoryPosts(params.slug) : await getPost(params.slug);
 
-  // const postDetails = await getPost(params.slug);
-
   const theme = getCookie();
 
   if (params.slug.length === 1) {
