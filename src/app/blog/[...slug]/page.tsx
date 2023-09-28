@@ -82,7 +82,7 @@ export const generateMetadata = async ({
 const DetailPage = async ({ params }: { params: { slug: string } }) => {
   // TODO: 물음표(?) 제거하기 - 쿼리스트링으로 인식
   const data =
-    params.slug.length === 1 ? getCategoryPosts(params.slug) : await getPost(params.slug);
+    params.slug.length === 1 ? await getCategoryPosts(params.slug) : await getPost(params.slug);
   const theme = getCookie();
 
   if (params.slug.length === 1) {

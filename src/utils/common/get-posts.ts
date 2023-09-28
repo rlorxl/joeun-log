@@ -116,34 +116,32 @@ export const getPost = cache(async (segments: string) => {
   }
 });
 
-export const getCategoryPosts = (categoryId: string) => {
+export const getCategoryPosts = async (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
-  let years: string[] = [];
+  // let years: string[] = [];
   let mdxSources: { [key: string]: any }[] = [];
 
   try {
-    fs.readdir(rootDirectory, async (err, dir) => {
-      if (err) console.log(err.message);
-      years = dir; // ['2023','2024']
+    // fs.readdir(rootDirectory, async (err, dir) => {
+    //   if (err) console.log(err.message);
+    //   years = dir; // ['2023','2024']
+    let years = fs.readdirSync(rootDirectory);
 
-      // console.log(years);
+    for (const year of years) {
+      const dirpath = `${rootDirectory}/${year}`; // public/posts/daily/2023
+      const months = fs.readdirSync(dirpath);
 
-      for (const year of years) {
-        const dirpath = `${rootDirectory}/${year}`; // public/posts/daily/2023
-        console.log(dirpath);
-        const months = fs.readdirSync(dirpath);
-
-        for (const month of months) {
-          const dirpath_2 = `${dirpath}/${month}`;
-          const files = fs.readdirSync(dirpath_2);
-          const mdxs = await getFiles(dirpath_2, files);
-          mdxSources = [...mdxSources, ...mdxs];
-        }
+      for (const month of months) {
+        const dirpath_2 = `${dirpath}/${month}`;
+        const files = fs.readdirSync(dirpath_2);
+        const mdxs = await getFiles(dirpath_2, files);
+        mdxSources = [...mdxSources, ...mdxs];
       }
+    }
 
-      if (mdxSources.length === 0) return null;
-      return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
-    });
+    if (mdxSources.length === 0) return null;
+    return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
+    // });
   } catch (err) {
     if (err instanceof Error) console.log(err.message);
   }
