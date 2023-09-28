@@ -116,7 +116,7 @@ export const getPost = cache(async (segments: string) => {
   }
 });
 
-export const getCategoryPosts = async (categoryId: string) => {
+export const getCategoryPosts = (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
   const years = fs.readdirSync(rootDirectory); // ['2023','2024']
 
