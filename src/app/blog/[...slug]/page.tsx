@@ -88,7 +88,7 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
   if (params.slug.length === 1) {
     return (
       <div className="ml-60 blog-width min-h-[1200px] space-y-5 sm:w-full sm:ml-0 sm:mt-10 py-20">
-        {/* {data && <Posts posts={data as TPost[]} />} */}
+        {<Posts posts={data as TPost[]} />}
         {!data && <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>}
       </div>
     );
@@ -96,7 +96,7 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <div className="ml-80 relative space-y-5 sm:w-full sm:ml-0 sm:p-8">
-      {/* {data && <PostDetail post={data as TPost[]} cookie={theme} />} */}
+      {<PostDetail post={data as TPost[]} cookie={theme} />}
     </div>
   );
 };

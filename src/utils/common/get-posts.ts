@@ -121,24 +121,32 @@ export const getCategoryPosts = (categoryId: string) => {
   let years: string[] = [];
   let mdxSources: { [key: string]: any }[] = [];
 
-  fs.readdir(rootDirectory, async (err, dir) => {
-    if (err) console.log(err.message);
-    years = dir; // ['2023','2024']
+  try {
+    fs.readdir(rootDirectory, async (err, dir) => {
+      if (err) console.log(err.message);
+      years = dir; // ['2023','2024']
 
-    for (const year of years) {
-      const dirpath = `${rootDirectory}/${year}`; // public/posts/daily/2023
-      const months = fs.readdirSync(dirpath);
+      // console.log(years);
 
-      for (const month of months) {
-        const dirpath_2 = `${dirpath}/${month}`;
-        const files = fs.readdirSync(dirpath_2);
-        const mdxs = await getFiles(dirpath_2, files);
-        mdxSources = [...mdxSources, ...mdxs];
+      for (const year of years) {
+        const dirpath = `${rootDirectory}/${year}`; // public/posts/daily/2023
+        console.log(dirpath);
+        const months = fs.readdirSync(dirpath);
+
+        for (const month of months) {
+          const dirpath_2 = `${dirpath}/${month}`;
+          const files = fs.readdirSync(dirpath_2);
+          const mdxs = await getFiles(dirpath_2, files);
+          mdxSources = [...mdxSources, ...mdxs];
+        }
       }
-    }
-    if (mdxSources.length === 0) return null;
-    return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
-  });
+
+      if (mdxSources.length === 0) return null;
+      return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
+    });
+  } catch (err) {
+    if (err instanceof Error) console.log(err.message);
+  }
 };
 
 /* 전체 포스트 리스트를 가져오는 함수 */
