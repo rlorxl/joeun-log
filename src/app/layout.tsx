@@ -6,8 +6,8 @@ import getCookie from '@/utils/common/get-cookie';
 import CheckDefaultScheme from '@/wrapper/default-scheme';
 
 export const metadata: Metadata = {
-  title: 'Joeunssm',
-  description: '조은의 블로그',
+  title: '조은씀',
+  description: '조은 개발 블로그',
   icons: [
     {
       rel: 'icon',

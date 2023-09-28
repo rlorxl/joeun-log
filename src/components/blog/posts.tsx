@@ -34,7 +34,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
   const [mounted, setMounted] = useState<boolean>(false);
 
   const paragraph = useRef<any[]>([]);
-  const paragraphList = useRef<any[]>(Array(posts.length).fill(''));
+  const paragraphList = useRef<any[]>(Array(posts?.length).fill(''));
 
   const renderparagraph = (props: any, idx: number) => {
     let text = props.children;
@@ -54,7 +54,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
   // 렌더링될 때마다 ref값 초기화.
   useEffect(() => {
     paragraph.current = [];
-    paragraphList.current = Array(posts.length).fill('');
+    paragraphList.current = Array(posts?.length).fill('');
   });
 
   useEffect(() => {
@@ -63,8 +63,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
 
   if (!mounted) return null;
 
-  if (posts.length === 0)
-    return <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>;
+  if (!posts) return <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>;
 
   return (
     <>
