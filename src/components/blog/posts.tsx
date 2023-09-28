@@ -63,8 +63,8 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
 
   if (!mounted) return null;
 
-  if (posts.length === 0)
-    return <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>;
+  // if (posts.length === 0)
+  //   return <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>;
 
   return (
     <>

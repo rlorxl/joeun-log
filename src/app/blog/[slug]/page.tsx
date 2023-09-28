@@ -19,16 +19,19 @@ const getCategoryPosts = async (categoryId: string) => {
       mdxSources = [...mdxSources, ...mdxs];
     }
   }
-  return mdxSources;
+  return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
 };
 
 const CategoryPage = async ({ params }: { params: { slug: string } }) => {
   const categoryPosts = await getCategoryPosts(params.slug);
-  const passingData = categoryPosts?.map(({ code, frontmatter }) => ({ code, frontmatter }));
 
   return (
     <div className="ml-60 blog-width min-h-[1200px] space-y-5 sm:w-full sm:ml-0 sm:mt-10 py-20">
-      <Posts posts={passingData} />
+      {categoryPosts.length > 0 ? (
+        <Posts posts={categoryPosts} />
+      ) : (
+        <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>
+      )}
     </div>
   );
 };
