@@ -6,6 +6,8 @@ const getCategoryPosts = async (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
   const years = fs.readdirSync(rootDirectory); // ['2023','2024']
 
+  if (years.length === 0) return [];
+
   let mdxSources: { [key: string]: any }[] = [];
 
   for (const year of years) {
@@ -19,6 +21,7 @@ const getCategoryPosts = async (categoryId: string) => {
       mdxSources = [...mdxSources, ...mdxs];
     }
   }
+
   return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
 };
 
