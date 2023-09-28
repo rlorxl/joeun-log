@@ -123,21 +123,21 @@ export const getCategoryPosts = async (categoryId: string) => {
   try {
     let mdxSources: { [key: string]: any }[] = [];
 
-    for (const year of years) {
-      const dirpath = `${rootDirectory}/${year}`; // public/posts/daily/2023
-      const months = fs.readdirSync(dirpath);
+    // for (const year of years) {
+    //   const dirpath = `${rootDirectory}/${year}`; // public/posts/daily/2023
+    //   const months = fs.readdirSync(dirpath);
 
-      for (const month of months) {
-        const dirpath_2 = `${dirpath}/${month}`;
-        const files = fs.readdirSync(dirpath_2);
-        if (files.length === 0) {
-          console.log('there is no file');
-          return null;
-        }
-        const mdxs = await getFiles(dirpath_2, files);
-        mdxSources = [...mdxSources, ...mdxs];
-      }
-    }
+    //   for (const month of months) {
+    //     const dirpath_2 = `${dirpath}/${month}`;
+    //     const files = fs.readdirSync(dirpath_2);
+    //     if (files.length === 0) {
+    //       console.log('there is no file');
+    //       return null;
+    //     }
+    //     const mdxs = await getFiles(dirpath_2, files);
+    //     mdxSources = [...mdxSources, ...mdxs];
+    //   }
+    // }
 
     if (mdxSources.length === 0) return null;
     return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
