@@ -1,7 +1,7 @@
 import React from 'react';
 import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
-import { getAllPosts, getPost } from '@/utils/common/get-posts';
+import { getAllPosts, getPost, getPost2 } from '@/utils/common/get-posts';
 import getCookie from '@/utils/common/get-cookie';
 
 export const generateMetadata = async ({
@@ -50,30 +50,30 @@ export const generateMetadata = async ({
   };
 };
 
-export const generateStaticParams = async () => {
-  const data = await getAllPosts();
+// export const generateStaticParams = async () => {
+//   const data = await getAllPosts();
 
-  if (!data) return [];
+//   if (!data) return [];
 
-  const slugs = data.map(({ matter }) => {
-    let arr = [];
-    const category = matter.data.category;
-    const date = matter.data.published.split('-').slice(0, 2);
-    const title = matter.data.title.replaceAll(' ', '-');
+//   const slugs = data.map(({ matter }) => {
+//     let arr = [];
+//     const category = matter.data.category;
+//     const date = matter.data.published.split('-').slice(0, 2);
+//     const title = matter.data.title.replaceAll(' ', '-');
 
-    // const url = process.env.LOCAL_URL + '/' + title;
-    // const decodedUri = decodeURI(url).split('/');
-    // const name = decodedUri[decodedUri.length - 1];
-    // const replaceComma = name.replaceAll('%2C', ',');
-    // const replaceColon = replaceComma.replaceAll('%3A', ':');
+//     // const url = process.env.LOCAL_URL + '/' + title;
+//     // const decodedUri = decodeURI(url).split('/');
+//     // const name = decodedUri[decodedUri.length - 1];
+//     // const replaceComma = name.replaceAll('%2C', ',');
+//     // const replaceColon = replaceComma.replaceAll('%3A', ':');
 
-    arr = [category, ...date, title];
-    // console.log(arr);
-    return arr;
-  });
+//     arr = [category, ...date, title];
+//     // console.log(arr);
+//     return arr;
+//   });
 
-  return slugs.map(item => ({ slug: item }));
-};
+//   return slugs.map(item => ({ slug: item }));
+// };
 
 const DetailPage = async ({ params }: { params: { slug: string } }) => {
   // TODO: 물음표(?) 제거하기 - 쿼리스트링으로 인식

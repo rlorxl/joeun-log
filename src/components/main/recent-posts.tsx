@@ -39,15 +39,9 @@ const RecentPosts = () => {
             <ul className="space-y-2 sm:hidden">
               {posts.slice(0, 4).map(({ frontmatter }, idx) => (
                 <li key={frontmatter.title} className={'flex-between' + slideUpAni(idx)}>
-                  {/* <Link href={toUrl(frontmatter)} className="mr-12 text-lg hover:underline">
+                  <Link href={toUrl(frontmatter)} className="mr-12 text-lg hover:underline">
                     {frontmatter.title}
-                  </Link> */}
-                  <button
-                    type="button"
-                    className="mr-12 text-lg hover:underline"
-                    onClick={() => router.push(toUrl(frontmatter))}>
-                    {frontmatter.title}
-                  </button>
+                  </Link>
                   <p className="text-sm">{frontmatter.published}</p>
                 </li>
               ))}
