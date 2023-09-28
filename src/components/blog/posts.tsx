@@ -54,7 +54,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
   // 렌더링될 때마다 ref값 초기화.
   useEffect(() => {
     paragraph.current = [];
-    paragraphList.current = Array(posts.length).fill('');
+    paragraphList.current = Array(posts?.length).fill('');
   });
 
   useEffect(() => {
