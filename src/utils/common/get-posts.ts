@@ -173,6 +173,7 @@ export const getCategoryPosts = async (categoryId: string) => {
     for (const month of months) {
       const dirpath_2 = `${dirpath}/${month}`;
       const files = fs.readdirSync(dirpath_2);
+      if (files.length === 0) return null;
       const mdxs = await getFiles(dirpath_2, files);
       mdxSources = [...mdxSources, ...mdxs];
     }
