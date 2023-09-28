@@ -86,13 +86,16 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
 
   const theme = getCookie();
 
-  if (!data) return <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>;
-
   if (params.slug.length === 1) {
     return (
-      <div className="ml-60 blog-width min-h-[1200px] space-y-5 sm:w-full sm:ml-0 sm:mt-10 py-20">
-        <Posts posts={data as TPost[]} />
-      </div>
+      <>
+        {!data && <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>}
+        {data && (
+          <div className="ml-60 blog-width min-h-[1200px] space-y-5 sm:w-full sm:ml-0 sm:mt-10 py-20">
+            <Posts posts={data} />
+          </div>
+        )}
+      </>
     );
   }
 
