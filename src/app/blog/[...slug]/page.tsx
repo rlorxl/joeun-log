@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
-import { getAllPosts, getPost, getPost2 } from '@/utils/common/get-posts';
+import { getAllPosts, getCategoryPosts, getPost, getPost2 } from '@/utils/common/get-posts';
 import getCookie from '@/utils/common/get-cookie';
+import Posts from '@/components/blog/posts';
+import { TPost } from '@/types/post';
 
 export const generateMetadata = async ({
   params,
 }: {
   params: { slug: string };
 }): Promise<Metadata> => {
+  if (params.slug.length === 1) return {};
+
   const postDetails = await getPost(params.slug);
   if (!postDetails) return {};
   const { frontmatter } = postDetails[0];
@@ -77,14 +81,24 @@ export const generateMetadata = async ({
 
 const DetailPage = async ({ params }: { params: { slug: string } }) => {
   // TODO: 물음표(?) 제거하기 - 쿼리스트링으로 인식
+  const data =
+    params.slug.length === 1 ? await getCategoryPosts(params.slug) : await getPost(params.slug);
 
-  const postDetails = await getPost(params.slug);
+  // const postDetails = await getPost(params.slug);
 
   const theme = getCookie();
 
+  if (params.slug.length === 1) {
+    return (
+      <div className="ml-60 blog-width min-h-[1200px] space-y-5 sm:w-full sm:ml-0 sm:mt-10 py-20">
+        <Posts posts={data as TPost[]} />
+      </div>
+    );
+  }
+
   return (
     <div className="ml-80 relative space-y-5 sm:w-full sm:ml-0 sm:p-8">
-      {postDetails && <PostDetail post={postDetails} cookie={theme} />}
+      {data && <PostDetail post={data} cookie={theme} />}
     </div>
   );
 };
