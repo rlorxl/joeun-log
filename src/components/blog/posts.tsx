@@ -63,8 +63,6 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
 
   if (!mounted) return null;
 
-  if (!posts) return <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>;
-
   return (
     <>
       {sortingData(posts).map(({ code, frontmatter }, idx) => {

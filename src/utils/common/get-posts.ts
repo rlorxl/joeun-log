@@ -7,12 +7,6 @@ import { bundleMDX } from 'mdx-bundler';
 
 export const revalidate = 3600;
 
-// export const preload = (id: string) => {
-//   // void evaluates the given expression and returns undefined
-//   // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
-//   void getPost(id);
-// };
-
 export const getFiles = async (dir: string, posts: string[]) => {
   let files: { [key: string]: any }[] = [];
 
@@ -118,13 +112,9 @@ export const getPost = cache(async (segments: string) => {
 
 export const getCategoryPosts = async (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
-  // let years: string[] = [];
   let mdxSources: { [key: string]: any }[] = [];
 
   try {
-    // fs.readdir(rootDirectory, async (err, dir) => {
-    //   if (err) console.log(err.message);
-    //   years = dir; // ['2023','2024']
     let years = fs.readdirSync(rootDirectory);
 
     for (const year of years) {
@@ -141,7 +131,6 @@ export const getCategoryPosts = async (categoryId: string) => {
 
     if (mdxSources.length === 0) return null;
     return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
-    // });
   } catch (err) {
     if (err instanceof Error) console.log(err.message);
   }
