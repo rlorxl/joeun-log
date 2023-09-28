@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
-import { getAllPosts, getCategoryPosts, getPost, getPost2 } from '@/utils/common/get-posts';
+import { getAllPosts, getCategoryPosts, getPost } from '@/utils/common/get-posts';
 import getCookie from '@/utils/common/get-cookie';
 import Posts from '@/components/blog/posts';
 import { TPost } from '@/types/post';
@@ -85,6 +85,8 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
     params.slug.length === 1 ? await getCategoryPosts(params.slug) : await getPost(params.slug);
 
   const theme = getCookie();
+
+  if (!data) return <div className="italic text-sm flex-center p-5">아직 아무것도 없어요 !</div>;
 
   if (params.slug.length === 1) {
     return (

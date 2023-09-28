@@ -116,71 +116,34 @@ export const getPost = cache(async (segments: string) => {
   }
 });
 
-export const getPost2 = cache(async (segments: string) => {
-  // console.log(segments);
-  // diary%2F2023%2F9%2F%EB%91%90%EB%B2%88%EC%A7%B8-%EB%B8%94%EB%A1%9C%EA%B7%B8
-  let paths = Array.from(segments);
-  let rootPath = '';
-  let filename = '';
-
-  paths.forEach((path, i, paths) => {
-    if (i !== paths.length - 1) {
-      rootPath += `/${path}`;
-    } else {
-      /* 세그먼트에 한글이 있어서 인코딩된 문자로 반환되기 때문에 디코딩해서 한글로 변환해서 가져와야 한다. 디코딩할때는 전체 Url이 필요. 
-        decodeURI(
-          'http://localhost:3000/blog/develop/2023/8/%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EB%B9%84%EB%8F%99%EA%B8%B0%EB%A1%9C%EC%A7%81-%EC%B2%98%EB%A6%AC%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC',
-        );
-      */
-      const url = process.env.LOCAL_URL + '/' + path;
-      const decodedUri = decodeURI(url);
-      const arr = decodedUri.split('/'); // [ 'http:', '', 'localhost:3000', 'title' ]
-      filename = replaceWords(arr[arr.length - 1]);
-      // console.log(filename);
-    }
-  });
-
-  const rootDirectory = `public/posts${rootPath}`; // public/posts/develop/2023/8
-
-  try {
-    const files = fs.readdirSync(rootDirectory); // [ 'develop.mdx', 'test.mdx' ]
-
-    const mdxs = await getFiles(rootDirectory, files);
-
-    let mdx: { [key: string]: any } = {};
-    mdxs.forEach(source => {
-      if (source.frontmatter.title === filename) mdx = source;
-    });
-
-    const data = Array(mdx).map(({ code, frontmatter }) => ({ code, frontmatter }));
-
-    return data;
-  } catch (err) {
-    if (err instanceof Error) console.log(err.message);
-  }
-});
-
 export const getCategoryPosts = async (categoryId: string) => {
   const rootDirectory = `public/posts/${categoryId}`;
   const years = fs.readdirSync(rootDirectory); // ['2023','2024']
 
-  let mdxSources: { [key: string]: any }[] = [];
+  try {
+    let mdxSources: { [key: string]: any }[] = [];
 
-  for (const year of years) {
-    const dirpath = `${rootDirectory}/${year}`;
-    const months = fs.readdirSync(dirpath);
+    for (const year of years) {
+      const dirpath = `${rootDirectory}/${year}`; // public/posts/daily/2023
+      const months = fs.readdirSync(dirpath);
 
-    for (const month of months) {
-      const dirpath_2 = `${dirpath}/${month}`;
-      const files = fs.readdirSync(dirpath_2);
-      if (files.length === 0) return null;
-      const mdxs = await getFiles(dirpath_2, files);
-      mdxSources = [...mdxSources, ...mdxs];
+      for (const month of months) {
+        const dirpath_2 = `${dirpath}/${month}`;
+        const files = fs.readdirSync(dirpath_2);
+        if (files.length === 0) {
+          console.log('there is no file');
+          return null;
+        }
+        const mdxs = await getFiles(dirpath_2, files);
+        mdxSources = [...mdxSources, ...mdxs];
+      }
     }
-  }
 
-  if (mdxSources.length === 0) return null;
-  return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
+    if (mdxSources.length === 0) return null;
+    return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
+  } catch (err) {
+    if (err instanceof Error) console.log(err.message);
+  }
 };
 
 /* 전체 포스트 리스트를 가져오는 함수 */
