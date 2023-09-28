@@ -1,0 +1,83 @@
+---
+title: Next13 서버사이드 에러 - 앱 라우팅 충돌
+category: develop
+published: 2023-9-29
+keywords: 오류해결, Next13, 앱라우터
+description: Next13 앱 라우팅 충돌??
+---
+
+블로그를 배포하다가 생각지 못한곳에서 에러를 마주했다.
+
+배포된 사이트에서 게시물 페이지에 들어가면 주소창의 경로가 바뀌지 않았고 서버 에러가 생겼다는 안내가 나왔다.
+
+![alt](https://github.com/Wecloset/pandaFE/assets/90922593/4b916077-a835-452c-a550-cee0936d53b7)
+
+처음엔 서버로그를 확인하라는 저 문구가 눈에 안들어와서 어떤 문제인지 전혀 예상할 수가 없어서 구글링 하다가 네트워크 요청, 응답 부분을 확인해보면서 이유를 찾으려고 했다.
+
+그러다가 그냥 뇌피셜로 왠지 SSG방식을 적용해볼까 하는 생각이 들었고 generateStaticParams를 적용해보려고 끙끙댔다..
+당연히 그 문제가 아니라서 해결되지 않았고 애꿎은 generateStaticParams를 붙잡고 씨름했다...
+파일을 찾아올 때 uri디코딩이 문제인가? 싶어서 시도해봤는데 그 문제도 아니었고 이렇게 삽질하는 과정에서 대략 5시간쯤 날린거 같다(^^)
+
+그러다가 뒤늦게 서버로그를 확인해 보라는 문구를 보고 로그를 확인해보면서 오류가 발생하는 폴더가
+캐치올 폴더가 아닌 다이나믹 라우트 파일안이라는 사실을 알게됐다.
+
+기존 폴더구조는 이랬다.
+
+```
+app
+ ┣ 📂blog
+ ┃ ┃ ┣ 📂[...slug]
+ ┃ ┃ ┗ page.tsx
+ ┃ ┃ ┣ 📂[slug]
+ ┃ ┃ ┗ page.tsx
+ ┃ ┃ layout.tsx
+ ┃ ┗ page.tsx
+ ┣ layout.tsx
+ ┗ pages.tsx
+```
+
+`/blog/develop`, `/blog/daily` 등 카테고리에 관련된 경로로 연결하기 위해 다이나믹 라우트([slug])로 연결시켰고,
+같은 폴더 선상에 캐치올([...slug])라우트로 `/blog/develop/a/b/c` 와 같은 경로를 캐치하려고 했다.
+지금은 이게 좀 이상해 보인다는걸 깨달았는데 초반에 폴더구조를 결정하고 어느 파일에 어느정도의 ui와 정보가 들어갈지 미정인 상태에서
+나름대로 복잡성을 낮춰보겠다고 분리를 했던거다.
+
+나는 `/blog/develop/a/b/c`의 경로로 연결되는 게시물 페이지 경로로 들어갔는데 로그를 보니까 [slug]폴더의 page에 있는 함수에서 오류가 나고 있었다.
+
+'???'
+
+공식문서를 찬찬히 다시 봤는데 뭐 같이 쓰지 말라는 내용은 딱히 없었고 (당연한건가?ㅠㅠ) 캐치올 라우트가 `/blog/a`부터 연결되니까 `/blog/a`경로로 들어갔을때 캐치올 라우트의 파일이 연결될 순 있을것 같은데
+`/blog/develop/a/b/c`경로로 연결했는데 왜 다이나믹 라우트로 연결되는걸까...????????
+그리고 개발모드로 작업할 때는 문제가 없었다.
+어쨋든 오류가 다이나믹 라우트 폴더의 페이지에서 생기고 있으니 테스트로 다이나믹 라우트를 삭제했고 캐치올라우트 파일 안에서 segment의 길이를 통해 어떤 경로인지 판별하고
+각기 다르게 데이터를 불러오고 다른 컴포넌트를 렌더링하도록 수정했더니 게시물 페이지로 잘 이동이 됐다.
+
+```js
+const DetailPage = async ({ params }: { params: { slug: string } }) => {
+  const data =
+    params.slug.length === 1 ? await getCategoryPosts(params.slug) : await getPost(params.slug);
+
+  const theme = getCookie();
+
+  if (params.slug.length === 1) {
+    return (
+      <div className="ml-60 blog-width min-h-[1200px] space-y-5 sm:w-full sm:ml-0 sm:mt-10 py-20">
+        {<Posts posts={data as TPost[]} />}
+      </div>
+    );
+  }
+
+  return (
+    <div className="ml-80 relative space-y-5 sm:w-full sm:ml-0 sm:p-8">
+      {<PostDetail post={data as TPost[]} cookie={theme} />}
+    </div>
+  );
+};
+
+export default DetailPage;
+```
+
+이 문제랑 다른 오류가 하나 더 있어서 꼬박 하루가걸려 70커밋을 하고 난 후에야 오류 두개를 잡을 수 있었다.🥲
+오랜만에 오래걸린 오류였고 예상하지 못한곳에서 발생해서 해결하는데 더 머리가 아팠던거 같다. 한가지 내가 잘못한 것은 중간에 너무 나의 뇌피셜로 해결을 하려고 했다는것이다.
+그것 때문에 쓸데없이 시간을 날렸다.. 사실 오류해결이 너무 안되면 아예 처음부터 해결방향이 잘못된건 아닌가 생각을 해봐야 하는데 오늘은 한번 꽂히니까 계속 그길로 쭉 가버렸다;;;
+그래도 결과적으로 해결이 됐으니 다행이고 오류가 생겼을 때 다시한번 로그를 잘 봐야겠다고 생각했다.
+덕분에 generateStaticParams로 SSG를 구현하는 것까지 공부했으니까 오히려 좋다고 스스로 위로를 해본다 ~🤧
