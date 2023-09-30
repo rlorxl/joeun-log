@@ -69,6 +69,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
     <>
       {sortingData(posts).map(({ code, frontmatter }, idx) => {
         const Component = getMDXComponent(code);
+        if (frontmatter.secret) return null;
         return (
           <div
             data-class="post"
