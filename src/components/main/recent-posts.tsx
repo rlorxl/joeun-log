@@ -33,13 +33,14 @@ const RecentPosts = () => {
   const [openPosts, setOpenPosts] = useState<TPost[]>([]);
 
   useEffect(() => {
+    if (!posts) return;
     const filteredPosts = posts.filter(post => !post.frontmatter.secret);
     setOpenPosts(filteredPosts);
-  }, []);
+  }, [posts]);
 
   return (
     <>
-      {posts.length > 0 && (
+      {openPosts.length > 0 && (
         <div className="flex justify-between items-start sm:p-5">
           <h2 className="mr-10 text-2xl font-bold sm:hidden">최근 글</h2>
           <div className="shrink-0">
