@@ -46,7 +46,10 @@ const TabContents = ({
   }, [data]);
 
   return (
-    <div className="w-full flex-col flex-center">
+    <div
+      className="w-full flex-col flex-center"
+      onMouseEnter={() => console.log('first')}
+      onMouseLeave={() => console.log('leave')}>
       <div
         className={`text-2xl font-bold w-full my-10 flex-center space-x-8 sm:flex-col sm:space-x-0`}>
         <button
