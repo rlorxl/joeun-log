@@ -32,6 +32,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="5Hoc5w7TAtymO_efS0zVrlyI3_ivotkExZNVKiPTs4Y"
+        />
+      </head>
       <CheckDefaultScheme cookie={theme}>
         <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
           <RecoilRootWrapper>{children}</RecoilRootWrapper>

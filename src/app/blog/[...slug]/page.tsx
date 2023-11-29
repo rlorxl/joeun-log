@@ -22,7 +22,7 @@ export const generateMetadata = async ({
     description: frontmatter.description,
     keywords: frontmatter.keywords,
     robots: {
-      index: false,
+      index: true,
       follow: true,
       nocache: true,
       googleBot: {
@@ -59,8 +59,6 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
   const data =
     params.slug.length === 1 ? await getCategoryPosts(params.slug) : await getPost(params.slug);
   const theme = getCookie();
-
-  console.log(data);
 
   if (params.slug.length === 1) {
     return (
