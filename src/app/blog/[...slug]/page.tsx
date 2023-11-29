@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
 import { getAllPosts, getCategoryPosts, getPost } from '@/utils/common/get-posts';
@@ -59,6 +59,8 @@ const DetailPage = async ({ params }: { params: { slug: string } }) => {
   const data =
     params.slug.length === 1 ? await getCategoryPosts(params.slug) : await getPost(params.slug);
   const theme = getCookie();
+
+  console.log(data);
 
   if (params.slug.length === 1) {
     return (

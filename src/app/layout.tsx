@@ -7,7 +7,9 @@ import CheckDefaultScheme from '@/wrapper/default-scheme';
 
 export const metadata: Metadata = {
   title: '조은씀',
-  description: '조은 개발 블로그',
+  description: '주니어 개발자 조은의 개발 블로그',
+  keywords: ['개발블로그', '개발자 블로그', '프론트엔드'],
+
   icons: [
     {
       rel: 'icon',
