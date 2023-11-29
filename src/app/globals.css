@@ -88,6 +88,12 @@
   .post-width {
     width: 700px;
   }
+
+  .clip {
+    overflow: hidden;
+    clip-path: polygon((0 0, 0 0, 0 0));
+    white-space: nowrap;
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {

@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 import { postState } from '@/recoil/posts';
 import { getMDXComponent } from 'mdx-bundler/client';
 import { useRouter } from 'next/navigation';
-import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constants';
+import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constant/constants';
 import setCookie from '@/utils/common/set-cookie';
 import { NavHeading, navigationComponents } from '@/custom/mdx-styling';
 

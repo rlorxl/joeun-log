@@ -1,5 +1,5 @@
 'use client';
-import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constants';
+import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constant/constants';
 import setCookie from '../utils/common/set-cookie';
 import { useEffect, useState } from 'react';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';

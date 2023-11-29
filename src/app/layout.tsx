@@ -7,7 +7,9 @@ import CheckDefaultScheme from '@/wrapper/default-scheme';
 
 export const metadata: Metadata = {
   title: '조은씀',
-  description: '조은 개발 블로그',
+  description: '주니어 개발자 조은의 개발 블로그',
+  keywords: ['개발블로그', '개발자 블로그', '프론트엔드'],
+
   icons: [
     {
       rel: 'icon',
@@ -30,6 +32,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="5Hoc5w7TAtymO_efS0zVrlyI3_ivotkExZNVKiPTs4Y"
+        />
+      </head>
       <CheckDefaultScheme cookie={theme}>
         <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
           <RecoilRootWrapper>{children}</RecoilRootWrapper>

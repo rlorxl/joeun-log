@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
 import { getAllPosts, getCategoryPosts, getPost } from '@/utils/common/get-posts';
@@ -22,7 +22,7 @@ export const generateMetadata = async ({
     description: frontmatter.description,
     keywords: frontmatter.keywords,
     robots: {
-      index: false,
+      index: true,
       follow: true,
       nocache: true,
       googleBot: {
