@@ -9,8 +9,6 @@ const Loading = () => {
         height={50}
         width={50}
         color="#535B77"
-        // wrapperStyle={{}}
-        // wrapperClass=""
         visible={true}
         ariaLabel="oval-loading"
         secondaryColor="#9199B5"

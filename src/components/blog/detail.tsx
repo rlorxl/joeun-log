@@ -1,13 +1,14 @@
 'use client';
-import { TPost } from '@/types/post';
-import { getMDXComponent } from 'mdx-bundler/client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { postState } from '@/recoil/posts';
+import { getMDXComponent } from 'mdx-bundler/client';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import TopButton from '../../../public/assets/icon/top.svg';
 import Image from 'next/image';
+
+import TopButton from '../../../public/assets/icon/top.svg';
+import { TPost } from '@/types/post';
 import { detailPageComponents } from '@/custom/mdx-styling';
+import { postState } from '@/recoil/posts';
 
 const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie }) => {
   const setPost = useSetRecoilState(postState);
@@ -16,13 +17,15 @@ const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie })
   const scrollTop = () => {
     const $mainBox = mainRef.current;
     if (!$mainBox) return;
+
     $mainBox.scrollIntoView({ block: 'start', inline: 'nearest' });
   };
 
   useEffect(() => {
     if (!post) return;
+
     setPost(post);
-  }, [post]);
+  }, [post, setPost]);
 
   return (
     <div

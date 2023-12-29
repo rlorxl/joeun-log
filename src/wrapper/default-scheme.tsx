@@ -20,11 +20,13 @@ const CheckDefaultScheme = ({
 
     if (!isDarkmode) {
       setCookie(LIGHT_MODE);
-    } else {
-      setCookie(DARK_MODE);
-      setDefaultScheme(DARK_MODE);
+
+      return;
     }
-  }, []);
+
+    setCookie(DARK_MODE);
+    setDefaultScheme(DARK_MODE);
+  }, [cookie]);
 
   if (cookie) return <body data-theme={cookie.value}>{children}</body>;
 

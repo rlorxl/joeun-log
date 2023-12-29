@@ -7,28 +7,8 @@ import Image from 'next/image';
 import { sortingData } from '@/utils/data-sorting';
 import { TPost } from '@/types/post';
 import { toUrl } from '@/utils/url';
+import { fadeInAnimate } from '@/utils/fadeInAnimate';
 import { blogPageComponents } from '@/custom/mdx-styling';
-
-const popupAni = (i: number): string => {
-  let classname = '';
-  switch (i) {
-    case 0:
-      classname = ' animate-show1';
-      break;
-    case 1:
-      classname = ' animate-show2';
-      break;
-    case 2:
-      classname = ' animate-show3';
-      break;
-    case 3:
-      classname = ' animate-show4';
-      break;
-    case 4:
-      classname = ' animate-show5';
-  }
-  return classname;
-};
 
 const Posts = ({ posts }: { posts: TPost[] }) => {
   const [mounted, setMounted] = useState<boolean>(false);
@@ -42,9 +22,14 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
     if (paragraph.current.length <= 5 && paragraphList.current[idx] === '') {
       paragraph.current.push(text);
       paragraph.current.push(' ');
-    } else if (paragraphList.current[idx] === '') {
+
+      return;
+    }
+
+    if (paragraphList.current[idx] === '') {
       paragraphList.current[idx] = paragraph.current;
       paragraph.current = [];
+
       return <> {paragraphList.current[idx]}</>;
     }
 
@@ -76,7 +61,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             key={frontmatter.title}
             className={
               'border-b last:border-b-0 pb-8 border-b-darkmode-text-color space-y-4 sm:px-8' +
-              popupAni(idx)
+              fadeInAnimate(idx)
             }>
             <h1 className="text-2xl font-semibold mb-4">
               <Link href={toUrl(frontmatter)} className="hover:underline">
