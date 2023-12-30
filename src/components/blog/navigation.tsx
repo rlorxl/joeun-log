@@ -5,13 +5,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as Icon from '../../../public/assets/icon';
 import { Icon as GoBackIcon } from '@iconify/react/dist/iconify.js';
 import { usePathname } from 'next/navigation';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { postState } from '@/recoil/posts';
 import { getMDXComponent } from 'mdx-bundler/client';
 import { useRouter } from 'next/navigation';
-import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constant/constants';
+import { DARK_MODE, LIGHT_MODE } from '@/constant/constants';
 import setCookie from '@/utils/common/set-cookie';
 import { NavHeading, navigationComponents } from '@/custom/mdx-styling';
+import { themeState } from '@/recoil/theme';
 
 type TBlogNav = {
   name: string;
@@ -24,19 +25,13 @@ const navLinkto: TBlogNav[] = [
   { name: '그냥생각', link: '/blog/daily' },
 ];
 
-const initialThemeChange = () => {
-  const isDarkmode = window.matchMedia(MEDIA).matches;
-  /* 
-  isDarkmode : 현재설정이 다크모드인지 확인.
-  다크모드 아님(윈도우 테마 설정이 light) : 클릭한 시점에서 다크모드로 바뀌어야함. (setCookie(DARK_MODE))
-  */
-  !isDarkmode ? setCookie(DARK_MODE) : setCookie(LIGHT_MODE);
-};
-
-const BlogNavigation = ({ cookie }: { cookie?: string }) => {
+const BlogNavigation = () => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
   const [isMainIconHover, setIsMainIconHover] = useState<boolean>(false);
+
+  const recoilTheme = useRecoilValue(themeState);
+  const setRecoilTheme = useSetRecoilState(themeState);
 
   const names = useRef<{ name: string; position: number }[]>([]);
 
@@ -55,17 +50,15 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
   }, []);
 
   const changeMode = () => {
-    if (!cookie) {
-      // 쿠키에 저장된 테마가 undefined일 때 (최초 클릭)
-      initialThemeChange();
-    } else if (cookie === LIGHT_MODE) {
+    if (recoilTheme === LIGHT_MODE) {
       setCookie(DARK_MODE);
-    } else {
-      setCookie(LIGHT_MODE);
+      setRecoilTheme(DARK_MODE);
+
+      return;
     }
 
-    // 테마변경시 layout리렌더링 :data-theme변경
-    router.refresh();
+    setCookie(LIGHT_MODE);
+    setRecoilTheme(LIGHT_MODE);
   };
 
   return (
@@ -117,7 +110,7 @@ const BlogNavigation = ({ cookie }: { cookie?: string }) => {
           <div
             className={
               'absolute top-1/2 -translate-y-1/2 w-[104px] h-6 transition-all ease-in-out duration-700' +
-              (cookie === DARK_MODE ? ' -left-8' : ' left-2')
+              (recoilTheme === DARK_MODE ? ' -left-8' : ' left-2')
             }>
             <Image src={Icon.Mode} alt="라이트모드" />
           </div>
