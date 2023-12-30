@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import BlogLogo from '../../public/assets/mainlogo.svg';
+import BlogLogo from '~/public/assets/mainlogo.svg';
 import TabContents from '@/components/main/tab-contents';
 import { getAllPosts } from '@/utils/common/get-posts';
 

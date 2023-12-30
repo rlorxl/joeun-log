@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import Image from 'next/image';
-import ArrowRight from '../../../public/assets/icon/arrow-right.svg';
+import ArrowRight from '~/public/assets/icon/arrow-right.svg';
 import { toUrl } from '@/utils/url';
-import { fadeInAnimate } from '@/utils/fadeInAnimate';
+import { fadeInAnimate } from '@/utils/fadeIn-animate';
 import { useEffect, useState } from 'react';
 import { TPost } from '@/types/post';
 

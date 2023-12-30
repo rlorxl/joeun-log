@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
-import GithubIcon from '../../../public/assets/icon/github.svg';
-import VelogIcon from '../../../public/assets/icon/velog.svg';
+import GithubIcon from '~/public/assets/icon/github.svg';
+import VelogIcon from '~/public/assets/icon/velog.svg';
 import Link from 'next/link';
 
 const Contact = () => {

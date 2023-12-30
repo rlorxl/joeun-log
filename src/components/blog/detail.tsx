@@ -5,7 +5,7 @@ import { getMDXComponent } from 'mdx-bundler/client';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import Image from 'next/image';
 
-import TopButton from '../../../public/assets/icon/top.svg';
+import TopButton from '~/public/assets/icon/top.svg';
 import { TPost } from '@/types/post';
 import { detailPageComponents } from '@/custom/mdx-styling';
 import { postState } from '@/recoil/posts';

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import RecentPosts from './recent-posts';
-import Me from '../../../public/me.mdx';
+import Me from '~/public/me.mdx';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';

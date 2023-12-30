@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react';
-import * as Icon from '../../../public/assets/icon';
+import * as Icon from '~/public/assets/icon';
 import { Icon as GoBackIcon } from '@iconify/react/dist/iconify.js';
 import { usePathname } from 'next/navigation';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
