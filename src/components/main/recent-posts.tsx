@@ -3,30 +3,11 @@ import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
 import { postsState } from '@/recoil/posts';
 import Image from 'next/image';
-import ArrowRight from '../../../public/assets/icon/arrow-right.svg';
-import { toUrl } from '../../utils/url';
-import { useRouter } from 'next/navigation';
+import ArrowRight from '~/public/assets/icon/arrow-right.svg';
+import { toUrl } from '@/utils/url';
+import { fadeInAnimate } from '@/utils/fadeIn-animate';
 import { useEffect, useState } from 'react';
 import { TPost } from '@/types/post';
-
-const slideUpAni = (i: number): string => {
-  let classname = '';
-  switch (i) {
-    case 0:
-      classname = ' animate-show1';
-      break;
-    case 1:
-      classname = ' animate-show2';
-      break;
-    case 2:
-      classname = ' animate-show3';
-      break;
-    case 3:
-      classname = ' animate-show4';
-      break;
-  }
-  return classname;
-};
 
 const RecentPosts = () => {
   const posts = useRecoilValue(postsState);
@@ -46,7 +27,7 @@ const RecentPosts = () => {
           <div className="shrink-0">
             <ul className="space-y-2 sm:hidden">
               {openPosts.slice(0, 4).map(({ frontmatter }, idx) => (
-                <li key={frontmatter.title} className={'flex-between' + slideUpAni(idx)}>
+                <li key={frontmatter.title} className={'flex-between' + fadeInAnimate(idx)}>
                   <Link href={toUrl(frontmatter)} className="mr-12 text-lg hover:underline">
                     {frontmatter.title}
                   </Link>

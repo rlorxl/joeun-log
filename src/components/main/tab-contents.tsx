@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import RecentPosts from './recent-posts';
-import Me from '../../../public/me.mdx';
+import Me from '~/public/me.mdx';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
@@ -46,10 +46,7 @@ const TabContents = ({
   }, [data]);
 
   return (
-    <div
-      className="w-full flex-col flex-center"
-      onMouseEnter={() => console.log('first')}
-      onMouseLeave={() => console.log('leave')}>
+    <div className="w-full flex-col flex-center">
       <div
         className={`text-2xl font-bold w-full my-10 flex-center space-x-8 sm:flex-col sm:space-x-0`}>
         <button

@@ -14,7 +14,6 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: 'icon',
-      // type: 'image/svg',
       sizes: '32x32',
       url: '/favicon.svg',
     },
@@ -40,11 +39,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         />
         <link rel="canonical" href="https://rlorxl.me/blog"></link>
       </head>
-      <CheckDefaultScheme cookie={theme}>
-        <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
-          <RecoilRootWrapper>{children}</RecoilRootWrapper>
-        </main>
-      </CheckDefaultScheme>
+      <RecoilRootWrapper theme={theme?.value}>
+        <CheckDefaultScheme>
+          <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
+            {children}
+          </main>
+        </CheckDefaultScheme>
+      </RecoilRootWrapper>
     </html>
   );
 };
