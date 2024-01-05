@@ -129,6 +129,7 @@ const blogPageComponents = {
   img: () => null,
   pre: () => null,
   hr: () => null,
+  br: () => null,
   blockquote: () => null,
   strong: () => null,
   a: () => null,

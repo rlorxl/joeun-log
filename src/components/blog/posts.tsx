@@ -1,45 +1,46 @@
 'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
+
 import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
-import ArrowRight from '~/public/assets/icon/arrow-right.svg';
 import Image from 'next/image';
+import ArrowRight from '~/public/assets/icon/arrow-right.svg';
+
 import { sortingData } from '@/utils/data-sorting';
-import { TPost } from '@/types/post';
 import { toUrl } from '@/utils/url';
 import { fadeInAnimate } from '@/utils/fadeIn-animate';
 import { blogPageComponents } from '@/custom/mdx-styling';
+import { TPost } from '@/types/post';
 
 const Posts = ({ posts }: { posts: TPost[] }) => {
   const [mounted, setMounted] = useState<boolean>(false);
 
-  const paragraph = useRef<any[]>([]);
-  const paragraphList = useRef<any[]>(Array(posts?.length).fill(''));
+  const paragraph = useRef<string[][]>(Array(posts?.length).fill([]));
 
   const renderparagraph = (props: any, idx: number) => {
     let text = props.children;
+    let _paragraph = paragraph.current;
 
-    if (paragraph.current.length <= 5 && paragraphList.current[idx] === '') {
-      paragraph.current.push(text);
-      paragraph.current.push(' ');
-
+    if (typeof text !== 'string') {
       return;
     }
 
-    if (paragraphList.current[idx] === '') {
-      paragraphList.current[idx] = paragraph.current;
-      paragraph.current = [];
+    if (_paragraph[idx].length < 3) {
+      // index 0,1,2일 때까지 배열에 추가
+      _paragraph[idx] = _paragraph[idx].concat(text);
 
-      return <> {paragraphList.current[idx]}</>;
+      return null;
     }
 
-    return null;
+    if (_paragraph[idx].length === 3) {
+      return <>{_paragraph[idx].join(' ')}</>;
+    }
   };
 
   // 렌더링될 때마다 ref값 초기화.
   useEffect(() => {
-    paragraph.current = [];
-    paragraphList.current = Array(posts?.length).fill('');
+    paragraph.current = Array(posts?.length).fill([]);
   });
 
   useEffect(() => {
@@ -74,7 +75,9 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
               <Component
                 components={Object.assign(
                   {
-                    p: (props: any) => renderparagraph(props, idx),
+                    p: (props: any) => {
+                      return renderparagraph(props, idx);
+                    },
                   },
                   blogPageComponents,
                 )}
