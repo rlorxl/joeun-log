@@ -1,0 +1,82 @@
+---
+title: 다크모드 구현기2
+category: develop
+published: 2024-1-9
+keywords: Next13, 다크모드, 리팩토링
+description: 'next스럽게 다크모드 구현하기'
+---
+
+# router.refresh() 제거하기
+
+이전에 다크모드를 구현할 때 서버단에서 미리 스타일이 적용되어 있게 하기 위해 layout컴포넌트를 리렌더링 시켜 쿠키를 읽어와 스타일이 적용되도록 구현했었다.
+
+<br />
+
+### 문제점
+
+1. 새로고침 했을 때 약간의 버벅임이 발생한다.
+2. **리액트에서 리프레쉬를 지양해야 한다.**
+
+대부분 프로젝트에서 강제로 컴포넌트를 리렌더링하는 것은 리액트 안티패턴에 속한다.
+
+<br />
+
+### 해결방안
+
+layout컴포넌트를 강제 리렌더링 시키는 `router.refresh()`를 제거하고 테마를 전역상태로 관리하는 코드로 리팩토링 하기로 했다.
+(쿠키 의존X, 리코일상태에 의존O)
+
+<br />
+
+# 리팩토링하기
+
+테마를 전역상태로 관리하기 위해 리코일themeState를 만들고 RecoilRootWrapper를 상위로 올렸다.
+
+```js
+<RecoilRootWrapper>
+  <CheckDefaultScheme>
+    <main className={`${sofia.className} w-full min-h-screen relative flex-col flex-center`}>
+      {children}
+    </main>
+  </CheckDefaultScheme>
+</RecoilRootWrapper>
+```
+
+**`CheckDefaultScheme`에서는 리코일 상태만 확인해서 data-theme를 변경시키는 역할만 하고, navigation등 컴포넌트에서는 전역상태를 확인해서 스타일을 변경한다.**
+
+```js
+const CheckDefaultScheme = ({ children }: { children: React.ReactNode }) => {
+  const recoilTheme = useRecoilValue(themeState);
+
+  return <body data-theme={recoilTheme}>{children}</body>;
+};
+```
+
+## 이슈발생 & 해결
+
+버튼 클릭시 스타일은 잘 변경 되었지만 새로고침시 흰 화면이 먼저 렌더링되는 문제가 발생한다.
+
+처음엔 이전처럼 `CheckDefaultScheme` 래퍼함수로 쿠키를 전달해서 해결하는 방식을 시도했지만 문제가 해결되지 않았고 리코일의 기본 스타일 설정에 문제가 있는것을 확인했다.
+
+- 기본 리코일 state가 적용이 되어 있지 않아 body에 data-theme적용이 불가함.
+- 서버 사이드(RootLayout 컴포넌트)에서 쿠키를 받아 리코일 **initialState**값으로 지정해야 함. (쿠키 값이 없을때는 윈도우 기본 설정된 테마로 지정.)
+
+```js
+function RecoilRootWrapper({ theme, children }: { theme?: string; children: React.ReactNode }) {
+  const initializeState = ({ set }: { set: any }) => {
+    if (theme) {
+      set(themeState, theme);
+
+      return;
+    }
+
+    window.matchMedia(MEDIA).matches ? set(themeState, DARK_MODE) : set(themeState, LIGHT_MODE);
+  };
+
+  return <RecoilRoot initializeState={initializeState}>{children}</RecoilRoot>;
+}
+
+export default RecoilRootWrapper;
+```
+
+서버 컴포넌트에서 저장된 쿠키가 있다면 전역상태의 기본상태가 지정이 되고 저장된 쿠키가 없다면 기본설정에서 테마를 가져와 기본상태를 지정하는 코드를 추가함으로써 문제가 해결되었다.

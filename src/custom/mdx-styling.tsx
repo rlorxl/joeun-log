@@ -47,7 +47,9 @@ const MyOl = (props: any) => <ol className="list-decimal pl-5 mb-6 space-y-2" {.
 
 const MyUl = (props: any) => <ul className="list-disc pl-5 mb-6 space-y-2" {...props} />;
 
-const MyCode = (props: any) => <code className=" bg-[#E9EAEE] rounded-md p-1 text-sm" {...props} />;
+const MyCode = (props: any) => (
+  <code className=" bg-[#f0f0f0] text-sm text-violet-400" {...props} />
+);
 
 const MyPre = (props: any) => CustomCode(props);
 

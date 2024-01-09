@@ -61,7 +61,7 @@ const Posts = ({ posts }: { posts: TPost[] }) => {
             data-class="post"
             key={frontmatter.title}
             className={
-              'border-b last:border-b-0 pb-8 border-b-darkmode-text-color space-y-4 sm:px-8' +
+              'border-b last:border-b-0 pb-8 mr-20 border-b-darkmode-text-color space-y-4 sm:px-8' +
               fadeInAnimate(idx)
             }>
             <h1 className="text-2xl font-semibold mb-4">
