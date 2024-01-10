@@ -1,9 +1,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import RecoilRootWrapper from '../wrapper/recoil-wrapper';
 import { Sofia_Sans } from 'next/font/google';
-import getCookie from '@/utils/common/get-cookie';
+
+import RecoilRootWrapper from '@/wrapper/recoil-wrapper';
 import CheckDefaultScheme from '@/wrapper/default-scheme';
+
+import getCookie from '@/utils/common/get-cookie';
 
 export const metadata: Metadata = {
   title: '주니어 프론트엔드 개발자 개인블로그: 조은씀',

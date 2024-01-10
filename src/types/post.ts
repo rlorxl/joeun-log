@@ -12,3 +12,8 @@ export type TPost = {
     [key: string]: string;
   };
 };
+
+export type TBlogNav = {
+  name: string;
+  link: string;
+};

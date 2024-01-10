@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import React from 'react';
+import Link from 'next/link';
 import GithubIcon from '~/public/assets/icon/github.svg';
 import VelogIcon from '~/public/assets/icon/velog.svg';
-import Link from 'next/link';
 
 const Contact = () => {
   return (

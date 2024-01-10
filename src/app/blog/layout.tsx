@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+
 import BlogNavigation from '@/components/blog/navigation';
 import BlogLogo from '@/components/blog/blog-logo';
 

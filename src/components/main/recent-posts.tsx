@@ -1,12 +1,15 @@
 'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRecoilValue } from 'recoil';
-import { postsState } from '@/recoil/posts';
 import Image from 'next/image';
 import ArrowRight from '~/public/assets/icon/arrow-right.svg';
+
+import { useRecoilValue } from 'recoil';
+import { postsState } from '@/recoil/posts';
+
 import { toUrl } from '@/utils/url';
 import { fadeInAnimate } from '@/utils/fadeIn-animate';
-import { useEffect, useState } from 'react';
 import { TPost } from '@/types/post';
 
 const RecentPosts = () => {

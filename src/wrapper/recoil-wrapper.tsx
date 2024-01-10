@@ -1,9 +1,11 @@
 'use client';
 
-import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constant/constants';
-import { themeState } from '@/recoil/theme';
 import React from 'react';
+
 import { RecoilRoot } from 'recoil';
+import { themeState } from '@/recoil/theme';
+
+import { DARK_MODE, LIGHT_MODE, MEDIA } from '@/constant/constants';
 
 function RecoilRootWrapper({ theme, children }: { theme?: string; children: React.ReactNode }) {
   const initializeState = ({ set }: { set: any }) => {

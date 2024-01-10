@@ -29,8 +29,6 @@ const useScroll = (
     if (!names.includes(currentId))
       headings.current.push({ name: currentId, position: headingPosition });
 
-    // console.log(headings.current);
-
     return () => window.removeEventListener('scroll', scroll);
   }, []);
 

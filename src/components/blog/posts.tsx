@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-
-import { getMDXComponent } from 'mdx-bundler/client';
 import Link from 'next/link';
 import Image from 'next/image';
 import ArrowRight from '~/public/assets/icon/arrow-right.svg';
+
+import { getMDXComponent } from 'mdx-bundler/client';
 
 import { sortingData } from '@/utils/data-sorting';
 import { toUrl } from '@/utils/url';

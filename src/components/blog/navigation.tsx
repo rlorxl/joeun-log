@@ -1,53 +1,35 @@
 'use client';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
-import * as Icon from '~/public/assets/icon';
-import { Icon as GoBackIcon } from '@iconify/react/dist/iconify.js';
+import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+import * as Icon from '~/public/assets/icon';
+
+import { getMDXComponent } from 'mdx-bundler/client';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { postState } from '@/recoil/posts';
-import { getMDXComponent } from 'mdx-bundler/client';
-import { useRouter } from 'next/navigation';
-import { DARK_MODE, LIGHT_MODE } from '@/constant/constants';
-import setCookie from '@/utils/common/set-cookie';
-import { NavHeading, navigationComponents } from '@/custom/mdx-styling';
 import { themeState } from '@/recoil/theme';
+import { Icon as GoBackIcon } from '@iconify/react/dist/iconify.js';
 
-type TBlogNav = {
-  name: string;
-  link: string;
-};
-
-const navLinkto: TBlogNav[] = [
-  { name: '개발얘기', link: '/blog/develop' },
-  { name: '취준일기', link: '/blog/diary' },
-  { name: '그냥생각', link: '/blog/daily' },
-];
+import { NavHeading, navigationComponents } from '@/custom/mdx-styling';
+import { DARK_MODE, LIGHT_MODE, LINKTO } from '@/constant/constants';
+import setCookie from '@/utils/common/set-cookie';
 
 const BlogNavigation = () => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [isDetailPage, setIsDetailPage] = useState<boolean>(false);
   const [isMainIconHover, setIsMainIconHover] = useState<boolean>(false);
 
-  const recoilTheme = useRecoilValue(themeState);
   const setRecoilTheme = useSetRecoilState(themeState);
+  const recoilTheme = useRecoilValue(themeState);
+  const currentPostSource = useRecoilValue(postState);
 
   const names = useRef<{ name: string; position: number }[]>([]);
 
   const router = useRouter();
+
   const path = usePathname(); // /blog/develop/2023/8/develop
-  const currentPostSource = useRecoilValue(postState);
-
-  useEffect(() => {
-    const paths = path.split('/');
-    if (paths.length > 3) setIsDetailPage(true);
-    else setIsDetailPage(false);
-  }, [path]);
-
-  useEffect(() => {
-    if (!mounted) setMounted(true);
-  }, []);
 
   const changeMode = () => {
     if (recoilTheme === LIGHT_MODE) {
@@ -61,12 +43,22 @@ const BlogNavigation = () => {
     setRecoilTheme(LIGHT_MODE);
   };
 
+  useEffect(() => {
+    const paths = path.split('/');
+    if (paths.length > 3) setIsDetailPage(true);
+    else setIsDetailPage(false);
+  }, [path]);
+
+  useEffect(() => {
+    if (!mounted) setMounted(true);
+  }, []);
+
   return (
     <div className="flex flex-col justify-between h-4/5">
       {!mounted && <div className="min-h-[300px]" />}
       {!isDetailPage && mounted && (
         <ul className="space-y-8 sm:space-y-5 font-semibold">
-          {navLinkto.map(({ name, link }) => (
+          {LINKTO.map(({ name, link }) => (
             <li key={name} className="hover:text-second-color transition">
               <Link href={link}>{name}</Link>
             </li>
@@ -79,7 +71,7 @@ const BlogNavigation = () => {
             <GoBackIcon icon="pajamas:go-back" className="mr-2" />
             목록
           </button>
-          {currentPostSource.map(({ code, frontmatter }, idx) => {
+          {currentPostSource.map(({ code, frontmatter }) => {
             const Component = getMDXComponent(code);
             return (
               <div
@@ -98,11 +90,6 @@ const BlogNavigation = () => {
         </div>
       )}
       <div className="space-y-10 flex-col flex sm:flex-row sm:justify-between sm:items-center sm:space-y-0 sm: sm:w-36 sm:absolute sm:top-0 sm:p-8 sm:right-0">
-        {/* {!isDetailPage && (
-          <button type="button">
-            <Image src={Icon.Search} alt="검색" />
-          </button>
-        )} */}
         <button
           type="button"
           onClick={changeMode}

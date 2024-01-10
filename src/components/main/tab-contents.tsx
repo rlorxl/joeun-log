@@ -1,12 +1,16 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
-import RecentPosts from './recent-posts';
 import Me from '~/public/me.mdx';
-import { Icon } from '@iconify/react/dist/iconify.js';
+
 import { useSetRecoilState } from 'recoil';
 import { postsState } from '@/recoil/posts';
-import { sortingData } from '../../utils/data-sorting';
+import { Icon } from '@iconify/react/dist/iconify.js';
+
+import RecentPosts from './recent-posts';
 import Contact from './contact';
+
+import { sortingData } from '../../utils/data-sorting';
 
 type TContents = {
   name: string;

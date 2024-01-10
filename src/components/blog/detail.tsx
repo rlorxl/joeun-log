@@ -1,16 +1,17 @@
 'use client';
+
 import React, { useEffect, useRef } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { getMDXComponent } from 'mdx-bundler/client';
-import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import Image from 'next/image';
-
 import TopButton from '~/public/assets/icon/top.svg';
-import { TPost } from '@/types/post';
-import { detailPageComponents } from '@/custom/mdx-styling';
-import { postState } from '@/recoil/posts';
 
-const PostDetail = ({ post, cookie }: { post: TPost[]; cookie?: RequestCookie }) => {
+import { useSetRecoilState } from 'recoil';
+import { postState } from '@/recoil/posts';
+import { getMDXComponent } from 'mdx-bundler/client';
+
+import { detailPageComponents } from '@/custom/mdx-styling';
+import { TPost } from '@/types/post';
+
+const PostDetail = ({ post }: { post: TPost[] }) => {
   const setPost = useSetRecoilState(postState);
   const mainRef = useRef<HTMLDivElement>(null);
 

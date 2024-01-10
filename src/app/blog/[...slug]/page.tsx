@@ -1,9 +1,10 @@
 import React from 'react';
-import PostDetail from '@/components/blog/detail';
 import { Metadata } from 'next';
-import { getCategoryPosts, getPost } from '@/utils/common/get-posts';
-import getCookie from '@/utils/common/get-cookie';
+
+import PostDetail from '@/components/blog/detail';
 import Posts from '@/components/blog/posts';
+
+import { getCategoryPosts, getPost } from '@/utils/common/get-posts';
 import { TPost } from '@/types/post';
 
 export const generateMetadata = async ({
@@ -43,7 +44,6 @@ export const generateMetadata = async ({
 const DetailPage = async ({ params: { slug } }: { params: { slug: string } }) => {
   // TODO: 물음표(?) 제거하기 - 쿼리스트링으로 인식
   const data = slug.length === 1 ? await getCategoryPosts(slug) : await getPost(slug);
-  const theme = getCookie();
 
   if (slug.length === 1) {
     return (
@@ -55,7 +55,7 @@ const DetailPage = async ({ params: { slug } }: { params: { slug: string } }) =>
 
   return (
     <div className="ml-80 relative space-y-5 sm:w-full sm:ml-0 sm:p-8">
-      <PostDetail post={data as TPost[]} cookie={theme} />
+      <PostDetail post={data as TPost[]} />
     </div>
   );
 };

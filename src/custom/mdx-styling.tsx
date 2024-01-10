@@ -1,6 +1,8 @@
-import useScroll from '@/hooks/useScroll';
+import React from 'react';
+
 import { Highlight, themes } from 'prism-react-renderer';
-import React, { MutableRefObject, useEffect, useState } from 'react';
+
+import useScroll from '@/hooks/useScroll';
 
 /* /blog/[...slug].tsx - pre tag styling */
 const CustomCode = (props: any) => {
