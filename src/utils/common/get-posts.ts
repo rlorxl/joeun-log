@@ -23,6 +23,9 @@ export const getFiles = async (dir: string, posts: string[]) => {
   return files;
 };
 
+/**
+ * '---'를 ' - '로 변환한다.
+ */
 const findConnectedDash = (target: string) => {
   // const dashIdx = target.indexOf('---'); // 6
   // const arr = target.split('-'); // [ 'Next13', '', '', 'cookie로', '다크모드', '구현하기' ]
@@ -48,6 +51,9 @@ const findConnectedDash = (target: string) => {
   return filename;
 };
 
+/**
+ * 변환된 특수문자를 올바른 특수문자로 변환한다. (문자 추가예정)
+ */
 export const replaceWords = (target: string): string => {
   let filename = target; // Next13---cookie로-다크모드-구현하기
   const comma = '%2C';
@@ -61,16 +67,7 @@ export const replaceWords = (target: string): string => {
   return filename;
 };
 
-/* 
-개별 포스트를 가져오는 함수.
-인코딩된 문자 url을 디코딩해서 제대로 된 파일명으로 바꾸고 mdx파일을 가져온다.
-
-findConnectedDash: '---'를 ' - '로 변환한다.
-replaceWords: 변환된 특수문자를 올바른 특수문자로 변환한다. (문자 추가예정)
-
-*/
-export const getPost = cache(async (segments: string) => {
-  let paths = Array.from(segments);
+const decodeUrl = (paths: string[]) => {
   let rootPath = '';
   let filename = '';
 
@@ -78,7 +75,7 @@ export const getPost = cache(async (segments: string) => {
     if (i !== paths.length - 1) {
       rootPath += `/${path}`;
     } else {
-      /* 세그먼트에 한글이 있어서 인코딩된 문자로 반환되기 때문에 디코딩해서 한글로 변환해서 가져와야 한다. 디코딩할때는 전체 Url이 필요. 
+      /* 세그먼트에 한글이 있어서 인코딩된 문자로 반환되기 때문에 디코딩해서 한글로 변환해서 가져와야 한다. 디코딩할때는 http를 포함한 전체 Url이 필요. 
         decodeURI(
           'http://localhost:3000/blog/develop/2023/8/%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EB%B9%84%EB%8F%99%EA%B8%B0%EB%A1%9C%EC%A7%81-%EC%B2%98%EB%A6%AC%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC',
         );
@@ -90,6 +87,15 @@ export const getPost = cache(async (segments: string) => {
     }
   });
 
+  return { rootPath, filename };
+};
+
+/**
+ * 개별 포스트를 가져오는 함수. 인코딩된 문자 url을 디코딩해서 제대로 된 파일명으로 바꾸고 mdx파일을 가져온다.
+ */
+export const getPost = cache(async (segments: string) => {
+  let paths = Array.from(segments);
+  let { rootPath, filename } = decodeUrl(paths);
   const rootDirectory = `public/posts${rootPath}`; // public/posts/develop/2023/8
 
   try {
@@ -98,6 +104,7 @@ export const getPost = cache(async (segments: string) => {
     const mdxs = await getFiles(rootDirectory, files);
 
     let mdx: { [key: string]: any } = {};
+
     mdxs.forEach(source => {
       if (source.frontmatter.title === filename) mdx = source;
     });
@@ -130,13 +137,16 @@ export const getCategoryPosts = async (categoryId: string) => {
     }
 
     if (mdxSources.length === 0) return null;
+
     return mdxSources.map(({ code, frontmatter }) => ({ code, frontmatter }));
   } catch (err) {
     if (err instanceof Error) console.log(err.message);
   }
 };
 
-/* 전체 포스트 리스트를 가져오는 함수 */
+/**
+ * 전체 포스트 리스트를 가져오는 함수
+ */
 export const getAllPosts = async () => {
   try {
     let mdxSources: { [key: string]: any }[] = [];
@@ -159,6 +169,7 @@ export const getAllPosts = async () => {
         }
       }
     }
+
     return mdxSources;
   } catch (err) {
     if (err instanceof Error) console.log(err.message);
